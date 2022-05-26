@@ -1,0 +1,60 @@
+From bf84ecb3034e0fec4c2af655044d7843ca5d2034 Mon Sep 17 00:00:00 2001
+From: "Kevin F. Haggerty" <haggertk@lineageos.org>
+Date: Fri, 11 Mar 2022 08:32:45 -0700
+Subject: [PATCH 5/5] Bump Security String to 2022-03-05
+
+Implemented:
+============
+CVE:            References:    Type:  Severity:  Updated AOSP versions:
+CVE-2021-39624  A-67862680     DoS    High       10, 11, 12
+CVE-2021-39692  A-209611539    EoP    High       10, 11, 12
+CVE-2021-39695  A-209607944    EoP    High       11
+CVE-2021-39697  A-200813547    EoP    High       11, 12
+CVE-2021-39701  A-212286849    EoP    High       11, 12
+CVE-2021-39704  A-209965481    EoP    High       10, 11, 12
+CVE-2021-39705  A-186026746    ID     High       10, 11, 12
+CVE-2021-39706  A-200164168    EoP    High       10, 11, 12
+CVE-2021-39707  A-200688991    EoP    High       10, 11, 12
+
+Previously Implemented:
+=======================
+CVE:            References:    Type:  Severity:  Updated AOSP versions:  Prior Change:
+CVE-2021-0957   A-193149550    EoP    High       10, 11, 12              dfc99fc242a4
+CVE-2021-39667  A-205702093    ID     High       10, 11, 12              6a155ff
+
+Not Implemented:
+================
+None
+
+Not Applicable (platform source):
+=================================
+CVE:            References:    Type:  Severity:  Updated AOSP versions:
+CVE-2021-39689  A-206090748    EoP    Moderate   12
+CVE-2021-39690  A-204316511    DoS    High       12
+CVE-2021-39693  A-208662370    EoP    High       12
+CVE-2021-39702  A-205150380    EoP    High       12
+CVE-2021-39703  A-207057578    EoP    High       12
+CVE-2021-39708  A-206128341    EoP    Critical   12
+CVE-2021-39709  A-208817618    EoP    High       12
+
+Change-Id: Ie3746d7337284d2197b8a42ba90c137778e3bdc6
+---
+ core/version_defaults.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/core/version_defaults.mk b/core/version_defaults.mk
+index 9c0a59fab..afa0d5b4a 100644
+--- a/core/version_defaults.mk
++++ b/core/version_defaults.mk
+@@ -240,7 +240,7 @@ ifndef PLATFORM_SECURITY_PATCH
+     #  It must be of the form "YYYY-MM-DD" on production devices.
+     #  It must match one of the Android Security Patch Level strings of the Public Security Bulletins.
+     #  If there is no $PLATFORM_SECURITY_PATCH set, keep it empty.
+-      PLATFORM_SECURITY_PATCH := 2022-02-05
++      PLATFORM_SECURITY_PATCH := 2022-03-05
+ endif
+ .KATI_READONLY := PLATFORM_SECURITY_PATCH
+ 
+-- 
+2.25.1
+
