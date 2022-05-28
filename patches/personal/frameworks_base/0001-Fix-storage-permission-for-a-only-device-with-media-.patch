@@ -1,0 +1,34 @@
+From 1ab6a623b4a5d44fa2b0c857030be7222ffa2972 Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Sun, 23 Jan 2022 15:33:12 +0100
+Subject: [PATCH] Fix storage permission for a-only device with media apps
+
+Fixes storage permission for some devices (mainly with Oreo vendor, A-only) access for media files from some apps like WhatsApp , Telegram or Instagram
+---
+ data/etc/platform.xml | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/data/etc/platform.xml b/data/etc/platform.xml
+index cf312165dd9a..a2a244f274e0 100644
+--- a/data/etc/platform.xml
++++ b/data/etc/platform.xml
+@@ -131,8 +131,14 @@
+          is negligible (one tag with the permission) compared to
+          the fragility as one can remove a built-in permission which
+          no longer needs to be mapped to gids and break grant propagation. -->
+-    <permission name="android.permission.READ_EXTERNAL_STORAGE" />
+-    <permission name="android.permission.WRITE_EXTERNAL_STORAGE" />
++    <permission name="android.permission.READ_EXTERNAL_STORAGE" >
++        <group gid="sdcard_r" />
++    </permission>
++    <permission name="android.permission.WRITE_EXTERNAL_STORAGE" >
++        <group gid="sdcard_r" />
++        <group gid="sdcard_rw" />
++        <group gid="media_rw" /> 
++    </permission>    
+ 
+     <!-- ================================================================== -->
+     <!-- ================================================================== -->
+-- 
+2.30.2
+
