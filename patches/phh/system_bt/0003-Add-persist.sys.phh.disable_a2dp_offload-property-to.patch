@@ -1,7 +1,7 @@
-From c696a287690f5b833c49bdeabcaaaf8e80c5e414 Mon Sep 17 00:00:00 2001
+From d846e46467c65308605ed83f69bc3fb8663f647f Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Mon, 25 May 2020 21:25:12 +0200
-Subject: [PATCH 3/5] Add persist.sys.phh.disable_a2dp_offload property to
+Subject: [PATCH 3/6] Add persist.sys.phh.disable_a2dp_offload property to
  force a2dp offload
 
 ---
@@ -30,10 +30,10 @@ index 679ec5ef5..0cab72a4a 100644
    callbacks_ = callbacks;
    if (a2dp_offload_enabled_) {
 diff --git a/stack/a2dp/a2dp_codec_config.cc b/stack/a2dp/a2dp_codec_config.cc
-index 5f4371fbc..b9d91f3d8 100644
+index edf7e0c46..795cbab9c 100644
 --- a/stack/a2dp/a2dp_codec_config.cc
 +++ b/stack/a2dp/a2dp_codec_config.cc
-@@ -573,13 +573,18 @@ bool A2dpCodecs::init() {
+@@ -560,13 +560,18 @@ bool A2dpCodecs::init() {
    char* tok = NULL;
    char* tmp_token = NULL;
    bool offload_codec_support[BTAV_A2DP_CODEC_INDEX_MAX] = {false};
@@ -53,7 +53,7 @@ index 5f4371fbc..b9d91f3d8 100644
  
    if (a2dp_offload_status) {
      char value_cap[PROPERTY_VALUE_MAX];
-@@ -667,7 +672,7 @@ bool A2dpCodecs::init() {
+@@ -654,7 +659,7 @@ bool A2dpCodecs::init() {
      }
    }
  
@@ -63,5 +63,5 @@ index 5f4371fbc..b9d91f3d8 100644
  
  A2dpCodecConfig* A2dpCodecs::findSourceCodecConfig(
 -- 
-2.30.2
+2.25.1
 
