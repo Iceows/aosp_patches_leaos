@@ -1,7 +1,7 @@
-From 1ab6a623b4a5d44fa2b0c857030be7222ffa2972 Mon Sep 17 00:00:00 2001
+From 8c70f876407e95e1fa5e56222302630a79aa21c5 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
-Date: Sun, 23 Jan 2022 15:33:12 +0100
-Subject: [PATCH] Fix storage permission for a-only device with media apps
+Date: Fri, 3 Jun 2022 14:34:06 +0200
+Subject: [PATCH] Fix media storage permission for a-only devices
 
 Fixes storage permission for some devices (mainly with Oreo vendor, A-only) access for media files from some apps like WhatsApp , Telegram or Instagram
 ---
@@ -9,7 +9,7 @@ Fixes storage permission for some devices (mainly with Oreo vendor, A-only) acce
  1 file changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/data/etc/platform.xml b/data/etc/platform.xml
-index cf312165dd9a..a2a244f274e0 100644
+index cf312165dd9a..b8beb8075ffa 100644
 --- a/data/etc/platform.xml
 +++ b/data/etc/platform.xml
 @@ -131,8 +131,14 @@
@@ -19,13 +19,13 @@ index cf312165dd9a..a2a244f274e0 100644
 -    <permission name="android.permission.READ_EXTERNAL_STORAGE" />
 -    <permission name="android.permission.WRITE_EXTERNAL_STORAGE" />
 +    <permission name="android.permission.READ_EXTERNAL_STORAGE" >
-+        <group gid="sdcard_r" />
++         <group gid="media_rw" />
 +    </permission>
 +    <permission name="android.permission.WRITE_EXTERNAL_STORAGE" >
-+        <group gid="sdcard_r" />
-+        <group gid="sdcard_rw" />
-+        <group gid="media_rw" /> 
-+    </permission>    
++         <group gid="sdcard_r" />
++         <group gid="sdcard_rw" />
++         <group gid="media_rw" />
++    </permission>
  
      <!-- ================================================================== -->
      <!-- ================================================================== -->
