@@ -1,0 +1,26 @@
+From b30e0cf8d5e3e6c990a7025c5434ae5a24dc46c3 Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Sun, 5 Jun 2022 16:10:59 +0200
+Subject: [PATCH] Compile with release-keys
+
+Compile image with release-keys (not test-keys)
+---
+ core/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/core/Makefile b/core/Makefile
+index 3e748eb..69d0a88 100644
+--- a/core/Makefile
++++ b/core/Makefile
+@@ -324,7 +324,7 @@ endif
+ # Both of these tags will be removed and replaced with "release-keys"
+ # when the target-files is signed in a post-build step.
+ ifeq ($(DEFAULT_SYSTEM_DEV_CERTIFICATE),build/make/target/product/security/testkey)
+-BUILD_KEYS := test-keys
++BUILD_KEYS := release-keys
+ else
+ BUILD_KEYS := dev-keys
+ endif
+-- 
+2.30.2
+
