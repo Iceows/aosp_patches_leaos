@@ -1,0 +1,27 @@
+From 081418ad2a8694b602824f5f72479273da22d8e3 Mon Sep 17 00:00:00 2001
+From: Victor Bo <bvoid@yandex.ru>
+Date: Wed, 8 Jul 2020 05:32:30 +0300
+Subject: [PATCH 032/295] hide lock icon
+
+  based on
+  https://github.com/BlissRoms/platform_frameworks_base/commit/a7cece1d33365fd6f1f1a3482e496691306f4805
+---
+ .../systemui/statusbar/phone/StatusBarKeyguardViewManager.java  | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/packages/SystemUI/src/com/android/systemui/statusbar/phone/StatusBarKeyguardViewManager.java b/packages/SystemUI/src/com/android/systemui/statusbar/phone/StatusBarKeyguardViewManager.java
+index 81d0699a29e..e0982b10b51 100644
+--- a/packages/SystemUI/src/com/android/systemui/statusbar/phone/StatusBarKeyguardViewManager.java
++++ b/packages/SystemUI/src/com/android/systemui/statusbar/phone/StatusBarKeyguardViewManager.java
+@@ -827,6 +827,8 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
+             updateNavigationBarVisibility(navBarVisible);
+         }
+ 
++        mLockIconContainer.setVisibility(View.GONE);
++
+         if (bouncerShowing != mLastBouncerShowing || mFirstUpdate) {
+             mNotificationShadeWindowController.setBouncerShowing(bouncerShowing);
+             mStatusBar.setBouncerShowing(bouncerShowing);
+-- 
+2.25.1
+

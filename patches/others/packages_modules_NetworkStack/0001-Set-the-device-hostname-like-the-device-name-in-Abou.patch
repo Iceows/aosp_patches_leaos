@@ -1,0 +1,29 @@
+From 3d47b8d1ee0a685069e8aa3927ca8e53c8db61c9 Mon Sep 17 00:00:00 2001
+From: Victor Bo <bvoid@yandex.ru>
+Date: Sun, 15 Aug 2021 08:45:53 +0000
+Subject: [PATCH] Set the device hostname like the device name in About Phone
+
+  from
+  https://github.com/DirtyUnicorns/android_vendor_du/commit/644232a1044d7419e0836fdd6bf666468581ceaa
+
+Change-Id: I52b85753ec1e94661b23025cf4713f6c2b2c4cef
+---
+ res/values/config.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/res/values/config.xml b/res/values/config.xml
+index d6a11ab..6e5474d 100644
+--- a/res/values/config.xml
++++ b/res/values/config.xml
+@@ -60,7 +60,7 @@
+     <bool name="config_no_sim_card_uses_neighbor_mcc">false</bool>
+ 
+     <!-- Configuration for including DHCP client hostname option -->
+-    <bool name="config_dhcp_client_hostname">false</bool>
++    <bool name="config_dhcp_client_hostname">true</bool>
+ 
+     <!-- Customized neighbor unreachable probe parameters. -->
+     <integer name="config_nud_steadystate_solicit_num">10</integer>
+-- 
+2.30.2
+
