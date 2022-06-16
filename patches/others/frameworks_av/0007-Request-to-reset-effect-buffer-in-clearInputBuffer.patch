@@ -1,0 +1,29 @@
+From aecd577fc039b6ecacae96f5bd6f911d4710c2c8 Mon Sep 17 00:00:00 2001
+From: Victor Bo <bvoid@yandex.ru>
+Date: Sat, 6 Mar 2021 18:50:24 -0500
+Subject: [PATCH 07/20] Request to reset effect buffer in clearInputBuffer
+
+  from
+  https://github.com/LineageOS/android_frameworks_av/commit/3f216b8bc2a08b147fa20ccd86205d00cb1728f9
+---
+ services/audioflinger/Effects.cpp | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/services/audioflinger/Effects.cpp b/services/audioflinger/Effects.cpp
+index 3dfeb83a4c..ff1f9ac136 100644
+--- a/services/audioflinger/Effects.cpp
++++ b/services/audioflinger/Effects.cpp
+@@ -2017,6 +2017,10 @@ void AudioFlinger::EffectChain::clearInputBuffer()
+ {
+     Mutex::Autolock _l(mLock);
+     clearInputBuffer_l();
++
++    for (size_t i = 0; i < mEffects.size(); i++) {
++        mEffects[i]->reset_l();
++    }
+ }
+ 
+ // Must be called with EffectChain::mLock locked
+-- 
+2.25.1
+

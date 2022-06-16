@@ -1,0 +1,52 @@
+From debf3f52c82c842cf9dc27ad3e0ecd075d0a8cba Mon Sep 17 00:00:00 2001
+From: myfluxi <myfluxi@users.noreply.github.com>
+Date: Thu, 16 Apr 2020 12:53:23 +0000
+Subject: [PATCH 19/20] audioflinger: Fix audio for WifiDisplay
+
+AudioFlinger is not able to determine the correct
+pid/tid for WifiDisplay and thus we do not pass checks
+for CAPTURE_AUDIO_OUTPUT and RECORD_AUDIO permissions.
+
+To fix audio for WifiDisplay, it should be safe to
+always allow a trusted calling uid (AID_MEDIA which
+has the same perms as AID_AUDIOSERVER).
+
+Change-Id: Ifa46d8e77a43027645cad02a04263b58e134c3ad
+---
+ services/audiopolicy/service/AudioPolicyInterfaceImpl.cpp | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/services/audiopolicy/service/AudioPolicyInterfaceImpl.cpp b/services/audiopolicy/service/AudioPolicyInterfaceImpl.cpp
+index df27f6e519..023d7fb7fe 100644
+--- a/services/audiopolicy/service/AudioPolicyInterfaceImpl.cpp
++++ b/services/audiopolicy/service/AudioPolicyInterfaceImpl.cpp
+@@ -455,7 +455,7 @@ status_t AudioPolicyService::getInputForAttr(const audio_attributes_t *attr,
+     // check calling permissions.
+     // Capturing from FM_TUNER source is controlled by captureAudioOutputAllowed() only as this
+     // does not affect users privacy as does capturing from an actual microphone.
+-    if (!(recordingAllowed(opPackageName, pid, uid) || attr->source == AUDIO_SOURCE_FM_TUNER)) {
++    if (!isAudioServerOrMediaServerUid(callingUid) && !(recordingAllowed(opPackageName, pid, uid) || attr->source == AUDIO_SOURCE_FM_TUNER)) {
+         ALOGE("%s permission denied: recording not allowed for uid %d pid %d",
+                 __func__, uid, pid);
+         return PERMISSION_DENIED;
+@@ -503,7 +503,7 @@ status_t AudioPolicyService::getInputForAttr(const audio_attributes_t *attr,
+             case AudioPolicyInterface::API_INPUT_TELEPHONY_RX:
+                 // FIXME: use the same permission as for remote submix for now.
+             case AudioPolicyInterface::API_INPUT_MIX_CAPTURE:
+-                if (!canCaptureOutput) {
++                if (!isAudioServerOrMediaServerUid(callingUid) && !canCaptureOutput) {
+                     ALOGE("getInputForAttr() permission denied: capture not allowed");
+                     status = PERMISSION_DENIED;
+                 }
+@@ -572,7 +572,7 @@ status_t AudioPolicyService::startInput(audio_port_handle_t portId)
+     }
+ 
+     // check calling permissions
+-    if (!(startRecording(client->opPackageName, client->pid, client->uid,
++    if (!isAudioServerOrMediaServerUid(IPCThreadState::self()->getCallingUid()) && !(startRecording(client->opPackageName, client->pid, client->uid,
+             client->attributes.source == AUDIO_SOURCE_HOTWORD)
+             || client->attributes.source == AUDIO_SOURCE_FM_TUNER)) {
+         ALOGE("%s permission denied: recording not allowed for uid %d pid %d",
+-- 
+2.25.1
+
