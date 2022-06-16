@@ -1,0 +1,28 @@
+From f7578ed52f278911d6deccb0602ada2d4dbfaeef Mon Sep 17 00:00:00 2001
+From: Victor Bo <bvoid@yandex.ru>
+Date: Thu, 7 Jan 2021 14:42:07 -0500
+Subject: [PATCH 02/20] nuplayer: Avoid crash when codec fails to load
+
+  from
+  https://github.com/ezio84/abc_frameworks_av/commit/57a803dad25ae381ce7ab3c62e47cd9f94433009
+---
+ media/libmediaplayerservice/nuplayer/NuPlayer.cpp | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/media/libmediaplayerservice/nuplayer/NuPlayer.cpp b/media/libmediaplayerservice/nuplayer/NuPlayer.cpp
+index c1c4b55400..8a81ef118b 100644
+--- a/media/libmediaplayerservice/nuplayer/NuPlayer.cpp
++++ b/media/libmediaplayerservice/nuplayer/NuPlayer.cpp
+@@ -2350,9 +2350,6 @@ void NuPlayer::performDecoderFlush(FlushCommand audio, FlushCommand video) {
+ void NuPlayer::performReset() {
+     ALOGV("performReset");
+ 
+-    CHECK(mAudioDecoder == NULL);
+-    CHECK(mVideoDecoder == NULL);
+-
+     updatePlaybackTimer(true /* stopping */, "performReset");
+     updateRebufferingTimer(true /* stopping */, true /* exiting */);
+ 
+-- 
+2.25.1
+
