@@ -1,4 +1,4 @@
-From fc45d22555732306bb5745d8ab000709fd39bfd0 Mon Sep 17 00:00:00 2001
+From f899f91ee8a2fa51d7e220a5b689e58b495116e8 Mon Sep 17 00:00:00 2001
 From: ironydelerium <42721860+ironydelerium@users.noreply.github.com>
 Date: Fri, 31 Dec 2021 02:20:28 -0800
 Subject: [PATCH 4/5] Reintroduce 'public void
