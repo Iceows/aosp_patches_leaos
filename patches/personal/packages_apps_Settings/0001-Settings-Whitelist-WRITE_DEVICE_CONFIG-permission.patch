@@ -1,0 +1,26 @@
+From 0cae037f6aa2ade19225bf593679e086522fc022 Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Thu, 11 Aug 2022 09:28:51 +0200
+Subject: [PATCH] Settings: Whitelist WRITE_DEVICE_CONFIG permission
+
+* needed after r30 merge
+con.android.providers.settings crash
+---
+ AndroidManifest.xml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/AndroidManifest.xml b/AndroidManifest.xml
+index cba309ad73..0efd0166c4 100644
+--- a/AndroidManifest.xml
++++ b/AndroidManifest.xml
+@@ -59,6 +59,7 @@
+     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+     <uses-permission android:name="android.permission.READ_DEVICE_CONFIG" />
++    <uses-permission android:name="android.permission.WRITE_DEVICE_CONFIG" />
+     <uses-permission android:name="android.permission.STATUS_BAR" />
+     <uses-permission android:name="android.permission.MANAGE_USB" />
+     <uses-permission android:name="android.permission.MANAGE_DEBUGGING" />
+-- 
+2.30.2
+
