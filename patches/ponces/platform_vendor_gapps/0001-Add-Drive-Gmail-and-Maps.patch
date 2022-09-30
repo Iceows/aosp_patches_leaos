@@ -1,0 +1,37 @@
+From 590788fc4b110d103a86c67f21b4fafb5fe56ef7 Mon Sep 17 00:00:00 2001
+From: Alberto Ponces <ponces26@gmail.com>
+Date: Sun, 31 Oct 2021 21:09:42 +0000
+Subject: [PATCH] Add Drive, Gmail and Maps
+
+---
+ config.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/config.mk b/config.mk
+index 7d99292..3ab5a13 100644
+--- a/config.mk
++++ b/config.mk
+@@ -56,17 +56,20 @@ PRODUCT_PACKAGES += \
+     Chrome-Stub \
+     DevicePolicyPrebuilt \
+     DiagnosticsToolPrebuilt \
++    Drive \
+     GoogleCamera \
+     GoogleContacts \
+     GoogleTTS \
+     LatinIMEGooglePrebuilt \
+     LocationHistoryPrebuilt \
++    Maps \
+     MarkupGoogle \
+     Photos \
+     PixelThemesStub \
+     PixelWallpapers2021 \
+     PrebuiltBugle \
+     PrebuiltDeskClockGoogle \
++    PrebuiltGmail \
+     PrebuiltGoogleAdservicesTvp \
+     PrebuiltGoogleTelemetryTvp \
+     SoundAmplifierPrebuilt \
+-- 
+2.32.0
+
