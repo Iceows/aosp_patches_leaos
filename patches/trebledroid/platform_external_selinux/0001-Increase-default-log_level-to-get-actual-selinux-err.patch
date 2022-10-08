@@ -1,4 +1,4 @@
-From f7301f0b4f6914c7ceec123e5e37979f980ccb08 Mon Sep 17 00:00:00 2001
+From 12c046441538777bd351a6f80eb20df84258f437 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Mon, 9 Apr 2018 00:19:49 +0200
 Subject: [PATCH 1/7] Increase default log_level to get actual selinux error in

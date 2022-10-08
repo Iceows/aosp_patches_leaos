@@ -1,4 +1,4 @@
-From e32ba7bed4c4cbf19e446bef9904a3b0fea0ebe7 Mon Sep 17 00:00:00 2001
+From 8483723fa9ccb20f8cc177e2b1b03b5aa2c117f9 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Thu, 12 Sep 2019 13:05:37 +0200
 Subject: [PATCH 01/12] If Vboot2 fails, fall-back to Vboot1

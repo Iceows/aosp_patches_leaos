@@ -1,7 +1,7 @@
-From 8ff7ad71a339502a1a59b70c2355cf1700c7b2cd Mon Sep 17 00:00:00 2001
+From 396888a0c291f9564a1ebe9a6595f4ae916b4b53 Mon Sep 17 00:00:00 2001
 From: corneranchu <corneranchu@gmail.com>
 Date: Sat, 1 Oct 2022 01:49:58 +0000
-Subject: [PATCH 5/6] telephony: forward-port support for forceCognitive
+Subject: [PATCH 5/7] telephony: forward-port support for forceCognitive
 
 * This is needed on some MTK devices. Android 10 refactored some code,
   so now the "non-persistent/cognitive" filter is relocated to RIL and

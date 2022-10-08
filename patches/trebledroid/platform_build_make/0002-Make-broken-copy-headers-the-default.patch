@@ -1,4 +1,4 @@
-From 66dd2d35e5d11ed58f3a334ba271fad7c6662d7d Mon Sep 17 00:00:00 2001
+From 59d1b02812907df623f7456ba725e9b9be5569db Mon Sep 17 00:00:00 2001
 From: Alexander Koskovich <zvnexus@outlook.com>
 Date: Sat, 3 Oct 2020 14:28:35 -0700
 Subject: [PATCH 02/10] Make broken copy headers the default

@@ -1,4 +1,4 @@
-From 8b4568c4334d37ac0acf5cdd905e43b1e94635e4 Mon Sep 17 00:00:00 2001
+From f64e9f58b6d837284ea0121f91c566bbce5e4b68 Mon Sep 17 00:00:00 2001
 From: Emilian Peev <epeev@google.com>
 Date: Fri, 5 Aug 2022 17:28:06 -0700
 Subject: [PATCH 10/24] Camera: Avoid unnecessary close of buffer acquire fence

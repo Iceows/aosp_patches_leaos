@@ -1,4 +1,4 @@
-From 5a87c3bfbc5e9394f376162c1d05d9579e25adc8 Mon Sep 17 00:00:00 2001
+From afb4358bacf8c79a69faed5b9bc2654df750bd6b Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Wed, 23 Feb 2022 17:37:47 -0500
 Subject: [PATCH 11/12] Let system override ro.apex.updatable

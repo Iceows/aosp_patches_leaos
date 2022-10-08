@@ -1,4 +1,4 @@
-From 3cf1d1cb0b753a1aba5f2e9cf51a0fa675ff5c60 Mon Sep 17 00:00:00 2001
+From 22c0f6fc57270516a79f68de6449295bf60ea29c Mon Sep 17 00:00:00 2001
 From: Andy CrossGate Yan <GeForce8800Ultra@gmail.com>
 Date: Sun, 8 Aug 2021 01:43:40 +0000
 Subject: [PATCH 02/11] Revert "Add suspend_resume trace events to the atrace

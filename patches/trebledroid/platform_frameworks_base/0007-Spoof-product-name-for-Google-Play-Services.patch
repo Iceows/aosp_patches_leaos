@@ -1,4 +1,4 @@
-From e998f0a390f28d7226c38d5b5ed90aa1ed0e7cfd Mon Sep 17 00:00:00 2001
+From 66a337b76ca7da162be13822d10c1f6ea73f1b62 Mon Sep 17 00:00:00 2001
 From: Danny Lin <danny@kdrag0n.dev>
 Date: Mon, 11 Oct 2021 19:59:51 -0700
 Subject: [PATCH 07/37] Spoof product name for Google Play Services

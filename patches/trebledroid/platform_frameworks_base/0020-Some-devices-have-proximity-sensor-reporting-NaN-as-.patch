@@ -1,4 +1,4 @@
-From e731a782990e870bb9d65fe4f20f705d38067796 Mon Sep 17 00:00:00 2001
+From 643b7b1c181a024cd66962993e00155cf4a668ae Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Tue, 29 Sep 2020 22:39:47 +0200
 Subject: [PATCH 20/37] Some devices have proximity sensor reporting NaN as max

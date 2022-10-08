@@ -1,4 +1,4 @@
-From 195841e7bca2bd567a5e9ca82ec43c4741262bca Mon Sep 17 00:00:00 2001
+From cf13c338e2b1988838c0bfa196b8536033f52ddd Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Wed, 12 Jan 2022 04:07:34 -0500
 Subject: [PATCH 09/11] Fix loading power hidl v1.0

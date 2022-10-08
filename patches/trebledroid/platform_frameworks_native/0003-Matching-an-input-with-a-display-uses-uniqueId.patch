@@ -1,4 +1,4 @@
-From d79a4eb7dedb2fa084d7b6f39470a34482e784b8 Mon Sep 17 00:00:00 2001
+From af82ce751c8ae73fa1531a4f9e793cc8d6ccc888 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Thu, 22 Oct 2020 23:22:46 +0200
 Subject: [PATCH 03/11] Matching an input with a display uses uniqueId
