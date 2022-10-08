@@ -1,4 +1,4 @@
-From d58e5b0d9b31c0a5aa0507bd1919bbf1843f943e Mon Sep 17 00:00:00 2001
+From 7d9d935d7a889333edf89778a921f025ebbf04c0 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Mon, 6 Dec 2021 16:28:22 -0500
 Subject: [PATCH 3/7] Fix baseband being too long to fit into a 91 chars

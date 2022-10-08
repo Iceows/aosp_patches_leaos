@@ -1,7 +1,7 @@
-From 84e2c0b0e82c377edc8ba85e82066dba026bf00e Mon Sep 17 00:00:00 2001
+From 7f05a80ebb9eb8933af8d27d33abab896aac6f85 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Mon, 2 Jul 2018 22:01:43 +0200
-Subject: [PATCH 1/2] Huawei Kirin 960:: accept broken rpfilter match
+Subject: [PATCH 1/3] Huawei Kirin 960:: accept broken rpfilter match
 
 How bad a security flaw is this?
 People lived with rpfilter on IPv4 for a very long time...

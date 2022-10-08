@@ -1,4 +1,4 @@
-From b3e8e9a65494aa952a0a25c0a249ca41b3404179 Mon Sep 17 00:00:00 2001
+From 28928e300d91c7d4472bd15194fca91559c7b9fe Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Sun, 28 Mar 2021 14:48:49 +0200
 Subject: [PATCH 17/24] Use a fake volume policy when none has been found

@@ -1,4 +1,4 @@
-From 29cace6a69a2a89ec73560b6c3bb3161a2b3c76e Mon Sep 17 00:00:00 2001
+From 349906f83698f7d3838bd6ff72e8b2f884d1209b Mon Sep 17 00:00:00 2001
 From: ChonDoit <thphantomblog@gmail.com>
 Date: Sat, 6 Aug 2022 15:20:41 +0000
 Subject: [PATCH 12/12] Add offline Charge Service

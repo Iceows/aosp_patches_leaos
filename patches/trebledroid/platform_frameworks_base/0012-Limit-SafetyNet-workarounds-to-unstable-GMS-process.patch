@@ -1,7 +1,7 @@
-From 7b8bba3e47d5cec8d033c48b4c91495cbdaa0547 Mon Sep 17 00:00:00 2001
+From f1bb6d17871516bbbf43141b9a8c5af7b0406c23 Mon Sep 17 00:00:00 2001
 From: Danny Lin <danny@kdrag0n.dev>
 Date: Mon, 1 Nov 2021 20:06:48 -0700
-Subject: [PATCH 12/37] Limit SafetyNet workarounds to unstable GMS process
+Subject: [PATCH 12/38] Limit SafetyNet workarounds to unstable GMS process
 
 The unstable process is where SafetyNet attestation actually runs, so
 we only need to spoof the model in that process. Leaving other processes

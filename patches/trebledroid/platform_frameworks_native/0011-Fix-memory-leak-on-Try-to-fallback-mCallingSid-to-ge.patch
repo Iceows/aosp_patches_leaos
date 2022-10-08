@@ -1,7 +1,7 @@
-From de0a61d4d1f4329fc441ec3bf938fc2402ebc7ad Mon Sep 17 00:00:00 2001
+From 914d550582f572c4ccf589b56a84b1b9e8bc5ef5 Mon Sep 17 00:00:00 2001
 From: Diogo Correia <me@diogotc.com>
 Date: Sat, 17 Sep 2022 12:24:52 +0100
-Subject: [PATCH 11/11] Fix memory leak on "Try to fallback mCallingSid to
+Subject: [PATCH 11/12] Fix memory leak on "Try to fallback mCallingSid to
  getpidcon"
 
 Also fixes styling to stay consistent with the rest of the file.

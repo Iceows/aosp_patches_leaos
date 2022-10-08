@@ -1,7 +1,7 @@
-From 22c0f6fc57270516a79f68de6449295bf60ea29c Mon Sep 17 00:00:00 2001
+From 6da6ae552c7298f6126fd5abe41d6f94d545a7b0 Mon Sep 17 00:00:00 2001
 From: Andy CrossGate Yan <GeForce8800Ultra@gmail.com>
 Date: Sun, 8 Aug 2021 01:43:40 +0000
-Subject: [PATCH 02/11] Revert "Add suspend_resume trace events to the atrace
+Subject: [PATCH 02/12] Revert "Add suspend_resume trace events to the atrace
  'freq' category."
 
 This reverts commit 581c22f979af05e48ad4843cdfa9605186d286da.

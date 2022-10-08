@@ -1,4 +1,4 @@
-From ead140364248ef414ff99597fee58dd32873406a Mon Sep 17 00:00:00 2001
+From 498adba82a2e16cfbdaced2589f1aa40bce89676 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Sun, 30 Jan 2022 07:40:19 -0500
 Subject: [PATCH 21/24] Fix parsing audio hal 7.0 audio policies

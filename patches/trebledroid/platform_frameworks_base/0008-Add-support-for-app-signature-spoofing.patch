@@ -1,7 +1,7 @@
-From cd0f7b458404a4dd047d6d1c924e5d95bbf17bca Mon Sep 17 00:00:00 2001
+From 66c56bc0b992f194e26822012c16835900c9ea68 Mon Sep 17 00:00:00 2001
 From: Danny Lin <danny@kdrag0n.dev>
 Date: Sat, 16 Oct 2021 05:27:57 -0700
-Subject: [PATCH 08/37] Add support for app signature spoofing
+Subject: [PATCH 08/38] Add support for app signature spoofing
 
 This is needed by microG GmsCore to pretend to be the official Google
 Play Services package, because client apps check the package signature

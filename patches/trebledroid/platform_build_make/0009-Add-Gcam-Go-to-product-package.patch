@@ -1,14 +1,14 @@
-From e5a6aeeaceefa899ff7ed03cf33dd57b507b0e9a Mon Sep 17 00:00:00 2001
+From 758b4a95c7b64f7cd53a0d6f83c5be09cb96755d Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
 Date: Wed, 13 Apr 2022 09:40:02 +0200
-Subject: [PATCH] Add Gcam Go to product package
+Subject: [PATCH 09/10] Add Gcam Go to product package
 
 ---
  target/product/handheld_product.mk | 1 +
  1 file changed, 1 insertion(+)
 
 diff --git a/target/product/handheld_product.mk b/target/product/handheld_product.mk
-index 968d150683..68cc167c34 100644
+index 2199c570a0..ce0eb4b258 100644
 --- a/target/product/handheld_product.mk
 +++ b/target/product/handheld_product.mk
 @@ -25,6 +25,7 @@ PRODUCT_PACKAGES += \
@@ -20,5 +20,5 @@ index 968d150683..68cc167c34 100644
      DeskClock \
      Gallery2 \
 -- 
-2.30.2
+2.25.1
 
