@@ -1,4 +1,4 @@
-From ae8f8816d7af9b45e1b8c920adb5811415615d76 Mon Sep 17 00:00:00 2001
+From 43ac7daab3ada3d11c91fe1eea5102988c04904a Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Fri, 6 Sep 2019 15:07:25 +0200
 Subject: [PATCH 4/7] Allow /devices/virtual/block/ genfscon conflict (seen on

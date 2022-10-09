@@ -1,7 +1,7 @@
-From 58793f4a5bedf112e0f8759224b35cae8f50e9dd Mon Sep 17 00:00:00 2001
+From 0afe3d641989294c21522b2b562853d9b2081f1b Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Mon, 2 May 2022 17:37:09 -0400
-Subject: [PATCH 24/24] Support variable flash strength on samsung hal 4.0
+Subject: [PATCH 24/41] Support variable flash strength on samsung hal 4.0
 
 ---
  services/camera/libcameraservice/Android.bp                 | 1 +

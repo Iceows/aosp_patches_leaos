@@ -1,4 +1,4 @@
-From e06934f8185b7c24e6c4dbae69f16abe9f95bfbf Mon Sep 17 00:00:00 2001
+From f88b41f24caadcf6f1fcf809373d730bb96be4d5 Mon Sep 17 00:00:00 2001
 From: Victor Bo <bvoid@yandex.ru>
 Date: Sat, 14 Dec 2019 23:46:34 +0200
 Subject: [PATCH 03/10] remove 'su' from none-su builds (exactly, all)

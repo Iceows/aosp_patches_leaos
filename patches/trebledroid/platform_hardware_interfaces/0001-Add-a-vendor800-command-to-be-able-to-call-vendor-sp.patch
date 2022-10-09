@@ -1,4 +1,4 @@
-From c78331fda204e53f2b90bef9e96180a1a3f28d82 Mon Sep 17 00:00:00 2001
+From f9885fd665eb3622a1d62e4a4051d50c6636f383 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Sun, 19 Dec 2021 17:03:15 -0500
 Subject: [PATCH] Add a vendor800 command, to be able to call vendor-specific

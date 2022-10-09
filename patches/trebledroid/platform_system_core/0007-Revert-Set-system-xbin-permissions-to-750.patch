@@ -1,4 +1,4 @@
-From bf603c378e3846b01c8376369b7e4d388f7bfbeb Mon Sep 17 00:00:00 2001
+From 6ff2c12c7ec69c58f5f00c406c9bd34a72d98119 Mon Sep 17 00:00:00 2001
 From: Alberto Ponces <ponces26@gmail.com>
 Date: Tue, 1 Feb 2022 13:48:35 +0000
 Subject: [PATCH 07/12] Revert "Set /system/xbin permissions to 750."

@@ -1,4 +1,4 @@
-From fec63ff83bb69ad28fa7010d24af3d1eaf94fb7c Mon Sep 17 00:00:00 2001
+From b47030d4bc073eca0cc9bb05f340c016da028a77 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Sun, 12 Dec 2021 08:45:36 -0500
 Subject: [PATCH 07/12] Mark accelerometer input as sensor exclusively if there

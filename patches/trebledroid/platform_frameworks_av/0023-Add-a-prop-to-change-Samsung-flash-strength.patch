@@ -1,7 +1,7 @@
-From cd21e87a0dcaf624402d9a964ba096b0c452bee2 Mon Sep 17 00:00:00 2001
+From 974f31eebc255f2cff65b86abc4946415e99c961 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Sat, 16 Apr 2022 14:30:14 -0400
-Subject: [PATCH 23/24] Add a prop to change Samsung flash strength
+Subject: [PATCH 23/41] Add a prop to change Samsung flash strength
 
 ---
  services/camera/libcameraservice/Android.bp        |  1 +

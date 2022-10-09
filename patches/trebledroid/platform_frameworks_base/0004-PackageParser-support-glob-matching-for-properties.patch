@@ -1,4 +1,4 @@
-From 8608737b2bfee312c683e7b80e6c60d618fbf19b Mon Sep 17 00:00:00 2001
+From 40c943caa71b09494a7cb75c53e3552cf0615b56 Mon Sep 17 00:00:00 2001
 From: Peter Cai <peter@typeblog.net>
 Date: Tue, 12 Oct 2021 21:37:22 -0400
 Subject: [PATCH 04/38] PackageParser: support glob matching for properties

@@ -1,4 +1,4 @@
-From 15ac590ebc1c4eab0cc053df75b180c50e87bb5f Mon Sep 17 00:00:00 2001
+From e0f11335496524829fc6c204493d00c7d20ff3c3 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Tue, 5 Jan 2021 23:44:00 +0100
 Subject: [PATCH 04/12] unshared_oob didn't exist in O/P, so detect its

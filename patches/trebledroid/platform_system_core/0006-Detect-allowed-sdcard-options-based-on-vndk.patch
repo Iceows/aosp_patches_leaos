@@ -1,4 +1,4 @@
-From b9bacb6cbd22f69a6b50acda3ea95f9769042dac Mon Sep 17 00:00:00 2001
+From 7dfeb3c6e98afaae699503e0401447451dc584bf Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Tue, 14 Aug 2018 19:33:03 +0200
 Subject: [PATCH 06/12] Detect allowed sdcard options based on vndk

@@ -1,4 +1,4 @@
-From 67b4ce652fcc4a4cf5b32135a10ca7e38f5d9ec3 Mon Sep 17 00:00:00 2001
+From 194b311c702506ea2dd600021a54f4c1955dda27 Mon Sep 17 00:00:00 2001
 From: dhacker29 <dhackerdvm@gmail.com>
 Date: Tue, 24 Nov 2015 01:53:47 -0500
 Subject: [PATCH 05/38] fw/b: Use ro.build.version.incremental to signal OTA

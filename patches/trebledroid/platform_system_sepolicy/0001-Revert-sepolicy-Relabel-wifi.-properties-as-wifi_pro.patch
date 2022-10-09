@@ -1,4 +1,4 @@
-From 64d4e82da7127c098ae70ae239c63f22b3f7428b Mon Sep 17 00:00:00 2001
+From 793250fff5803f3c9bb6a6290a26a0aac0150dbf Mon Sep 17 00:00:00 2001
 From: Andy CrossGate Yan <GeForce8800Ultra@gmail.com>
 Date: Mon, 5 Oct 2020 01:29:18 +0000
 Subject: [PATCH 1/2] Revert "sepolicy: Relabel wifi. properties as wifi_prop"
