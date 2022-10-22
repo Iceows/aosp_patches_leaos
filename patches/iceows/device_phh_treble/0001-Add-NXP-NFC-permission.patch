@@ -1,0 +1,32 @@
+From e5b68175154e1ea7afdc24fc65d0d729c67e309c Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Tue, 18 Oct 2022 22:05:42 +0200
+Subject: [PATCH] Add NXP NFC permission
+
+Add NXP NFC android hardware + mifare permissions
+---
+ base.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/base.mk b/base.mk
+index 33196bf..edca339 100644
+--- a/base.mk
++++ b/base.mk
+@@ -8,6 +8,14 @@ PRODUCT_COPY_FILES := \
+ 	frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/etc/permissions/android.hardware.bluetooth_le.xml \
+ 	frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
+ 
++#Add NXP NFC permission
++PRODUCT_COPY_FILES := \
++    frameworks/native/data/etc/android.hardware.nfc.hce.xml:system/etc/permissions/android.hardware.nfc.hce.xml \
++    frameworks/native/data/etc/android.hardware.nfc.hcef.xml:system/etc/permissions/android.hardware.nfc.hcef.xml \
++    frameworks/native/data/etc/android.sofware.nfc.beam.xml:system/etc/permissions/android.sofware.nfc.beam.xml \
++    frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml \
++    frameworks/native/data/etc/com.nxp.mifare.xml:system/etc/permissions/com.nxp.mifare.xml \
++
+ # Bluetooth Audio (System-side HAL, sysbta)
+ PRODUCT_PACKAGES += \
+     audio.sysbta.default \
+-- 
+2.25.1
+
