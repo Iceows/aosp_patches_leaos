@@ -1,7 +1,7 @@
-From cacbd4fcde6257866e1133d5927b9029646fa05a Mon Sep 17 00:00:00 2001
+From fc57c67c1ac17e5f1a40b699273768a1ba63780b Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Fri, 1 Nov 2019 18:22:13 +0100
-Subject: [PATCH 08/12] Ugly but secure: Set /dev/uinput as 0666 to fix
+Subject: [PATCH 08/13] Ugly but secure: Set /dev/uinput as 0666 to fix
  fingerprint sensor on some devices
 
 cf https://github.com/phhusson/device_phh_treble/pull/122/commits/e000d69c286b6686777ea6f1867f379e30273e48

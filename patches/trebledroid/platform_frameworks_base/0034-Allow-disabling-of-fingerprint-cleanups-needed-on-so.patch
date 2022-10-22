@@ -1,7 +1,7 @@
-From 38fe4eef1b5f1e0fa661f4aeedda07bca3ef7efc Mon Sep 17 00:00:00 2001
+From 4483a6139edd0948d618e1ff4a1362fcd30a6cc6 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Sat, 2 Apr 2022 18:04:01 -0400
-Subject: [PATCH 34/38] Allow disabling of fingerprint cleanups, needed on some
+Subject: [PATCH 34/39] Allow disabling of fingerprint cleanups, needed on some
  Realme devices that cant enumerate
 
 ---

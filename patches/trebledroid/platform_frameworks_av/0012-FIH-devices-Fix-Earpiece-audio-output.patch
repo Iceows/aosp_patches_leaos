@@ -1,7 +1,7 @@
-From b66e8dd48110ada1ee454bc1ce6b2ecb43fc50d5 Mon Sep 17 00:00:00 2001
+From ec648b678a8044d8b50929232c9faf2fda70582d Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Tue, 24 Apr 2018 00:14:28 +0200
-Subject: [PATCH 12/41] FIH devices: Fix "Earpiece" audio output
+Subject: [PATCH 12/47] FIH devices: Fix "Earpiece" audio output
 
 On some FIH devices (confirmed on Razer, and probably on Aquos SS2),
 Earpiece is not listed in attachedDevices, and devicePort's profile

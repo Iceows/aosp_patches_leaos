@@ -1,7 +1,7 @@
-From 0b8d9e1a6508881dec81e7e4d6032229a7246ade Mon Sep 17 00:00:00 2001
+From e9eb6cfda3dfa7783de69548438fc89f1c04040c Mon Sep 17 00:00:00 2001
 From: Danny Lin <danny@kdrag0n.dev>
 Date: Mon, 11 Oct 2021 19:59:51 -0700
-Subject: [PATCH 07/38] Spoof product name for Google Play Services
+Subject: [PATCH 07/39] Spoof product name for Google Play Services
 
 NB: This code is under the gmscompat package, but it does not depend on
 any code from gmscompat.

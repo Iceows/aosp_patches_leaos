@@ -1,7 +1,7 @@
-From 780de010fdace2849d47e5554567a858a47363f0 Mon Sep 17 00:00:00 2001
+From 4f4c22caba71e1a9b76ce2c3e9176549970e5cf8 Mon Sep 17 00:00:00 2001
 From: ChonDoit <thphantomblog@gmail.com>
 Date: Sun, 5 Jun 2022 01:53:56 +0000
-Subject: [PATCH 2/2] Adress some denials and dont audit others
+Subject: [PATCH 2/3] Adress some denials and dont audit others
 
 ---
  private/denials.te   |  5 +++++

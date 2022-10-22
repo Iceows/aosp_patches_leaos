@@ -1,7 +1,7 @@
-From ecc9a3f227ff0746f8aa46a14d1352a88adf83f8 Mon Sep 17 00:00:00 2001
+From ae11e65a3300297c50e132d78e52d4c2a6228713 Mon Sep 17 00:00:00 2001
 From: Luca Weiss <luca.weiss@fairphone.com>
 Date: Wed, 2 Feb 2022 15:07:39 +0100
-Subject: [PATCH 38/41] Add group audio to vendor.media.omx service
+Subject: [PATCH 38/47] Add group audio to vendor.media.omx service
 
 Resolves Qualcomm libs trying to access e.g. /dev/msm_alac and failing.
 

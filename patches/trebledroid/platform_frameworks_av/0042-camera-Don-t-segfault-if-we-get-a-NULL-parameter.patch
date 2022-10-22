@@ -1,7 +1,7 @@
-From 6d40f570fdc634761fa45ad26cad51b4222816df Mon Sep 17 00:00:00 2001
+From 8e0d8eabd2894e953a9279b4d20ba726307ac4c3 Mon Sep 17 00:00:00 2001
 From: Steve Kondik <shade@chemlab.org>
 Date: Wed, 1 May 2013 02:58:11 -0700
-Subject: [PATCH] camera: Don't segfault if we get a NULL parameter
+Subject: [PATCH 42/47] camera: Don't segfault if we get a NULL parameter
 
  * Values end up NULL on some drivers, don't crash.
 
@@ -26,3 +26,6 @@ index e95c91cb98..99befa7968 100644
      // XXX i think i can do this with strspn()
      if (strchr(key, '=') || strchr(key, ';')) {
          //XXX ALOGE("Key \"%s\"contains invalid character (= or ;)", key);
+-- 
+2.25.1
+

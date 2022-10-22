@@ -1,4 +1,4 @@
-From f9a5dee93a5d3c2aa4f67f6560621b825c12f7c4 Mon Sep 17 00:00:00 2001
+From 9657e8657ac76c61eaf27980223bc97d7a8a59d0 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
 Date: Thu, 6 Oct 2022 08:37:44 +0200
 Subject: [PATCH 7/7] Huawei ril - fix uiccPort and slot incorrect

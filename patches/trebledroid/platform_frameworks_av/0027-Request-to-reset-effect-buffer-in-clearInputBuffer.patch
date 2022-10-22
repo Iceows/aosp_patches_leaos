@@ -1,7 +1,7 @@
-From edf2abbd18bb244aacb9f60bb6685aac9a5a019e Mon Sep 17 00:00:00 2001
+From f03378a7e326c65e02dd2c4859fd7fee346859bd Mon Sep 17 00:00:00 2001
 From: Victor Bo <bvoid@yandex.ru>
 Date: Sat, 6 Mar 2021 18:50:24 -0500
-Subject: [PATCH 27/41] Request to reset effect buffer in clearInputBuffer
+Subject: [PATCH 27/47] Request to reset effect buffer in clearInputBuffer
 
   from
   https://github.com/LineageOS/android_frameworks_av/commit/3f216b8bc2a08b147fa20ccd86205d00cb1728f9

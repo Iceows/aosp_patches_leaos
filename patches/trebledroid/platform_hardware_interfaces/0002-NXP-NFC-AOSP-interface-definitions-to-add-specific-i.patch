@@ -1,0 +1,35 @@
+From 1d285ad4e5b18d2b62651994091d2930db0b770b Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Sat, 22 Oct 2022 11:48:15 +0200
+Subject: [PATCH 2/2] NXP-NFC AOSP interface definitions to add specific
+ interface
+
+Patch the AOSP hardware/interface definitions to add specific interface
+---
+ .../compatibility_matrix.current.xml                   | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/compatibility_matrices/compatibility_matrix.current.xml b/compatibility_matrices/compatibility_matrix.current.xml
+index 886f7f5b3..c11f31e0b 100644
+--- a/compatibility_matrices/compatibility_matrix.current.xml
++++ b/compatibility_matrices/compatibility_matrix.current.xml
+@@ -7,6 +7,16 @@
+             <instance>default</instance>
+         </interface>
+     </hal>
++    <hal format="hidl">
++        <name>vendor.nxp.nxpnfc</name>
++        <transport>hwbinder</transport>
++        <impl level="generic"></impl>
++        <version>1.0</version>
++        <interface>
++            <name>INxpNfc</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
+     <hal format="hidl" optional="false">
+         <name>android.hardware.audio</name>
+         <version>6.0</version>
+-- 
+2.25.1
+

@@ -1,7 +1,7 @@
-From 68fa706579be32413a87c65da3de4f51844685a9 Mon Sep 17 00:00:00 2001
+From 71cc3624a798b9e97b2493d471572b2b1b8aa8d7 Mon Sep 17 00:00:00 2001
 From: Iceows <mounierr07@gmail.com>
 Date: Tue, 12 Jul 2022 10:40:14 +0200
-Subject: [PATCH 10/10] Build with release keys
+Subject: [PATCH 09/10] Build with release keys
 
 Build with release keys instead of test-keys
 ---
@@ -9,10 +9,10 @@ Build with release keys instead of test-keys
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/core/sysprop.mk b/core/sysprop.mk
-index 61c07ba603..4e014cdef0 100644
+index 570702a679..d136207b18 100644
 --- a/core/sysprop.mk
 +++ b/core/sysprop.mk
-@@ -149,7 +149,7 @@ endif
+@@ -157,7 +157,7 @@ endif
  # Both of these tags will be removed and replaced with "release-keys"
  # when the target-files is signed in a post-build step.
  ifeq ($(DEFAULT_SYSTEM_DEV_CERTIFICATE),build/make/target/product/security/testkey)

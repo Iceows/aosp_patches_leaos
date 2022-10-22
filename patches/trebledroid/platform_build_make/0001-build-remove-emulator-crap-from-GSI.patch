@@ -1,4 +1,4 @@
-From df4a616da6f03817bcacc42bd4ccdb204709b2e1 Mon Sep 17 00:00:00 2001
+From 79d19e23bf9dd62c5e69d54e1c04483b8dec41a4 Mon Sep 17 00:00:00 2001
 From: sooti <sooti85@gmail.com>
 Date: Tue, 12 Oct 2021 14:32:52 +0300
 Subject: [PATCH 01/10] build: remove emulator crap from GSI

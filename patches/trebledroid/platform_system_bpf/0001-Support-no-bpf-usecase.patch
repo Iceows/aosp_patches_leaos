@@ -1,7 +1,7 @@
-From 59325ffce26a9ed081e2223e84294e01e32c11a2 Mon Sep 17 00:00:00 2001
+From e8c997f6ef996da6b896820e4ea49eb2f77c358a Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Wed, 13 Oct 2021 10:56:52 -0400
-Subject: [PATCH] Support no-bpf usecase
+Subject: [PATCH 1/2] Support no-bpf usecase
 
 Change-Id: I75a427a2a41aa4ab1104ad88a891bef0dc2d9c91
 ---
@@ -9,7 +9,7 @@ Change-Id: I75a427a2a41aa4ab1104ad88a891bef0dc2d9c91
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/bpfloader/BpfLoader.cpp b/bpfloader/BpfLoader.cpp
-index bc72811..9ace0fa 100644
+index 5cd80b7..bbfa7a8 100644
 --- a/bpfloader/BpfLoader.cpp
 +++ b/bpfloader/BpfLoader.cpp
 @@ -194,8 +194,8 @@ int main(int argc, char** argv) {

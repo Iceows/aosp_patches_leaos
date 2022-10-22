@@ -1,7 +1,7 @@
-From 9778be398845aa7c29c7a4e5dec76a07bef51228 Mon Sep 17 00:00:00 2001
+From a574ce557dd5127b6901adaa1712d8ba90326522 Mon Sep 17 00:00:00 2001
 From: Michael Bestas <mkbestas@gmail.com>
 Date: Sat, 3 Sep 2022 20:49:09 +0300
-Subject: [PATCH 40/41] Revert "Remove libavservices_minijail_vendor"
+Subject: [PATCH 40/47] Revert "Remove libavservices_minijail_vendor"
 
 Older device vendor blobs still depend on this.
 

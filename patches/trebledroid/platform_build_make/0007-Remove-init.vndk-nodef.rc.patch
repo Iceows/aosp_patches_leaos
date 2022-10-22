@@ -1,4 +1,4 @@
-From 97d94e8afcad48e874390f564bdf4e9fcc3d2a72 Mon Sep 17 00:00:00 2001
+From 4dd5870c355a547a008ac11d7234dd3541818d5d Mon Sep 17 00:00:00 2001
 From: Andy CrossGate Yan <GeForce8800Ultra@gmail.com>
 Date: Wed, 8 Dec 2021 07:04:53 +0000
 Subject: [PATCH 07/10] Remove init.vndk-nodef.rc

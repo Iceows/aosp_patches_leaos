@@ -1,7 +1,7 @@
-From 956379e6ebb899f99af08178a5df9f2efba00a09 Mon Sep 17 00:00:00 2001
+From ab9b9a944b625af0f073957cec50105ecfd550d7 Mon Sep 17 00:00:00 2001
 From: Victor Bo <bvoid@yandex.ru>
 Date: Sat, 6 Mar 2021 18:46:19 -0500
-Subject: [PATCH 26/41] stagefright: ACodec: Resolve empty vendor parameters
+Subject: [PATCH 26/47] stagefright: ACodec: Resolve empty vendor parameters
  usage
 
   from

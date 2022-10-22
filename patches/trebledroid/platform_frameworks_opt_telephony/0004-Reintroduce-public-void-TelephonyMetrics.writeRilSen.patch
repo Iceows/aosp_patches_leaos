@@ -1,4 +1,4 @@
-From ce303a0e77b833cc37c2e703c94584460a2026d2 Mon Sep 17 00:00:00 2001
+From 376e60d07b6df102dbaaebd76caa646a53b5d0d8 Mon Sep 17 00:00:00 2001
 From: ironydelerium <42721860+ironydelerium@users.noreply.github.com>
 Date: Fri, 31 Dec 2021 02:20:28 -0800
 Subject: [PATCH 4/7] Reintroduce 'public void
@@ -18,10 +18,10 @@ Co-authored-by: Sarah Vandomelen <sarah@sightworks.com>
  1 file changed, 13 insertions(+)
 
 diff --git a/src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java b/src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java
-index 5b47ae5b7a..f775fc8be4 100644
+index 3fdbfe0ed7..9479e77dc6 100644
 --- a/src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java
 +++ b/src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java
-@@ -2324,6 +2324,19 @@ public class TelephonyMetrics {
+@@ -2320,6 +2320,19 @@ public class TelephonyMetrics {
          smsSession.increaseExpectedResponse();
      }
  
