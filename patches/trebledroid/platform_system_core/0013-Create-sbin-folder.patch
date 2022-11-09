@@ -1,7 +1,7 @@
-From 5a3b0519ac83967cbc3166809d22ab60229b5692 Mon Sep 17 00:00:00 2001
+From 9aff717872a7c7b520a83127ed749de19b5132dc Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
 Date: Wed, 9 Nov 2022 06:57:40 +0100
-Subject: [PATCH] Create sbin folder
+Subject: [PATCH 13/13] Create sbin folder
 
 The sbin directory is needed at root for some programs like magisk
 ---

@@ -1,4 +1,4 @@
-From a574ce557dd5127b6901adaa1712d8ba90326522 Mon Sep 17 00:00:00 2001
+From b4beb35b5ded0a1f2278e87fd3ce5460941aba2f Mon Sep 17 00:00:00 2001
 From: Michael Bestas <mkbestas@gmail.com>
 Date: Sat, 3 Sep 2022 20:49:09 +0300
 Subject: [PATCH 40/47] Revert "Remove libavservices_minijail_vendor"

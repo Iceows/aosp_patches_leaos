@@ -1,4 +1,4 @@
-From 7575e7de965acab65045c7a5203a386d500e17f3 Mon Sep 17 00:00:00 2001
+From 1fcb35542654ce787261b67c7e00299a53586650 Mon Sep 17 00:00:00 2001
 From: Vladimir Oltean <olteanv@gmail.com>
 Date: Wed, 9 Jan 2019 02:50:08 +0200
 Subject: [PATCH 30/47] Revert "Removed unused class and its test"

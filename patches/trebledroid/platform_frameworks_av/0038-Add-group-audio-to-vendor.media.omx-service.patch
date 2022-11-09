@@ -1,4 +1,4 @@
-From ae11e65a3300297c50e132d78e52d4c2a6228713 Mon Sep 17 00:00:00 2001
+From b9a119309e8df677de1ea740972af10ee0e02dd9 Mon Sep 17 00:00:00 2001
 From: Luca Weiss <luca.weiss@fairphone.com>
 Date: Wed, 2 Feb 2022 15:07:39 +0100
 Subject: [PATCH 38/47] Add group audio to vendor.media.omx service

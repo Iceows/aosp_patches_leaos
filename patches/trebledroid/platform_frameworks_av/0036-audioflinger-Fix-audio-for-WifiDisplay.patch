@@ -1,4 +1,4 @@
-From ca3aefabeca292581605adebf5efb5cd788f33e7 Mon Sep 17 00:00:00 2001
+From 2d0e4a553f742d5b9517e6902c8d326c46d8dc28 Mon Sep 17 00:00:00 2001
 From: myfluxi <myfluxi@users.noreply.github.com>
 Date: Thu, 16 Apr 2020 12:53:23 +0000
 Subject: [PATCH 36/47] audioflinger: Fix audio for WifiDisplay

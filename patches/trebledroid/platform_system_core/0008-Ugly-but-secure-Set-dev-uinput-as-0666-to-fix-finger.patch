@@ -1,4 +1,4 @@
-From fc57c67c1ac17e5f1a40b699273768a1ba63780b Mon Sep 17 00:00:00 2001
+From 4cdf92b486b246a694f809d2bdd0137798da31d3 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Fri, 1 Nov 2019 18:22:13 +0100
 Subject: [PATCH 08/13] Ugly but secure: Set /dev/uinput as 0666 to fix

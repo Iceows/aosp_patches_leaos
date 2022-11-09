@@ -1,4 +1,4 @@
-From 319499b7c719e7c82c3125e8547e1228cad14c9f Mon Sep 17 00:00:00 2001
+From c5dd21b79f8b07e2f370b9c42b3cd785d77ca2a8 Mon Sep 17 00:00:00 2001
 From: Manikanta Kanamarlapudi <kmanikan@codeaurora.org>
 Date: Mon, 30 Apr 2018 12:34:40 +0530
 Subject: [PATCH 44/47] libstagefright: Allow HFR-60 in HAL-3 recording

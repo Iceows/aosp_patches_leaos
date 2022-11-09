@@ -1,7 +1,7 @@
-From 3826f87e4ddbff3376cd534622a950e19ac80cbd Mon Sep 17 00:00:00 2001
+From 063957e4b5fd1cf54724da082d6a2665bc4666a5 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Mon, 6 Dec 2021 16:28:22 -0500
-Subject: [PATCH 3/7] Fix baseband being too long to fit into a 91 chars
+Subject: [PATCH 03/10] Fix baseband being too long to fit into a 91 chars
  property, preventing telephony subsystem from starting
 
 Change-Id: I1762e4a8cc137626be89f350229d6be162bdaf57

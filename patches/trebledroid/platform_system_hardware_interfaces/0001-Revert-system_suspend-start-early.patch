@@ -1,4 +1,4 @@
-From 256e09864bb2ecea1f0640ae8ef47a44f4402024 Mon Sep 17 00:00:00 2001
+From 95c75a502de60e79c28ce7e54c29246a95749d48 Mon Sep 17 00:00:00 2001
 From: Andy CrossGate Yan <GeForce8800Ultra@gmail.com>
 Date: Sun, 10 Jan 2021 11:44:29 +0000
 Subject: [PATCH] Revert "system_suspend: start early"

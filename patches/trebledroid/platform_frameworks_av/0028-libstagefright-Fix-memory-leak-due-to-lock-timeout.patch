@@ -1,4 +1,4 @@
-From 1259bed8b6b47bfa950f9df1326d7d57a8c36a23 Mon Sep 17 00:00:00 2001
+From 46bfed24440e808fb1f09dd362d7b97691944b4a Mon Sep 17 00:00:00 2001
 From: Victor Bo <bvoid@yandex.ru>
 Date: Sat, 6 Mar 2021 18:51:33 -0500
 Subject: [PATCH 28/47] libstagefright: Fix memory leak due to lock timeout

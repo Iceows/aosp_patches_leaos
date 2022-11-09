@@ -1,4 +1,4 @@
-From 98b01afba0a4ad1937f89d208c872dcbd1ce5692 Mon Sep 17 00:00:00 2001
+From 6e8d33a52dc483bbf662c61eefca614991645af0 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
 Date: Tue, 18 Oct 2022 20:59:36 +0200
 Subject: [PATCH 13/13] NXP-NFC AOSP add specific permissions

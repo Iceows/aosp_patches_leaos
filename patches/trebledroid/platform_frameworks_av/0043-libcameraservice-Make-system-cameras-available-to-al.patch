@@ -1,4 +1,4 @@
-From 0d90e942a6e26811c3a9f9103efc32548e2242ba Mon Sep 17 00:00:00 2001
+From b0f2ff88bb16060794da78b5afa5b60d30821b02 Mon Sep 17 00:00:00 2001
 From: Adithya R <gh0strider.2k18.reborn@gmail.com>
 Date: Tue, 3 Aug 2021 20:27:06 +0530
 Subject: [PATCH 43/47] libcameraservice: Make system cameras available to all

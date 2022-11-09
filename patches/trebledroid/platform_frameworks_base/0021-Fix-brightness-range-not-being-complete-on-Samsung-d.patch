@@ -1,7 +1,7 @@
-From 715d12a3e568081c6a7e59fef6654329a4b8bf0d Mon Sep 17 00:00:00 2001
+From 216effeb4b2e41b0ad07f40f7c6a308340064339 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Tue, 29 Sep 2020 22:40:10 +0200
-Subject: [PATCH 21/39] Fix brightness range not being complete on Samsung
+Subject: [PATCH 21/38] Fix brightness range not being complete on Samsung
  devices
 
 On some devices, minimum brightness is 0, which totally messes with

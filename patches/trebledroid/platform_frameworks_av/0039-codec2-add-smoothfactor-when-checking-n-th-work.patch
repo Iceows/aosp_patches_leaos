@@ -1,4 +1,4 @@
-From e837b968c6e0fe26f163f1268106a5854bb98d71 Mon Sep 17 00:00:00 2001
+From ff3eff5cead9466b8e411ac651ff575aa2a4402c Mon Sep 17 00:00:00 2001
 From: Jiajia Cong <jcong@codeaurora.org>
 Date: Thu, 5 Aug 2021 16:33:35 +0800
 Subject: [PATCH 39/47] codec2: add smoothfactor when checking n-th work

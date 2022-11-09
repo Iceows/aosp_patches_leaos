@@ -1,4 +1,4 @@
-From e2568466a4998638a68c1531ab1c362667638e3e Mon Sep 17 00:00:00 2001
+From 6b5c6c89414cb8c6ec22e6948cbc630d68f6babf Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Mon, 2 May 2022 17:44:28 -0400
 Subject: [PATCH 2/2] Ignore cancelled fingerprint events, they are expected,

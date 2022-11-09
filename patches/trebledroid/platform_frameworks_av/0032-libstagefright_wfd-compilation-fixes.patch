@@ -1,4 +1,4 @@
-From 8563873898bf29dbd7eba3a873b6ff5c80276e23 Mon Sep 17 00:00:00 2001
+From 3807cb262648ae177fb2dbade8f08e9ae3dcdf2e Mon Sep 17 00:00:00 2001
 From: Vladimir Oltean <olteanv@gmail.com>
 Date: Wed, 9 Jan 2019 01:43:08 +0200
 Subject: [PATCH 32/47] libstagefright_wfd: compilation fixes

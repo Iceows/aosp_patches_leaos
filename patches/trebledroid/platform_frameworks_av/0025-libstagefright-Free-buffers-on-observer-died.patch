@@ -1,4 +1,4 @@
-From 9ec657c34defa98253855a306e01bbde474dab12 Mon Sep 17 00:00:00 2001
+From d996ae1164bf562497bc0872f9adf55aef01d465 Mon Sep 17 00:00:00 2001
 From: Victor Bo <bvoid@yandex.ru>
 Date: Thu, 7 Jan 2021 14:41:25 -0500
 Subject: [PATCH 25/47] libstagefright: Free buffers on observer died

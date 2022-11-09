@@ -1,7 +1,7 @@
-From dfe3c5ed299340f7bfee8c96576c5ad51caebcf4 Mon Sep 17 00:00:00 2001
+From 782924aa06334634df732b13cbbceabf4fb6cca9 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Mon, 9 Apr 2018 00:19:49 +0200
-Subject: [PATCH 1/7] Increase default log_level to get actual selinux error in
+Subject: [PATCH 1/8] Increase default log_level to get actual selinux error in
  kmsg
 
 ---

@@ -1,4 +1,4 @@
-From 8a9c340e6045f8b9e2fc9116c9c55e2ad6138676 Mon Sep 17 00:00:00 2001
+From 9e135baa2b55ae162105710b63afef6b4cd63078 Mon Sep 17 00:00:00 2001
 From: Shuzhen Wang <shuzhenwang@google.com>
 Date: Thu, 17 Mar 2022 00:11:20 +0000
 Subject: [PATCH 46/47] Camera: Call corresponding unlock for every lockAsync

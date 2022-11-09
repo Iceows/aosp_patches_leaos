@@ -1,4 +1,4 @@
-From 214118684284e36d3703f058ed14306d6b8fd0ed Mon Sep 17 00:00:00 2001
+From 5a9f0c71762dc76bab137619d4c3e852ab0cb067 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Fri, 25 Mar 2022 05:37:56 -0400
 Subject: [PATCH 10/13] MIUI13 devices hide their vibrator HAL behind

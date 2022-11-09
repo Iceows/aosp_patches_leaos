@@ -1,7 +1,7 @@
-From 9657e8657ac76c61eaf27980223bc97d7a8a59d0 Mon Sep 17 00:00:00 2001
+From b504c2a2d82f1e556afba844d95366474303ebc5 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
 Date: Thu, 6 Oct 2022 08:37:44 +0200
-Subject: [PATCH 7/7] Huawei ril - fix uiccPort and slot incorrect
+Subject: [PATCH 07/10] Huawei ril - fix uiccPort and slot incorrect
 
 Under Huawei hi6250 the system cannot find the correct uuic port number. The patch allows to put 0 in case of error
 
