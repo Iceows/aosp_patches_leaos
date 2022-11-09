@@ -38,3 +38,9 @@ p=device_phh_treble
 echo $p
 cd $reposync/$p
 cp * $finalpatches/$p
+
+# Special case for relan repo
+p=platform_external_exfat
+echo $p
+cd $reposync/$p
+cp * $finalpatches/$p
