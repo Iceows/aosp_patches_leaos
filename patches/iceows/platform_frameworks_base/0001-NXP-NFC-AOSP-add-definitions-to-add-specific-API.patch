@@ -1,7 +1,7 @@
-From 63a999e9076141f728674e45f06becc0ba662741 Mon Sep 17 00:00:00 2001
+From c9f02eb197aba66b70deae89185a20a7be44d37e Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
 Date: Tue, 18 Oct 2022 21:03:32 +0200
-Subject: [PATCH 39/39] NXP-NFC AOSP add definitions to add specific API
+Subject: [PATCH 1/2] NXP-NFC AOSP add definitions to add specific API
 
 NXP-NFC AOSP add definitions to add specific API
 ---
