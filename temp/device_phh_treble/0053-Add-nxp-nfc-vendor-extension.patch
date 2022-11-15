@@ -1,0 +1,47 @@
+From 553eeb6b245d8f14643ea22a1dbbbd709a0f651a Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Thu, 10 Nov 2022 19:23:05 +0100
+Subject: [PATCH] Add nxp nfc vendor extension
+
+Add specific nxp vendor extension.
+
+Need to clone platform_vendor_nxp_opensource_frameworks repo for build com.nxp.nfc.jar
+---
+ base.mk | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/base.mk b/base.mk
+index 3edb116..c014e42 100644
+--- a/base.mk
++++ b/base.mk
+@@ -13,7 +13,8 @@ PRODUCT_COPY_FILES += \
+     frameworks/native/data/etc/android.hardware.nfc.hce.xml:system/etc/permissions/android.hardware.nfc.hce.xml \
+     frameworks/native/data/etc/android.hardware.nfc.hcef.xml:system/etc/permissions/android.hardware.nfc.hcef.xml \
+     frameworks/native/data/etc/android.sofware.nfc.beam.xml:system/etc/permissions/android.sofware.nfc.beam.xml \
+-    frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml
++    frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml \
++    vendor/nxp/com.nxp.nfc.xml:system/etc/permissions/com.nxp.nfc.xml
+     
+ # Bluetooth Audio (System-side HAL, sysbta)
+ PRODUCT_PACKAGES += \
+@@ -72,8 +73,16 @@ PRODUCT_COPY_FILES += \
+ # LineageOS build may need this to make NFC work
+ PRODUCT_PACKAGES += \
+         NfcNci \
++        com.nxp.nfc.jar \
+         Tag \
+-        android.hardware.nfc@1.0-impl \
++        android.hardware.nfc@1.0-impl
++
++PRODUCT_PACKAGES += \
++	android.hardware.nfc@1.2-service
++
++PRODUCT_PACKAGES += \
++	vendor.nxp.nxpnfc@1.0-impl \
++	vendor.nxp.nxpnfc@1.0-service
+ 
+ PRODUCT_PACKAGES += \
+ 	android.hardware.nfc@1.2-service \
+-- 
+2.25.1
+

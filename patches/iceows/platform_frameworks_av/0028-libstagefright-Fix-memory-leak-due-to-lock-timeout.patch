@@ -1,0 +1,33 @@
+From 46bfed24440e808fb1f09dd362d7b97691944b4a Mon Sep 17 00:00:00 2001
+From: Victor Bo <bvoid@yandex.ru>
+Date: Sat, 6 Mar 2021 18:51:33 -0500
+Subject: [PATCH 28/47] libstagefright: Fix memory leak due to lock timeout
+
+  from
+  https://github.com/LineageOS/android_frameworks_av/commit/3b925d38c2bfda63323ac14b7a01c8afbab41a29
+---
+ media/libstagefright/omx/OMXNodeInstance.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/media/libstagefright/omx/OMXNodeInstance.cpp b/media/libstagefright/omx/OMXNodeInstance.cpp
+index 9d1ebff689..9a932a48c2 100644
+--- a/media/libstagefright/omx/OMXNodeInstance.cpp
++++ b/media/libstagefright/omx/OMXNodeInstance.cpp
+@@ -580,12 +580,12 @@ status_t OMXNodeInstance::freeNode() {
+             break;
+     }
+ 
+-    Mutex::Autolock _l(mLock);
+-
+     if (mActiveBuffers.size() > 0) {
+         freeActiveBuffers();
+     }
+ 
++    Mutex::Autolock _l(mLock);
++
+     status_t err = mOwner->freeNode(this);
+ 
+     mDispatcher.clear();
+-- 
+2.25.1
+
