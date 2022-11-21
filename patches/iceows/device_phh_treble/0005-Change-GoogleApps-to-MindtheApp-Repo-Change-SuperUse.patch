@@ -1,0 +1,37 @@
+From 722519181ed2d55d3ddd14799a57e71c6160e4a8 Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Tue, 18 Oct 2022 11:23:06 +0200
+Subject: [PATCH 5/7] Change GoogleApps to MindtheApp Repo + Change SuperUser
+ apk
+
+Change GoogleApps to  MindtheApp Repo
+New SuperUser version
+---
+ generate.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/generate.sh b/generate.sh
+index fac8208..6112204 100644
+--- a/generate.sh
++++ b/generate.sh
+@@ -26,7 +26,7 @@ for part in a ab;do
+ 		optional_base=""
+ 				if [ "$apps" == "gapps" ];then
+ 					apps_suffix="g"
+-					apps_script='$(call inherit-product, device/phh/treble/gapps.mk)'
++					apps_script='$(call inherit-product, vendor/gapps/arm64/arm64-vendor.mk)'
+ 					apps_name="with GApps"
+ 				fi
+ 				if [ "$apps" == "gapps-go" ];then
+@@ -54,7 +54,7 @@ for part in a ab;do
+ 				su_suffix='N'
+ 				if [ "$su" == "yes" ];then
+ 					su_suffix='S'
+-					extra_packages+=' phh-su me.phh.superuser'
++					extra_packages+=' phh-su SuperUser'
+ 				fi
+ 
+ 				part_suffix='a'
+-- 
+2.25.1
+
