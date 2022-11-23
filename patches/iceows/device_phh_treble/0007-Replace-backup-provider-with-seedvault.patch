@@ -1,7 +1,7 @@
 From c21743430354b883454bfc207501ac0073a2e30e Mon Sep 17 00:00:00 2001
 From: utkustnr <utkuustuner@proton.me>
 Date: Mon, 14 Nov 2022 20:51:04 +0300
-Subject: [PATCH 7/7] Replace backup provider with seedvault
+Subject: [PATCH 7/9] Replace backup provider with seedvault
 
 ---
  base.mk | 3 +++

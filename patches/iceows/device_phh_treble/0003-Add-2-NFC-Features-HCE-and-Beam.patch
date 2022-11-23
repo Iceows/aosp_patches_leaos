@@ -1,7 +1,7 @@
 From 81b3c54458427f993907ffc56b4c37c993c92e8f Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
 Date: Sun, 20 Nov 2022 17:59:56 +0100
-Subject: [PATCH 3/7] Add 2 NFC Features (HCE and Beam)
+Subject: [PATCH 3/9] Add 2 NFC Features (HCE and Beam)
 
 Enable two NFC features
 
