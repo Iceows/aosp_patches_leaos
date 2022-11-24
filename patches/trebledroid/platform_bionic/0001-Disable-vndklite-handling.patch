@@ -1,4 +1,4 @@
-From afe6457ada193a4d4c0b6beb9679a926978c08e3 Mon Sep 17 00:00:00 2001
+From af0cc2a5eebfc386024136900da9f17b6a16726a Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Wed, 27 Oct 2021 14:39:29 -0400
 Subject: [PATCH 1/2] Disable vndklite handling

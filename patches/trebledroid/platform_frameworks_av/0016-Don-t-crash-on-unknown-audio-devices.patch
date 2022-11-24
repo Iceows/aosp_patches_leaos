@@ -1,7 +1,7 @@
-From d4c1e9459106cd0e62265782e11d6425bb2bf790 Mon Sep 17 00:00:00 2001
+From 54812319e23174f258ad72c26067e9ba31c52ddf Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Tue, 23 Mar 2021 00:16:42 +0100
-Subject: [PATCH 16/47] Don't crash on unknown audio devices
+Subject: [PATCH 16/26] Don't crash on unknown audio devices
 
 Change-Id: I2df8d88f742da6a84aa8888cdf19de25444de919
 ---

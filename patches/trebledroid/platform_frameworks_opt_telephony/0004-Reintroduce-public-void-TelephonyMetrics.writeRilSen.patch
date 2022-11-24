@@ -1,7 +1,7 @@
-From c9055691ed5d2f8a2a9a189e27f8c04625696d97 Mon Sep 17 00:00:00 2001
+From 341022120cf38d828f1d1da04bf10c503b3a9850 Mon Sep 17 00:00:00 2001
 From: ironydelerium <42721860+ironydelerium@users.noreply.github.com>
 Date: Fri, 31 Dec 2021 02:20:28 -0800
-Subject: [PATCH 04/10] Reintroduce 'public void
+Subject: [PATCH 4/9] Reintroduce 'public void
  TelephonyMetrics.writeRilSendSms(int, int, int, int)'. (#8)
 
 The MediaTek IMS package for Android Q, at the very least (likely for the rest, too)
@@ -18,7 +18,7 @@ Co-authored-by: Sarah Vandomelen <sarah@sightworks.com>
  1 file changed, 13 insertions(+)
 
 diff --git a/src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java b/src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java
-index 3fdbfe0ed7..9479e77dc6 100644
+index 3fdbfe0ed7..fb8011c3df 100644
 --- a/src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java
 +++ b/src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java
 @@ -2320,6 +2320,19 @@ public class TelephonyMetrics {
@@ -35,7 +35,7 @@ index 3fdbfe0ed7..9479e77dc6 100644
 +     *         {@link SmsMessage#FORMAT_3GPP2}.
 +     */
 +    public void writeRilSendSms(int phoneId, int rilSerial, int tech, int format) {
-+    	writeRilSendSms(phoneId, rilSerial, tech, format, 0);
++        writeRilSendSms(phoneId, rilSerial, tech, format, 0);
 +    }
 +
      /**
