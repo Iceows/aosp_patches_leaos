@@ -1,7 +1,7 @@
 From 5648d576ceb12faba3500aa58d01acde14f8e904 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
 Date: Tue, 15 Nov 2022 20:23:28 +0100
-Subject: [PATCH 3/3] Fix offline charger for Huawei phone
+Subject: [PATCH 3/5] Fix offline charger for Huawei phone
 
 # Add vendor charger init
 # Add declaration of offlinecharger service
