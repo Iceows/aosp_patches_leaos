@@ -1,9 +1,9 @@
-From 5648d576ceb12faba3500aa58d01acde14f8e904 Mon Sep 17 00:00:00 2001
+From 228889313e91b12b00562033f8ceb2268ab47d11 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
-Date: Tue, 15 Nov 2022 20:23:28 +0100
-Subject: [PATCH 3/5] Fix offline charger for Huawei phone
+Date: Tue, 6 Dec 2022 06:35:56 +0100
+Subject: [PATCH 2/3] Fix offline charger for Huawei phone
 
-# Add vendor charger init
+# Add ressource vendor charger init
 # Add declaration of offlinecharger service
 ---
  rootdir/init.rc | 13 +++++++++++++

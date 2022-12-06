@@ -1,23 +1,32 @@
-From cc72175efe35f9a16b704216f219028cace811dd Mon Sep 17 00:00:00 2001
+From dc586e9d7b545450e95a3bedfa95ff0bad455c75 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
-Date: Thu, 10 Nov 2022 22:30:16 +0100
-Subject: [PATCH 2/2] SystemUI Enable NFC quick settings tile
+Date: Tue, 6 Dec 2022 20:43:39 +0100
+Subject: [PATCH] SystemUI Enable NFC quick settings tile
 
-SystemUI : Enable NFC quick settings tile
+SystemUI Enable NFC quick settings tile
 ---
- packages/SystemUI/res/values/config.xml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ packages/SystemUI/res/values/config.xml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/packages/SystemUI/res/values/config.xml b/packages/SystemUI/res/values/config.xml
-index 7ed915600230..fd355a9d744c 100644
+index 37549c927a90..59b080eeef4b 100644
 --- a/packages/SystemUI/res/values/config.xml
 +++ b/packages/SystemUI/res/values/config.xml
-@@ -87,7 +87,7 @@
+@@ -68,7 +68,7 @@
+ 
+     <!-- The default tiles to display in QuickSettings -->
+     <string name="quick_settings_tiles_default" translatable="false">
+-        internet,bt,flashlight,dnd,alarm,airplane,controls,wallet,rotation,battery,cast,screenrecord,mictoggle,cameratoggle,custom(com.android.permissioncontroller/.permission.service.SafetyCenterQsTileService)
++        internet,bt,flashlight,dnd,alarm,airplane,controls,wallet,rotation,battery,cast,nfc,screenrecord,mictoggle,cameratoggle,custom(com.android.permissioncontroller/.permission.service.SafetyCenterQsTileService)
+     </string>
+ 
+     <!-- The class path of the Safety Quick Settings Tile -->
+@@ -81,7 +81,7 @@
  
      <!-- Tiles native to System UI. Order should match "quick_settings_tiles_default" -->
      <string name="quick_settings_tiles_stock" translatable="false">
--        internet,bt,flashlight,dnd,alarm,airplane,controls,wallet,rotation,battery,cast,screenrecord,mictoggle,cameratoggle,location,hotspot,inversion,saver,dark,work,night,reverse,reduce_brightness,qr_code_scanner,onehanded,color_correction
-+        internet,bt,flashlight,dnd,alarm,airplane,controls,wallet,rotation,battery,nfc,cast,screenrecord,mictoggle,cameratoggle,location,hotspot,inversion,saver,dark,work,night,reverse,reduce_brightness,qr_code_scanner,onehanded,color_correction
+-        internet,bt,flashlight,dnd,alarm,airplane,controls,wallet,rotation,battery,cast,screenrecord,mictoggle,cameratoggle,location,hotspot,inversion,saver,dark,work,night,reverse,reduce_brightness,qr_code_scanner,onehanded,color_correction,dream
++        internet,bt,flashlight,dnd,alarm,airplane,controls,wallet,rotation,battery,cast,nfc,screenrecord,mictoggle,cameratoggle,location,hotspot,inversion,saver,dark,work,night,reverse,reduce_brightness,qr_code_scanner,onehanded,color_correction,dream
      </string>
  
      <!-- The tiles to display in QuickSettings -->

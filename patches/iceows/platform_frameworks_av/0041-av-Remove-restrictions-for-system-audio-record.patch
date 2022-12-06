@@ -1,35 +1,42 @@
-From aa255c2d21b28894d5f09c0928e70d17e553ce19 Mon Sep 17 00:00:00 2001
-From: jhenrique09 <jhenrique09.mcz@hotmail.com>
-Date: Tue, 24 Mar 2020 16:36:07 -0300
-Subject: [PATCH 41/47] av: Remove restrictions for system audio record [2/2]
+From ba0a11ef589214c5b712b5b60a5c1711f107685e Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Tue, 6 Dec 2022 21:10:27 +0100
+Subject: [PATCH] av: Remove restrictions for system audio record
 
-* Give freedom to screen recorder apps
-
-Change-Id: I726bde4f44bba6fc8cd771ae90c8864b26cdd919
+Give freedom to screen recorder apps
 ---
- .../libaaudio/src/utility/AAudioUtilities.cpp |  2 +-
- .../managerdefinitions/src/AudioPolicyMix.cpp | 24 -------------------
- 2 files changed, 1 insertion(+), 25 deletions(-)
+ .../libaaudio/src/utility/AAudioUtilities.cpp |  4 +--
+ .../managerdefinitions/src/AudioPolicyMix.cpp | 33 -------------------
+ 2 files changed, 2 insertions(+), 35 deletions(-)
 
 diff --git a/media/libaaudio/src/utility/AAudioUtilities.cpp b/media/libaaudio/src/utility/AAudioUtilities.cpp
-index 872faca58b..15e791d0c6 100644
+index 872faca58b..7075150ae6 100644
 --- a/media/libaaudio/src/utility/AAudioUtilities.cpp
 +++ b/media/libaaudio/src/utility/AAudioUtilities.cpp
-@@ -274,7 +274,7 @@ audio_flags_mask_t AAudioConvert_allowCapturePolicyToAudioFlagsMask(
-         flagsMask = static_cast<audio_flags_mask_t>(flagsMask | AUDIO_FLAG_CONTENT_SPATIALIZED);
-     }
+@@ -239,7 +239,7 @@ audio_flags_mask_t AAudioConvert_allowCapturePolicyToAudioFlagsMask(
+         aaudio_spatialization_behavior_t spatializationBehavior,
+         bool isContentSpatialized) {
+     audio_flags_mask_t flagsMask = AUDIO_FLAG_NONE;
+-    switch (policy) {
++    /*switch (policy) {
+         case AAUDIO_UNSPECIFIED:
+         case AAUDIO_ALLOW_CAPTURE_BY_ALL:
+             // flagsMask is not modified
+@@ -254,7 +254,7 @@ audio_flags_mask_t AAudioConvert_allowCapturePolicyToAudioFlagsMask(
+         default:
+             ALOGE("%s() 0x%08X unrecognized capture policy", __func__, policy);
+             // flagsMask is not modified
+-    }
++    }*/
  
--    return flagsMask;
-+    return AUDIO_FLAG_NONE;
- }
- 
- audio_flags_mask_t AAudioConvert_privacySensitiveToAudioFlagsMask(
+     switch (spatializationBehavior) {
+         case AAUDIO_UNSPECIFIED:
 diff --git a/services/audiopolicy/common/managerdefinitions/src/AudioPolicyMix.cpp b/services/audiopolicy/common/managerdefinitions/src/AudioPolicyMix.cpp
-index 546f56b490..a18bf151bb 100644
+index e142bef750..0fdc64559f 100644
 --- a/services/audiopolicy/common/managerdefinitions/src/AudioPolicyMix.cpp
 +++ b/services/audiopolicy/common/managerdefinitions/src/AudioPolicyMix.cpp
-@@ -205,30 +205,6 @@ AudioPolicyMixCollection::MixMatchStatus AudioPolicyMixCollection::mixMatch(
-         const AudioMix* mix, size_t mixIndex, const audio_attributes_t& attributes, uid_t uid) {
+@@ -206,39 +206,6 @@ AudioPolicyMixCollection::MixMatchStatus AudioPolicyMixCollection::mixMatch(
+         const audio_config_base_t& config, uid_t uid) {
  
      if (mix->mMixType == MIX_TYPE_PLAYERS) {
 -        // Loopback render mixes are created from a public API and thus restricted
@@ -54,6 +61,15 @@ index 546f56b490..a18bf151bb 100644
 -                hasFlag(attributes.flags, AUDIO_FLAG_NO_MEDIA_PROJECTION)) {
 -                return MixMatchStatus::NO_MATCH;
 -            }
+-        }
+-
+-        // Permit match only if requested format and mix format are PCM and can be format
+-        // adapted by the mixer, or are the same (compressed) format.
+-        if (!is_mix_loopback(mix->mRouteFlags) &&
+-            !((audio_is_linear_pcm(config.format) && audio_is_linear_pcm(mix->mFormat.format)) ||
+-              (config.format == mix->mFormat.format)) &&
+-              config.format != AUDIO_CONFIG_BASE_INITIALIZER.format) {
+-            return MixMatchStatus::NO_MATCH;
 -        }
 -
          int userId = (int) multiuser_get_user_id(uid);
