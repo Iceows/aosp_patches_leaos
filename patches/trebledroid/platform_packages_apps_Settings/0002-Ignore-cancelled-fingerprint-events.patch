@@ -1,0 +1,51 @@
+From 0cccd88a442a85c94af04abe015d50f2fc5084fc Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Tue, 6 Dec 2022 22:54:12 +0100
+Subject: [PATCH] Ignore cancelled fingerprint events
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+ Ignore cancelled fingerprint events, they are expected, plus add more…
+… fingerprint enroll logs
+---
+ .../biometrics/fingerprint/FingerprintEnrollEnrolling.java   | 5 ++++-
+ .../biometrics/fingerprint/FingerprintEnrollFindSensor.java  | 1 +
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/com/android/settings/biometrics/fingerprint/FingerprintEnrollEnrolling.java b/src/com/android/settings/biometrics/fingerprint/FingerprintEnrollEnrolling.java
+index d65c8c76ab..5af29ebe58 100644
+--- a/src/com/android/settings/biometrics/fingerprint/FingerprintEnrollEnrolling.java
++++ b/src/com/android/settings/biometrics/fingerprint/FingerprintEnrollEnrolling.java
+@@ -749,6 +749,9 @@ public class FingerprintEnrollEnrolling extends BiometricsEnrollEnrolling {
+ 
+     @Override
+     public void onEnrollmentError(int errMsgId, CharSequence errString) {
++        android.util.Log.e("PHH-Enroll", "heyo " + errMsgId + ", " + errString , new Exception());
++        if (errMsgId == 5) return;
++	
+         onCancelEnrollment(errMsgId);
+     }
+ 
+@@ -1075,4 +1078,4 @@ public class FingerprintEnrollEnrolling extends BiometricsEnrollEnrolling {
+             return SettingsEnums.DIALOG_FINGERPRINT_ICON_TOUCH;
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/com/android/settings/biometrics/fingerprint/FingerprintEnrollFindSensor.java b/src/com/android/settings/biometrics/fingerprint/FingerprintEnrollFindSensor.java
+index 20f8af65fa..7620a665b9 100644
+--- a/src/com/android/settings/biometrics/fingerprint/FingerprintEnrollFindSensor.java
++++ b/src/com/android/settings/biometrics/fingerprint/FingerprintEnrollFindSensor.java
+@@ -276,6 +276,7 @@ public class FingerprintEnrollFindSensor extends BiometricEnrollBase implements
+ 
+     @Override
+     public void onEnrollmentError(int errMsgId, CharSequence errString) {
++        android.util.Log.e("PHH-Enroll", "heyo " + errMsgId + ", " + errString + ", " + mNextClicked, new Exception());
+         if (mNextClicked && errMsgId == FingerprintManager.FINGERPRINT_ERROR_CANCELED) {
+             proceedToEnrolling(false /* cancelEnrollment */);
+         } else {
+-- 
+2.25.1
+

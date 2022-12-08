@@ -1,16 +1,16 @@
-From ba0a11ef589214c5b712b5b60a5c1711f107685e Mon Sep 17 00:00:00 2001
+From 8c8de38152a420a3747037d5c7f5bc7f0a6b1746 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
-Date: Tue, 6 Dec 2022 21:10:27 +0100
+Date: Wed, 7 Dec 2022 17:27:37 +0100
 Subject: [PATCH] av: Remove restrictions for system audio record
 
-Give freedom to screen recorder apps
+* Give freedom to screen recorder apps
 ---
- .../libaaudio/src/utility/AAudioUtilities.cpp |  4 +--
- .../managerdefinitions/src/AudioPolicyMix.cpp | 33 -------------------
- 2 files changed, 2 insertions(+), 35 deletions(-)
+ .../libaaudio/src/utility/AAudioUtilities.cpp |  5 +--
+ .../managerdefinitions/src/AudioPolicyMix.cpp | 36 ++-----------------
+ 2 files changed, 6 insertions(+), 35 deletions(-)
 
 diff --git a/media/libaaudio/src/utility/AAudioUtilities.cpp b/media/libaaudio/src/utility/AAudioUtilities.cpp
-index 872faca58b..7075150ae6 100644
+index 872faca58b..193efbb967 100644
 --- a/media/libaaudio/src/utility/AAudioUtilities.cpp
 +++ b/media/libaaudio/src/utility/AAudioUtilities.cpp
 @@ -239,7 +239,7 @@ audio_flags_mask_t AAudioConvert_allowCapturePolicyToAudioFlagsMask(
@@ -22,23 +22,25 @@ index 872faca58b..7075150ae6 100644
          case AAUDIO_UNSPECIFIED:
          case AAUDIO_ALLOW_CAPTURE_BY_ALL:
              // flagsMask is not modified
-@@ -254,7 +254,7 @@ audio_flags_mask_t AAudioConvert_allowCapturePolicyToAudioFlagsMask(
+@@ -254,7 +254,8 @@ audio_flags_mask_t AAudioConvert_allowCapturePolicyToAudioFlagsMask(
          default:
              ALOGE("%s() 0x%08X unrecognized capture policy", __func__, policy);
              // flagsMask is not modified
 -    }
 +    }*/
++    ALOGV("%s() 0x%08X capture policy", __func__, policy);
  
      switch (spatializationBehavior) {
          case AAUDIO_UNSPECIFIED:
 diff --git a/services/audiopolicy/common/managerdefinitions/src/AudioPolicyMix.cpp b/services/audiopolicy/common/managerdefinitions/src/AudioPolicyMix.cpp
-index e142bef750..0fdc64559f 100644
+index e142bef750..c2d7a0e1a2 100644
 --- a/services/audiopolicy/common/managerdefinitions/src/AudioPolicyMix.cpp
 +++ b/services/audiopolicy/common/managerdefinitions/src/AudioPolicyMix.cpp
-@@ -206,39 +206,6 @@ AudioPolicyMixCollection::MixMatchStatus AudioPolicyMixCollection::mixMatch(
+@@ -205,42 +205,12 @@ AudioPolicyMixCollection::MixMatchStatus AudioPolicyMixCollection::mixMatch(
+         const AudioMix* mix, size_t mixIndex, const audio_attributes_t& attributes,
          const audio_config_base_t& config, uid_t uid) {
  
-     if (mix->mMixType == MIX_TYPE_PLAYERS) {
+-    if (mix->mMixType == MIX_TYPE_PLAYERS) {
 -        // Loopback render mixes are created from a public API and thus restricted
 -        // to non sensible audio that have not opted out.
 -        if (is_mix_loopback_render(mix->mRouteFlags)) {
@@ -71,10 +73,15 @@ index e142bef750..0fdc64559f 100644
 -              config.format != AUDIO_CONFIG_BASE_INITIALIZER.format) {
 -            return MixMatchStatus::NO_MATCH;
 -        }
--
+ 
++    if (mix->mMixType == MIX_TYPE_PLAYERS) {
          int userId = (int) multiuser_get_user_id(uid);
  
++        ALOGV("Format of config is 0x%x", config.format);
++
          // TODO if adding more player rules (currently only 2), make rule handling "generic"
+         //      as there is no difference in the treatment of usage- or uid-based rules
+         bool hasUsageMatchRules = false;
 -- 
 2.25.1
 
