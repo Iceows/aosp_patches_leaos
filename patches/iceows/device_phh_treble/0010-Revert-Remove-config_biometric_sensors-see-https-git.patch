@@ -1,0 +1,30 @@
+From 4b2f7e5368a09b1114c90fea93358af7769cab8e Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Fri, 9 Dec 2022 17:22:16 +0100
+Subject: [PATCH] Revert "Remove config_biometric_sensors, see
+ https://github.com/TrebleDroid/platform_frameworks_base/commit/c507779193354e887b809ee5abc253e6ef02aa0f"
+
+This reverts commit 7c1a29f0f51875454b1d15d86b7c0eba0ba38e8a.
+---
+ overlay/frameworks/base/core/res/res/values/config.xml | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/overlay/frameworks/base/core/res/res/values/config.xml b/overlay/frameworks/base/core/res/res/values/config.xml
+index 479bff7..0bc3350 100644
+--- a/overlay/frameworks/base/core/res/res/values/config.xml
++++ b/overlay/frameworks/base/core/res/res/values/config.xml
+@@ -35,6 +35,11 @@
+ 
+ 	<bool name="config_cellBroadcastAppLinks">true</bool>
+ 
++    <string-array name="config_biometric_sensors" translatable="false" >
++        <!-- ID0:Fingerprint:Strong -->
++        <item>0:2:15</item>
++    </string-array>
++
+     <array name="config_availableColorModes">
+         <!-- ColorDisplayManager.COLOR_MODE_NATURAL -->
+         <item>0</item>
+-- 
+2.25.1
+
