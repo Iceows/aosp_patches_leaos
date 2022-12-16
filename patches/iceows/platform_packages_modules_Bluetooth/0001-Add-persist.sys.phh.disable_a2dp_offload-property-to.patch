@@ -1,0 +1,86 @@
+From 495f97c62929005b669d00199b114a7f0a5084d3 Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Sun, 11 Dec 2022 12:29:49 +0100
+Subject: [PATCH] Add persist.sys.phh.disable_a2dp_offload property to force
+ a2dp offload
+
+11/12/2022 : Add android 13r16 persist.bluetooth.a2dp_offload.disabled and persist.sys.phh.disable_a2dp_offload properties
+---
+ system/btif/src/btif_av.cc             |  9 ++++++++-
+ system/stack/a2dp/a2dp_codec_config.cc | 23 +++++++++++++++++++++--
+ 2 files changed, 29 insertions(+), 3 deletions(-)
+
+diff --git a/system/btif/src/btif_av.cc b/system/btif/src/btif_av.cc
+index 7f613b87ad..cc2b42ed13 100644
+--- a/system/btif/src/btif_av.cc
++++ b/system/btif/src/btif_av.cc
+@@ -997,10 +997,17 @@ bt_status_t BtifAvSource::Init(
+   osi_property_get("ro.bluetooth.a2dp_offload.supported", value_sup, "false");
+   osi_property_get("persist.bluetooth.a2dp_offload.disabled", value_dis,
+                    "false");
++
++  char value_phh[PROPERTY_VALUE_MAX] = {'\0'};
++  osi_property_get("persist.sys.phh.disable_a2dp_offload", value_phh, "false");
++  
+   a2dp_offload_enabled_ =
+       (strcmp(value_sup, "true") == 0) && (strcmp(value_dis, "false") == 0);
+-  BTIF_TRACE_DEBUG("a2dp_offload.enable = %d", a2dp_offload_enabled_);
++  if(strcmp(value_phh, "true") == 0)
++      a2dp_offload_enabled_ = false;
+ 
++  LOG_ERROR("a2dp_offload.enable = %s", a2dp_offload_enabled_ ? "on" : "off");
++  
+   callbacks_ = callbacks;
+   if (a2dp_offload_enabled_) {
+     bluetooth::audio::a2dp::update_codec_offloading_capabilities(
+diff --git a/system/stack/a2dp/a2dp_codec_config.cc b/system/stack/a2dp/a2dp_codec_config.cc
+index 34503c8cfa..26ccf8faea 100644
+--- a/system/stack/a2dp/a2dp_codec_config.cc
++++ b/system/stack/a2dp/a2dp_codec_config.cc
+@@ -44,6 +44,9 @@
+ /* The Media Type offset within the codec info byte array */
+ #define A2DP_MEDIA_TYPE_OFFSET 1
+ 
++/* A2DP Offload enabled in stack */
++static bool a2dp_offload_status;
++
+ // Initializes the codec config.
+ // |codec_config| is the codec config to initialize.
+ // |codec_index| and |codec_priority| are the codec type and priority to use
+@@ -558,7 +561,23 @@ A2dpCodecs::~A2dpCodecs() {
+ bool A2dpCodecs::init() {
+   LOG_INFO("%s", __func__);
+   std::lock_guard<std::recursive_mutex> lock(codec_mutex_);
+-
++  char value_phh[PROPERTY_VALUE_MAX];
++  char value_sup[PROPERTY_VALUE_MAX], value_dis[PROPERTY_VALUE_MAX];
++
++  osi_property_get("ro.bluetooth.a2dp_offload.supported", value_sup, "false");
++  osi_property_get("persist.bluetooth.a2dp_offload.disabled", value_dis,
++                   "false");
++  a2dp_offload_status =
++      (strcmp(value_sup, "true") == 0) && (strcmp(value_dis, "false") == 0);
++      
++  osi_property_get("persist.sys.phh.disable_a2dp_offload", value_phh, "false");
++  
++  if(strcmp(value_phh, "true") == 0)
++      a2dp_offload_status = false;
++
++  LOG_ERROR("Got a2dp offload status %s", a2dp_offload_status ? "on" : "off");
++  
++  
+   for (int i = BTAV_A2DP_CODEC_INDEX_MIN; i < BTAV_A2DP_CODEC_INDEX_MAX; i++) {
+     btav_a2dp_codec_index_t codec_index =
+         static_cast<btav_a2dp_codec_index_t>(i);
+@@ -613,7 +632,7 @@ bool A2dpCodecs::init() {
+     }
+   }
+ 
+-  return (!ordered_source_codecs_.empty() && !ordered_sink_codecs_.empty());
++  return (!ordered_source_codecs_.empty() && !ordered_sink_codecs_.empty()) && !a2dp_offload_status;
+ }
+ 
+ A2dpCodecConfig* A2dpCodecs::findSourceCodecConfig(
+-- 
+2.25.1
+
