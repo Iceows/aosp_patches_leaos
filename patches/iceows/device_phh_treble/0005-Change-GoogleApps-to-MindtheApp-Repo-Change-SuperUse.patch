@@ -1,7 +1,7 @@
-From 722519181ed2d55d3ddd14799a57e71c6160e4a8 Mon Sep 17 00:00:00 2001
+From 8c5e5057abe4c86db4d24e6d132f2d067a129718 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
 Date: Tue, 18 Oct 2022 11:23:06 +0200
-Subject: [PATCH 5/9] Change GoogleApps to MindtheApp Repo + Change SuperUser
+Subject: [PATCH 5/8] Change GoogleApps to MindtheApp Repo + Change SuperUser
  apk
 
 Change GoogleApps to  MindtheApp Repo
@@ -11,7 +11,7 @@ New SuperUser version
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/generate.sh b/generate.sh
-index fac8208..6112204 100644
+index 9c20eb5..e83345d 100644
 --- a/generate.sh
 +++ b/generate.sh
 @@ -26,7 +26,7 @@ for part in a ab;do

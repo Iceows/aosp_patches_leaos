@@ -1,7 +1,7 @@
-From 81b3c54458427f993907ffc56b4c37c993c92e8f Mon Sep 17 00:00:00 2001
+From e87cfab76de383b337fac49378c865dffb5b9402 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
 Date: Sun, 20 Nov 2022 17:59:56 +0100
-Subject: [PATCH 3/9] Add 2 NFC Features (HCE and Beam)
+Subject: [PATCH 3/8] Add 2 NFC Features (HCE and Beam)
 
 Enable two NFC features
 
@@ -13,7 +13,7 @@ Enable two NFC features
  1 file changed, 13 insertions(+), 1 deletion(-)
 
 diff --git a/base.mk b/base.mk
-index 5545240..a83d370 100644
+index d9b564f..965af89 100644
 --- a/base.mk
 +++ b/base.mk
 @@ -6,7 +6,14 @@ PRODUCT_COPY_FILES := \
@@ -32,7 +32,7 @@ index 5545240..a83d370 100644
  
  # Bluetooth Audio (System-side HAL, sysbta)
  PRODUCT_PACKAGES += \
-@@ -69,6 +76,11 @@ PRODUCT_COPY_FILES += \
+@@ -70,6 +77,11 @@ PRODUCT_COPY_FILES += \
  # LineageOS build may need this to make NFC work
  PRODUCT_PACKAGES += \
          NfcNci \

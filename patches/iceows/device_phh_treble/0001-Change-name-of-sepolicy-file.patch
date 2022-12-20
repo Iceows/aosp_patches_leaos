@@ -1,7 +1,7 @@
-From 62236e488002464ecedbfa310cd52e1d2bd78ffe Mon Sep 17 00:00:00 2001
+From cd396e466a2013f52244aa1db8c715143925a584 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
 Date: Sat, 1 Oct 2022 14:33:08 +0200
-Subject: [PATCH 1/9] Change name of sepolicy file
+Subject: [PATCH 1/8] Change name of sepolicy file
 
 Change  name of sepolicy file for EMUI9
 ---

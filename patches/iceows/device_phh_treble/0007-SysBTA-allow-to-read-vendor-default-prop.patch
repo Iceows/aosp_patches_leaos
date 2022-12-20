@@ -1,8 +1,9 @@
-From 5fff8c8f6e709f92932d3ea6e4c99aa130db4625 Mon Sep 17 00:00:00 2001
+From bd3b1f91678149f89bd5196da33bdff8723a73bc Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
-Date: Thu, 1 Dec 2022 21:10:44 +0100
-Subject: [PATCH 1/2] SysBTA allow to read vendor default prop
+Date: Tue, 20 Dec 2022 06:23:14 +0100
+Subject: [PATCH 7/8] SysBTA allow to read vendor default prop
 
+Fix kirin 960 audio sysbta
 ---
  sepolicy/hal_audio_sysbta.te | 3 +++
  1 file changed, 3 insertions(+)

@@ -1,7 +1,7 @@
-From bf00be1d484251ece6976073cfab1eeaa8561805 Mon Sep 17 00:00:00 2001
+From 114940d0ecf40634ab0c2231b155722fcdb617b6 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
 Date: Tue, 22 Nov 2022 20:21:45 +0100
-Subject: [PATCH 9/9] Huawei - Fix AGPS watchlss extension
+Subject: [PATCH 8/8] Huawei - Fix AGPS watchlss extension
 
 Fix bad AGPS logspams, process vendor watchlss
 Fix sdcard permission
