@@ -1,7 +1,7 @@
 From 62524ac5b2da386419858b1d1ca954b1c4da7856 Mon Sep 17 00:00:00 2001
 From: Arne Coucheron <arco68@gmail.com>
 Date: Thu, 5 Nov 2020 05:38:44 +0100
-Subject: [PATCH 32/32] SystemUI: Use AVCProfileMain for screen recorder
+Subject: [PATCH 32/36] SystemUI: Use AVCProfileMain for screen recorder
 
 Some devices don't support the High profile very well.
 Use Main profile, which is more compatible, so they
