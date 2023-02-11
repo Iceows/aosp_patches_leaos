@@ -1,16 +1,46 @@
-From b6d9748306fa1b55149de73d35b243cdb3673aa2 Mon Sep 17 00:00:00 2001
+From 1efa1df323f2f9e2d56bb040e7aa99b7aa9169c1 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
-Date: Mon, 19 Dec 2022 08:22:08 +0100
-Subject: [PATCH]  Settings: Reset battery stats [2/2]
+Date: Fri, 10 Feb 2023 22:33:13 +0100
+Subject: [PATCH] Settings: Reset battery stats [2/2]
 
-from
+Port battery stat from
 https://github.com/SuperiorOS/android_packages_apps_Settings/commit/749180a2cbb09cba9c3faae2eb0c4bcda994bafc
 ---
+ res/values-fr/leaos_strings.xml               | 22 ++++++++
  res/values/leaos_strings.xml                  | 22 ++++++++
- .../batteryusage/PowerUsageAdvanced.java      | 56 ++++++++++++++++++-
- 2 files changed, 77 insertions(+), 1 deletion(-)
+ .../fuelgauge/PowerUsageAdvanced.java         | 56 ++++++++++++++++++-
+ 3 files changed, 99 insertions(+), 1 deletion(-)
+ create mode 100644 res/values-fr/leaos_strings.xml
  create mode 100644 res/values/leaos_strings.xml
 
+diff --git a/res/values-fr/leaos_strings.xml b/res/values-fr/leaos_strings.xml
+new file mode 100644
+index 0000000000..3f896174e5
+--- /dev/null
++++ b/res/values-fr/leaos_strings.xml
+@@ -0,0 +1,22 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!--
++     Copyright (C) 2019-2022 Evolution X
++     SPDX-License-Identifier: Apache-2.0
++-->
++<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
++
++    <!-- SELinux Status -->
++    <string name="selinux_status">Status SELinux</string>
++    <string name="selinux_status_disabled">Non disponible</string>
++    <string name="selinux_status_permissive">Permissive</string>
++    <string name="selinux_status_enforcing">Enforcing</string>
++ 
++    <!-- Battery stats reset -->
++    <string name="battery_stats_reset">Reset statistiques ?</string>
++    <string name="battery_stats_message">Les statistiques de consommation de la batterie vont etre perdus</string>
++    <string name="battery_stats_clear" translatable="false">@string/proxy_clear_text</string>
++
++    <!-- Battery temperature -->
++    <string name="battery_temp">Temperature de batterie</string>
++
++ </resources>
 diff --git a/res/values/leaos_strings.xml b/res/values/leaos_strings.xml
 new file mode 100644
 index 0000000000..096ee43944
@@ -39,11 +69,11 @@ index 0000000000..096ee43944
 +    <string name="battery_temp">Battery temperature</string>
 +
 + </resources>
-diff --git a/src/com/android/settings/fuelgauge/batteryusage/PowerUsageAdvanced.java b/src/com/android/settings/fuelgauge/batteryusage/PowerUsageAdvanced.java
-index b88d85ddd1..53a163ed6f 100644
---- a/src/com/android/settings/fuelgauge/batteryusage/PowerUsageAdvanced.java
-+++ b/src/com/android/settings/fuelgauge/batteryusage/PowerUsageAdvanced.java
-@@ -18,7 +18,9 @@ package com.android.settings.fuelgauge.batteryusage;
+diff --git a/src/com/android/settings/fuelgauge/PowerUsageAdvanced.java b/src/com/android/settings/fuelgauge/PowerUsageAdvanced.java
+index afbb71f9ed..5291485c22 100644
+--- a/src/com/android/settings/fuelgauge/PowerUsageAdvanced.java
++++ b/src/com/android/settings/fuelgauge/PowerUsageAdvanced.java
+@@ -16,7 +16,9 @@ package com.android.settings.fuelgauge;
  import static com.android.settings.fuelgauge.BatteryBroadcastReceiver.BatteryUpdateType;
  
  import android.app.settings.SettingsEnums;
@@ -53,7 +83,7 @@ index b88d85ddd1..53a163ed6f 100644
  import android.content.Intent;
  import android.content.IntentFilter;
  import android.database.ContentObserver;
-@@ -26,8 +28,13 @@ import android.net.Uri;
+@@ -24,8 +26,13 @@ import android.net.Uri;
  import android.os.BatteryManager;
  import android.os.Bundle;
  import android.os.Handler;
@@ -67,7 +97,7 @@ index b88d85ddd1..53a163ed6f 100644
  
  import androidx.annotation.NonNull;
  import androidx.annotation.VisibleForTesting;
-@@ -57,6 +64,9 @@ public class PowerUsageAdvanced extends PowerUsageBase {
+@@ -53,6 +60,9 @@ public class PowerUsageAdvanced extends PowerUsageBase {
      private static final String KEY_APP_LIST = "app_list";
      private static final int LOADER_BATTERY_USAGE_STATS = 2;
  
@@ -77,7 +107,7 @@ index b88d85ddd1..53a163ed6f 100644
      @VisibleForTesting
      BatteryHistoryPreference mHistPref;
      @VisibleForTesting
-@@ -139,6 +149,34 @@ public class PowerUsageAdvanced extends PowerUsageBase {
+@@ -135,6 +145,34 @@ public class PowerUsageAdvanced extends PowerUsageBase {
          }
      }
  
@@ -112,7 +142,7 @@ index b88d85ddd1..53a163ed6f 100644
      @Override
      protected List<AbstractPreferenceController> createPreferenceControllers(Context context) {
          refreshFeatureFlag(context);
-@@ -164,6 +202,17 @@ public class PowerUsageAdvanced extends PowerUsageBase {
+@@ -160,6 +198,17 @@ public class PowerUsageAdvanced extends PowerUsageBase {
          return true;
      }
  
@@ -130,7 +160,7 @@ index b88d85ddd1..53a163ed6f 100644
      @Override
      protected void refreshUi(@BatteryUpdateType int refreshType) {
          final Context context = getContext();
-@@ -179,6 +228,10 @@ public class PowerUsageAdvanced extends PowerUsageBase {
+@@ -175,6 +224,10 @@ public class PowerUsageAdvanced extends PowerUsageBase {
          if (mBatteryChartPreferenceController != null && mBatteryHistoryMap != null) {
              mBatteryChartPreferenceController.setBatteryHistoryMap(mBatteryHistoryMap);
          }
@@ -141,7 +171,7 @@ index b88d85ddd1..53a163ed6f 100644
      }
  
      @Override
-@@ -211,8 +264,9 @@ public class PowerUsageAdvanced extends PowerUsageBase {
+@@ -207,8 +260,9 @@ public class PowerUsageAdvanced extends PowerUsageBase {
          if (mPowerUsageFeatureProvider == null) {
              mPowerUsageFeatureProvider = FeatureFactory.getFactory(context)
                      .getPowerUsageFeatureProvider(context);
