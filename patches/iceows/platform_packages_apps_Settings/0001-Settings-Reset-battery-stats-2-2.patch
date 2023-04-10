@@ -1,14 +1,14 @@
-From b6d9748306fa1b55149de73d35b243cdb3673aa2 Mon Sep 17 00:00:00 2001
+From 5bd1d330813c78d2ce83089edd50b5b982663614 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
-Date: Mon, 19 Dec 2022 08:22:08 +0100
-Subject: [PATCH]  Settings: Reset battery stats [2/2]
+Date: Mon, 10 Apr 2023 08:55:57 +0200
+Subject: [PATCH] Settings: Reset battery stats [2/2]
 
-from
-https://github.com/SuperiorOS/android_packages_apps_Settings/commit/749180a2cbb09cba9c3faae2eb0c4bcda994bafc
+Settings: Reset battery stats [2/2]
+Change-Id: I5387890c48d6fb4508c26ddc5a39ceb970b771ae
 ---
- res/values/leaos_strings.xml                  | 22 ++++++++
- .../batteryusage/PowerUsageAdvanced.java      | 56 ++++++++++++++++++-
- 2 files changed, 77 insertions(+), 1 deletion(-)
+ res/values/leaos_strings.xml                  | 22 +++++++
+ .../batteryusage/PowerUsageAdvanced.java      | 57 ++++++++++++++++++-
+ 2 files changed, 78 insertions(+), 1 deletion(-)
  create mode 100644 res/values/leaos_strings.xml
 
 diff --git a/res/values/leaos_strings.xml b/res/values/leaos_strings.xml
@@ -40,7 +40,7 @@ index 0000000000..096ee43944
 +
 + </resources>
 diff --git a/src/com/android/settings/fuelgauge/batteryusage/PowerUsageAdvanced.java b/src/com/android/settings/fuelgauge/batteryusage/PowerUsageAdvanced.java
-index b88d85ddd1..53a163ed6f 100644
+index db904730a2..e9ad8ca675 100644
 --- a/src/com/android/settings/fuelgauge/batteryusage/PowerUsageAdvanced.java
 +++ b/src/com/android/settings/fuelgauge/batteryusage/PowerUsageAdvanced.java
 @@ -18,7 +18,9 @@ package com.android.settings.fuelgauge.batteryusage;
@@ -67,17 +67,17 @@ index b88d85ddd1..53a163ed6f 100644
  
  import androidx.annotation.NonNull;
  import androidx.annotation.VisibleForTesting;
-@@ -57,6 +64,9 @@ public class PowerUsageAdvanced extends PowerUsageBase {
+@@ -55,6 +62,9 @@ public class PowerUsageAdvanced extends PowerUsageBase {
+     private static final String KEY_REFRESH_TYPE = "refresh_type";
+     private static final String KEY_BATTERY_GRAPH = "battery_graph";
      private static final String KEY_APP_LIST = "app_list";
-     private static final int LOADER_BATTERY_USAGE_STATS = 2;
- 
++    
 +    static final int MENU_STATS_RESET = Menu.FIRST + 1;
 +    private boolean mStatsReset = false;
-+
+ 
      @VisibleForTesting
      BatteryHistoryPreference mHistPref;
-     @VisibleForTesting
-@@ -139,6 +149,34 @@ public class PowerUsageAdvanced extends PowerUsageBase {
+@@ -138,6 +148,34 @@ public class PowerUsageAdvanced extends PowerUsageBase {
          }
      }
  
@@ -112,28 +112,29 @@ index b88d85ddd1..53a163ed6f 100644
      @Override
      protected List<AbstractPreferenceController> createPreferenceControllers(Context context) {
          refreshFeatureFlag(context);
-@@ -164,6 +202,17 @@ public class PowerUsageAdvanced extends PowerUsageBase {
+@@ -162,6 +200,17 @@ public class PowerUsageAdvanced extends PowerUsageBase {
+     protected boolean isBatteryHistoryNeeded() {
          return true;
      }
- 
++    
 +    @Override
 +    public boolean onOptionsItemSelected(MenuItem item) {
 +        switch (item.getItemId()) {
-+            case MENU_STATS_RESET:
++           case MENU_STATS_RESET:
 +                resetStats();
 +                return true;
 +            default:
 +                return super.onOptionsItemSelected(item);
 +        }
 +    }
-+
+ 
      @Override
      protected void refreshUi(@BatteryUpdateType int refreshType) {
-         final Context context = getContext();
-@@ -179,6 +228,10 @@ public class PowerUsageAdvanced extends PowerUsageBase {
+@@ -178,6 +227,11 @@ public class PowerUsageAdvanced extends PowerUsageBase {
          if (mBatteryChartPreferenceController != null && mBatteryHistoryMap != null) {
              mBatteryChartPreferenceController.setBatteryHistoryMap(mBatteryHistoryMap);
          }
++        
 +        if (mStatsReset) {
 +            restartBatteryStatsLoader(refreshType);
 +            mStatsReset = false;
@@ -141,18 +142,17 @@ index b88d85ddd1..53a163ed6f 100644
      }
  
      @Override
-@@ -211,8 +264,9 @@ public class PowerUsageAdvanced extends PowerUsageBase {
+@@ -210,8 +264,9 @@ public class PowerUsageAdvanced extends PowerUsageBase {
          if (mPowerUsageFeatureProvider == null) {
              mPowerUsageFeatureProvider = FeatureFactory.getFactory(context)
                      .getPowerUsageFeatureProvider(context);
 -            mIsChartGraphEnabled = mPowerUsageFeatureProvider.isChartGraphEnabled(context);
          }
-+        mIsChartGraphEnabled = Settings.System.getIntForUser(context.getContentResolver(),
++            mIsChartGraphEnabled = Settings.System.getIntForUser(context.getContentResolver(),
 +            "battery_24_hrs_stats", 0, UserHandle.USER_CURRENT) != 0;
      }
  
      private void setBatteryChartPreferenceController() {
 -- 
 2.25.1
-
 

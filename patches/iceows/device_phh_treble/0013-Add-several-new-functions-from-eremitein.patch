@@ -1,52 +1,27 @@
-From 4a0115c6c877ca9f94ea187b5e64c8620bb0e74e Mon Sep 17 00:00:00 2001
+From 6319c7229eb2663201e6109e71b34b12e3ebed28 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
-Date: Wed, 21 Dec 2022 18:42:18 +0100
+Date: Sun, 9 Apr 2023 17:33:07 +0200
 Subject: [PATCH] Add several new functions from eremitein
 
-Add several new functions from eremitein :
 - Add safetynet, securize
 - Add Autorun
 - Add NoLog
 - Add Restart sysui
 - Add Dump Logs
-- Add Disable Sound Volume Effect
+- Add qin.dt2w support
 ---
- base.mk             |  4 ++-
- phh-on-data.sh      | 15 ++++++---
- phh-prop-handler.sh | 79 +++++++++++++++++++++++++++++++++++++++++++++
- rw-system.sh        |  3 ++
+ phh-on-data.sh      | 17 +++++++---
+ phh-prop-handler.sh | 80 +++++++++++++++++++++++++++++++++++++++++++++
  secure.sh           | 16 +++++++++
- vndk.rc             | 18 +++++++++++
- 6 files changed, 130 insertions(+), 5 deletions(-)
+ vndk.rc             | 19 +++++++++++
+ 4 files changed, 128 insertions(+), 4 deletions(-)
  create mode 100644 secure.sh
 
-diff --git a/base.mk b/base.mk
-index 965af89..12b1e88 100644
---- a/base.mk
-+++ b/base.mk
-@@ -51,7 +51,7 @@ PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
- #Huawei HiSuite (also other OEM custom programs I guess) it's of no use in AOSP builds
- PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
- 	persist.sys.usb.config=adb \
--	ro.cust.cdrom=/dev/null	
-+	ro.cust.cdrom=/dev/null
- 
- #VNDK config files
- PRODUCT_COPY_FILES += \
-@@ -87,6 +87,8 @@ PRODUCT_COPY_FILES += \
- 	device/phh/treble/rw-system.sh:system/bin/rw-system.sh \
- 	device/phh/treble/phh-on-data.sh:system/bin/phh-on-data.sh \
- 	device/phh/treble/phh-prop-handler.sh:system/bin/phh-prop-handler.sh \
-+	device/phh/treble/secure.sh:system/phh/secure.sh \
-+	device/phh/treble/su/su:system/phh/xbin/su \
- 	device/phh/treble/fixSPL/getSPL.arm:system/bin/getSPL
- 
- PRODUCT_COPY_FILES += \
 diff --git a/phh-on-data.sh b/phh-on-data.sh
-index 472d16e..34ad54b 100644
+index 472d16e..9c72782 100644
 --- a/phh-on-data.sh
 +++ b/phh-on-data.sh
-@@ -3,25 +3,32 @@
+@@ -3,25 +3,34 @@
  vndk="$(getprop persist.sys.vndk)"
  [ -z "$vndk" ] && vndk="$(getprop ro.vndk.version |grep -oE '^[0-9]+')"
  
@@ -58,6 +33,11 @@ index 472d16e..34ad54b 100644
  fi
  
 -if getprop persist.sys.phh.caf.media_profile |grep -q true;then
++if getprop persist.sys.phh.caf.media_profile |grep -q true; then
+     setprop media.settings.xml "/vendor/etc/media_profiles_vendor.xml"
+ fi
+ 
++ 
 +if getprop persist.sys.phh.no_stock_apps |grep -q true; then
 +	for part in odm vendor; do
 +		mount /mnt/phh/empty_dir/ /$part/overlay
@@ -65,10 +45,7 @@ index 472d16e..34ad54b 100644
 +	done
 +fi
 +
-+if getprop persist.sys.phh.caf.media_profile |grep -q true; then
-     setprop media.settings.xml "/vendor/etc/media_profiles_vendor.xml"
- fi
- 
++
  
  minijailSrc=/system/system_ext/apex/com.android.vndk.v28/lib/libminijail.so
  minijailSrc64=/system/system_ext/apex/com.android.vndk.v28/lib64/libminijail.so
@@ -84,13 +61,14 @@ index 472d16e..34ad54b 100644
      mount $minijailSrc /vendor/lib/libminijail_vendor.so
      mount $minijailSrc64 /system/lib64/vndk-28/libminijail.so
 diff --git a/phh-prop-handler.sh b/phh-prop-handler.sh
-index 4371632..0afdd9b 100644
+index 4371632..8c46052 100644
 --- a/phh-prop-handler.sh
 +++ b/phh-prop-handler.sh
-@@ -195,6 +195,85 @@ if [ "$1" == "persist.sys.phh.backlight.scale" ];then
+@@ -195,6 +195,86 @@ if [ "$1" == "persist.sys.phh.backlight.scale" ];then
      exit
  fi
  
++ 
 +if [ "$1" == "persist.sys.phh.qin.dt2w" ];then
 +    if [[ "$prop_value" != "0" && "$prop_value" != "1" ]]; then
 +        exit 1
@@ -173,28 +151,6 @@ index 4371632..0afdd9b 100644
  if [ "$1" == "persist.sys.phh.disable_soundvolume_effect" ];then
      if [[ "$prop_value" != "0" && "$prop_value" != "1" ]]; then
          exit 1
-diff --git a/rw-system.sh b/rw-system.sh
-index 993b94b..2410ec7 100644
---- a/rw-system.sh
-+++ b/rw-system.sh
-@@ -728,7 +728,9 @@ copyprop() {
-         resetprop_phh "$1" "$(getprop "$2")"
-     fi
- }
-+
- if [ -f /system/phh/secure ] || [ -f /metadata/phh/secure ];then
-+
-     copyprop ro.build.device ro.vendor.build.device
-     copyprop ro.system.build.fingerprint ro.vendor.build.fingerprint
-     copyprop ro.bootimage.build.fingerprint ro.vendor.build.fingerprint
-@@ -754,6 +756,7 @@ if [ -f /system/phh/secure ] || [ -f /metadata/phh/secure ];then
-     copyprop ro.product.manufacturer ro.vendor.product.manufacturer
-     copyprop ro.system.product.manufacturer ro.product.vendor.manufacturer
-     copyprop ro.product.manufacturer ro.product.vendor.manufacturer
-+
-     (getprop ro.vendor.build.security_patch; getprop ro.keymaster.xxx.security_patch) |sort |tail -n 1 |while read v;do
-         [ -n "$v" ] && resetprop_phh ro.build.version.security_patch "$v"
-     done
 diff --git a/secure.sh b/secure.sh
 new file mode 100644
 index 0000000..98027e7
@@ -218,20 +174,20 @@ index 0000000..98027e7
 +resetprop_phh ro.adb.secure 1
 +setprop ctl.restart adbd
 diff --git a/vndk.rc b/vndk.rc
-index d1fffde..5e59a97 100644
+index d1fffde..2efbc4b 100644
 --- a/vndk.rc
 +++ b/vndk.rc
-@@ -52,6 +52,9 @@ on property:persist.sys.phh.disable_soundvolume_effect=*
- on property:ro.sf.lcd_density=*
-     restart surfaceflinger
+@@ -43,6 +43,9 @@ on property:persist.sys.phh.caf.audio_policy=*
+ on property:persist.sys.phh.vsmart.dt2w=*
+     exec u:r:phhsu_daemon:s0 root -- /system/bin/phh-prop-handler.sh "persist.sys.phh.vsmart.dt2w"
  
 +on property:persist.sys.phh.qin.dt2w=*
 +    exec u:r:phhsu_daemon:s0 root -- /system/bin/phh-prop-handler.sh "persist.sys.phh.qin.dt2w"
 +
- on property:persist.sys.phh.disable_a2dp_offload=0
-     setprop persist.sys.phh.disable_a2dp_offload false
+ on property:persist.sys.phh.backlight.scale=*
+     exec u:r:phhsu_daemon:s0 root -- /system/bin/phh-prop-handler.sh "persist.sys.phh.backlight.scale"
  
-@@ -61,6 +64,21 @@ on property:persist.sys.phh.disable_a2dp_offload=1
+@@ -61,6 +64,22 @@ on property:persist.sys.phh.disable_a2dp_offload=1
  on property:persist.sys.phh.disable_a2dp_offload=*
      setprop persist.bluetooth.bluetooth_audio_hal.disabled ${persist.sys.phh.disable_a2dp_offload}
  
@@ -249,6 +205,7 @@ index d1fffde..5e59a97 100644
 +
 +on property:sys.phh.dump_logs=*
 +    exec u:r:phhsu_daemon:s0 root -- /system/bin/phh-prop-handler.sh "sys.phh.dump_logs"
++
 +
  on property:init.svc.ril-proxy=stopped && property:persist.sys.phh.restart_ril=true
      start ril-proxy
