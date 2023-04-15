@@ -1,0 +1,80 @@
+From de10531c7f68591ab5dbc451bf60b8aa277abc5f Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Fri, 14 Apr 2023 12:42:01 +0200
+Subject: [PATCH] Add support of camera prop and huawei debug prop
+
+---
+ sepolicy/huawei.te         | 19 +++++++++++++++++++
+ sepolicy/property_contexts | 10 +++++++++-
+ 2 files changed, 28 insertions(+), 1 deletion(-)
+
+diff --git a/sepolicy/huawei.te b/sepolicy/huawei.te
+index 61b20e3..06c9cd8 100644
+--- a/sepolicy/huawei.te
++++ b/sepolicy/huawei.te
+@@ -169,13 +169,30 @@ type hal_drm_widevine, domain;
+ allow hal_drm_widevine shell_data_file:dir { search };
+ allow hal_drm_widevine shell_test_data_file:dir { search };
+ 
++# AGPS-Supl 2.0 Huawei
++type hi110x_vendor_file, file_type;
++allow system_app hi110x_vendor_file:file r_file_perms;
++
++# For logging
++type dft_syshwdebug_prop, property_type;
++get_prop(rild, dft_syshwdebug_prop)
++get_prop(hal_nfc_default, dft_syshwdebug_prop)
++get_prop(hal_audio_default, dft_syshwdebug_prop)
++
++# Camera
++type cameradaemon_prop, property_type;
++get_prop(priv_app, cameradaemon_prop)
++
+ 
+ # Authorize a lot of process to read default, config and system prop
+ type hal_health_default, domain;
+ type hal_camera_default, domain;
+ type hal_audio_default, domain;
+ type hal_keymaster_default, domain;
++type hal_nfc_default, domain;
++
+ 
++get_prop(system_app, cameradaemon_prop)
+ 
+ get_prop(rild, config_prop)
+ get_prop(rild, system_prop)
+@@ -189,6 +206,7 @@ get_prop(hal_audio_default, config_prop)
+ get_prop(hal_audio_default, system_prop)
+ get_prop(hal_keymaster_default, config_prop)
+ get_prop(hal_drm_widevine, default_prop)
++get_prop(hal_nfc_default, system_prop)
+ 
+ type hi110x_daemon, domain;
+ type wpa_hisi, domain;
+@@ -201,6 +219,7 @@ type storage_info, domain;
+ 
+ get_prop(hi110x_daemon, default_prop)
+ get_prop(wpa_hisi, default_prop)
++get_prop(wpa_hisi, config_prop)
+ get_prop(aptouch_daemon, system_prop)
+ get_prop(gpsdaemon, default_prop)
+ get_prop(oeminfo_nvm, default_prop)
+diff --git a/sepolicy/property_contexts b/sepolicy/property_contexts
+index 185a08b..2f22579 100644
+--- a/sepolicy/property_contexts
++++ b/sepolicy/property_contexts
+@@ -1,2 +1,10 @@
+ persist.sys.sf.hs_mode         u:object_r:sf_hs_mode_prop:s0
+-hwc.exynos.vsync_mode      u:object_r:vendor_hwc_prop:s0
++hwc.exynos.vsync_mode          u:object_r:vendor_hwc_prop:s0
++
++# GCAM
++vendor.camera.aux.packagelist  u:object_r:exported2_default_prop:s0 exact string
++persist.vendor.camera.privapp.list   u:object_r:exported2_default_prop:s0 exact string
++persist.vendor.camera.privapp.list2  u:object_r:exported2_default_prop:s0 exact string
++
++# Huawei debug vendor prop
++persist.sys.huawei.debug.on    u:object_r:dft_syshwdebug_prop:s0 exact int
+-- 
+2.25.1
+
