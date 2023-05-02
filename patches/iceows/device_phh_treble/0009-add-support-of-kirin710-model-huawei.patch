@@ -1,0 +1,31 @@
+From aae8336495c86da211d09c336b1424f00a0323b9 Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Mon, 1 May 2023 16:09:32 +0200
+Subject: [PATCH 9/9] add support of kirin710 model (huawei)
+
+add also more string detection in fingerprint kirin and hi
+---
+ vndk-detect | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/vndk-detect b/vndk-detect
+index 1f4caf4..a0002e5 100644
+--- a/vndk-detect
++++ b/vndk-detect
+@@ -16,11 +16,11 @@ if [ -d /sys/module/five ];then
+ elif [ -f /sbin/adbd ];then
+ 	mount -o bind /system/bin/adbd /sbin/adbd
+ fi
+-if ( getprop ro.hardware | grep -qE '(kirin970|hi3660|hi6250|hi3670)' );then
++if ( getprop ro.hardware | grep -qE '(kirin710|kirin970|hi3660|hi6250|hi3670)' );then
+ 	FOUND_HUAWEI=1
+ fi
+ 
+-if getprop ro.vendor.build.fingerprint |grep -qiE '(huawei|honor|hi3660)';then
++if getprop ro.vendor.build.fingerprint |grep -qiE '(huawei|honor|kirin710|kirin970|hi3660|hi6250|hi3670)';then
+ 	FOUND_HUAWEI=1
+ fi
+ 
+-- 
+2.25.1
+
