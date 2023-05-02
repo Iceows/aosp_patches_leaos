@@ -1,0 +1,272 @@
+From a0c703a8fdb564d09017bb881f073ef736304976 Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Tue, 2 May 2023 22:10:46 +0200
+Subject: [PATCH 10/12] add dynamic securize ,  and some extra functionsc
+
+ Add  securize
+- Add Autorun
+- Add NoLog
+- Add Restart sysui
+- Add Dump Logs
+- Add no stock apps
+---
+ base.mk             |  3 +-
+ phh-on-data.sh      | 15 +++++++---
+ phh-prop-handler.sh | 70 +++++++++++++++++++++++++++++++++++++++++++++
+ rw-system.sh        |  4 +--
+ secure.sh           | 16 +++++++++++
+ vndk.rc             | 38 ++++++++++++++++++++----
+ 6 files changed, 133 insertions(+), 13 deletions(-)
+ create mode 100644 secure.sh
+
+diff --git a/base.mk b/base.mk
+index ed07565..0595527 100644
+--- a/base.mk
++++ b/base.mk
+@@ -46,7 +46,7 @@ PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
+ 	ro.build.version.security_patch=$(PLATFORM_SECURITY_PATCH) \
+ 	ro.adb.secure=0 \
+ 	ro.logd.auditd=true \
+-	ro.logd.kernel=true \
++	ro.logd.kernel=true
+ 
+ #Huawei HiSuite (also other OEM custom programs I guess) it's of no use in AOSP builds
+ PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
+@@ -90,6 +90,7 @@ PRODUCT_COPY_FILES += \
+ 	device/phh/treble/fixSPL/getSPL.arm:system/bin/getSPL
+ 
+ PRODUCT_COPY_FILES += \
++	device/phh/treble/secure.sh:system/phh/secure.sh \
+ 	device/phh/treble/empty:system/phh/empty \
+ 	device/phh/treble/phh-on-boot.sh:system/bin/phh-on-boot.sh
+ 
+diff --git a/phh-on-data.sh b/phh-on-data.sh
+index 472d16e..34ad54b 100644
+--- a/phh-on-data.sh
++++ b/phh-on-data.sh
+@@ -3,25 +3,32 @@
+ vndk="$(getprop persist.sys.vndk)"
+ [ -z "$vndk" ] && vndk="$(getprop ro.vndk.version |grep -oE '^[0-9]+')"
+ 
+-if getprop persist.sys.phh.no_vendor_overlay |grep -q true;then
++if getprop persist.sys.phh.no_vendor_overlay |grep -q true; then
+ 	for part in odm vendor;do
+ 		mount /mnt/phh/empty_dir/ /$part/overlay
+ 	done
+ fi
+ 
+-if getprop persist.sys.phh.caf.media_profile |grep -q true;then
++if getprop persist.sys.phh.no_stock_apps |grep -q true; then
++	for part in odm vendor; do
++		mount /mnt/phh/empty_dir/ /$part/overlay
++		mount /mnt/phh/empty_dir/ /$part/app
++	done
++fi
++
++if getprop persist.sys.phh.caf.media_profile |grep -q true; then
+     setprop media.settings.xml "/vendor/etc/media_profiles_vendor.xml"
+ fi
+ 
+ 
+ minijailSrc=/system/system_ext/apex/com.android.vndk.v28/lib/libminijail.so
+ minijailSrc64=/system/system_ext/apex/com.android.vndk.v28/lib64/libminijail.so
+-if [ "$vndk" = 27 ];then
++if [ "$vndk" = 27 ]; then
+     mount $minijailSrc64 /vendor/lib64/libminijail_vendor.so
+     mount $minijailSrc /vendor/lib/libminijail_vendor.so
+ fi
+ 
+-if [ "$vndk" = 28 ];then
++if [ "$vndk" = 28 ]; then
+     mount $minijailSrc64 /vendor/lib64/libminijail_vendor.so
+     mount $minijailSrc /vendor/lib/libminijail_vendor.so
+     mount $minijailSrc64 /system/lib64/vndk-28/libminijail.so
+diff --git a/phh-prop-handler.sh b/phh-prop-handler.sh
+index 24056e4..3f79b0c 100644
+--- a/phh-prop-handler.sh
++++ b/phh-prop-handler.sh
+@@ -227,4 +227,74 @@ if [ "$1" == "persist.bluetooth.system_audio_hal.enabled" ]; then
+     fi
+     restartAudio
+     exit
++fiv
++
++#securize
++if [ "$1" == "persist.sys.phh.securize" ]; then
++    if [[ "$prop_value" != "true" ]]; then
++        exit 1
++    fi
++
++    if [ ! -f /data/adb/phh/secure ]; then
++        mkdir -p /data/adb/phh
++        cp /system/phh/secure.sh /data/adb/phh/secure
++    fi
++    /system/bin/sh /data/adb/phh/secure
++    exit
++fi
++
++#autorun
++if [ "$1" == "persist.sys.phh.autorun" ]; then
++    if [[ "$prop_value" != "true" && "$prop_value" != "false" ]]; then
++        exit 1
++    fi
++
++    if [ ! -f /data/adb/phh/run ]; then
++        mkdir -p /data/adb/phh
++        touch /data/adb/phh/run
++    fi
++    /system/bin/sh /data/adb/phh/run
++    exit
++fi
++
++#nolog
++if [ "$1" == "persist.sys.phh.nolog" ]; then
++    if [[ "$prop_value" != "false" && "$prop_value" != "true" ]]; then
++        exit 1
++    fi
++
++    if [[ "$prop_value" == "true" ]]; then
++        setprop ctl.stop logd
++        setprop ctl.stop traced
++        setprop ctl.stop traced_probes
++    else
++        setprop ctl.start traced_probes
++        setprop ctl.start traced
++        setprop ctl.start logd
++    fi
++    exit
++fi
++
++#restart_sysui
++if [ "$1" == "sys.phh.restart_sysui" ]; then
++    if [[ "$prop_value" = "false" && "$prop_value" != "true" ]]; then
++        exit
++    fi
++
++    if [[ "$prop_value" == "true" ]]; then
++        pkill systemui
++    fi
++    exit
++fi
++
++#dump_logs
++if [ "$1" == "sys.phh.dump_logs" ]; then
++    if [[ "$prop_value" = "false" && "$prop_value" != "true" ]]; then
++        exit
++    fi
++
++    if [[ "$prop_value" == "true" ]]; then
++        logcat -b all -d > /sdcard/logs.txt
++    fi
++    exit
+ fi
+diff --git a/rw-system.sh b/rw-system.sh
+index 6600774..5db76be 100644
+--- a/rw-system.sh
++++ b/rw-system.sh
+@@ -735,7 +735,7 @@ copyprop() {
+         resetprop_phh "$1" "$(getprop "$2")"
+     fi
+ }
+-if [ -f /system/phh/secure ] || [ -f /metadata/phh/secure ];then
++if [ -f /system/phh/secure ] || [ -f /metadata/phh/secure ] || [ -f /data/adb/phh/secure ];then
+     copyprop ro.build.device ro.vendor.build.device
+     copyprop ro.system.build.fingerprint ro.vendor.build.fingerprint
+     copyprop ro.bootimage.build.fingerprint ro.vendor.build.fingerprint
+@@ -1068,7 +1068,7 @@ fi
+ if getprop ro.vendor.build.fingerprint | grep -iq samsung/a11que;then
+ 	echo -n V > /dev/watchdog0
+ fi
+-	
++
+ if [ "$vndk" -le 30 ];then
+ 	# On older vendor the default behavior was to disable color management
+ 	# Don't override vendor value, merely add a fallback
+diff --git a/secure.sh b/secure.sh
+new file mode 100644
+index 0000000..98027e7
+--- /dev/null
++++ b/secure.sh
+@@ -0,0 +1,16 @@
++(getprop ro.vendor.build.security_patch; getprop ro.keymaster.xxx.security_patch) |sort |tail -n 1 |while read v;do
++    [ -n "$v" ] && resetprop_phh ro.build.version.security_patch "$v"
++done
++resetprop_phh ro.build.tags release-keys
++resetprop_phh ro.boot.vbmeta.device_state locked
++resetprop_phh ro.boot.verifiedbootstate green
++resetprop_phh ro.boot.flash.locked 1
++resetprop_phh ro.boot.veritymode enforcing
++resetprop_phh ro.boot.warranty_bit 0
++resetprop_phh ro.warranty_bit 0
++resetprop_phh ro.debuggable 0
++resetprop_phh ro.secure 1
++resetprop_phh ro.build.type user
++resetprop_phh ro.build.selinux 0
++resetprop_phh ro.adb.secure 1
++setprop ctl.restart adbd
+diff --git a/vndk.rc b/vndk.rc
+index 7f96b52..2090800 100644
+--- a/vndk.rc
++++ b/vndk.rc
+@@ -1,14 +1,14 @@
+ on post-fs
+-	exec - root -- /system/bin/vndk-detect
+-	exec - root -- /system/bin/rw-system.sh
+-	mount none /system/etc/usb_audio_policy_configuration.xml /vendor/etc/usb_audio_policy_configuration.xml bind
++    exec - root -- /system/bin/vndk-detect
++    exec - root -- /system/bin/rw-system.sh
++    mount none /system/etc/usb_audio_policy_configuration.xml /vendor/etc/usb_audio_policy_configuration.xml bind
+         setprop ro.vndk.version ${persist.sys.vndk}
+ 
+ on property:vold.decrypt=trigger_restart_framework
+-	exec - root -- /system/bin/phh-on-data.sh
++    exec - root -- /system/bin/phh-on-data.sh
+ 
+ on early-boot
+-	exec - root -- /system/bin/phh-on-data.sh
++    exec - root -- /system/bin/phh-on-data.sh
+ 
+ service phh_on_boot /system/bin/phh-on-boot.sh
+     oneshot
+@@ -54,6 +54,33 @@ on property:ro.sf.lcd_density=*
+ 
+ on property:persist.bluetooth.system_audio_hal.enabled=*
+     exec u:r:phhsu_daemon:s0 root -- /system/bin/phh-prop-handler.sh "persist.bluetooth.system_audio_hal.enabled"
++    
++on property:persist.sys.phh.qin.dt2w=*
++    exec u:r:phhsu_daemon:s0 root -- /system/bin/phh-prop-handler.sh "persist.sys.phh.qin.dt2w"
++
++on property:persist.sys.phh.disable_a2dp_offload=0
++    setprop persist.sys.phh.disable_a2dp_offload false
++
++on property:persist.sys.phh.disable_a2dp_offload=1
++    setprop persist.sys.phh.disable_a2dp_offload true
++
++on property:persist.sys.phh.disable_a2dp_offload=*
++    setprop persist.bluetooth.bluetooth_audio_hal.disabled ${persist.sys.phh.disable_a2dp_offload}
++
++on property:persist.sys.phh.securize=*
++    exec u:r:phhsu_daemon:s0 root -- /system/bin/phh-prop-handler.sh "persist.sys.phh.securize"
++
++on property:persist.sys.phh.autorun=*
++    exec u:r:phhsu_daemon:s0 root -- /system/bin/phh-prop-handler.sh "persist.sys.phh.autorun"
++
++on property:persist.sys.phh.nolog=*
++    exec u:r:phhsu_daemon:s0 root -- /system/bin/phh-prop-handler.sh "persist.sys.phh.nolog"
++
++on property:sys.phh.restart_sysui=*
++    exec u:r:phhsu_daemon:s0 root -- /system/bin/phh-prop-handler.sh "sys.phh.restart_sysui"
++
++on property:sys.phh.dump_logs=*
++    exec u:r:phhsu_daemon:s0 root -- /system/bin/phh-prop-handler.sh "sys.phh.dump_logs"
+ 
+ on property:init.svc.ril-proxy=stopped && property:persist.sys.phh.restart_ril=true
+     start ril-proxy
+@@ -75,4 +102,3 @@ on property:sys.phh.uninstall-ota=true
+ 
+ on property:ro.vendor.radio.default_network=*
+     setprop ro.telephony.default_network ${ro.vendor.radio.default_network}
+-
+-- 
+2.25.1
+

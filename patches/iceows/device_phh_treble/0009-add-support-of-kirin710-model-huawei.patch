@@ -1,7 +1,7 @@
 From aae8336495c86da211d09c336b1424f00a0323b9 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
 Date: Mon, 1 May 2023 16:09:32 +0200
-Subject: [PATCH 9/9] add support of kirin710 model (huawei)
+Subject: [PATCH 09/12] add support of kirin710 model (huawei)
 
 add also more string detection in fingerprint kirin and hi
 ---

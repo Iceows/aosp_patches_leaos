@@ -1,0 +1,48 @@
+From a6511f4778be9435f47ee99aeb8dda4b1a71eaa4 Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Tue, 2 May 2023 22:18:54 +0200
+Subject: [PATCH 11/12] huawei dualsim, disable second modem to fix data
+
+On android 13 the support of the two sim cards is not correct. So we disable one modem
+---
+ rw-system.sh | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/rw-system.sh b/rw-system.sh
+index 5db76be..e415e0b 100644
+--- a/rw-system.sh
++++ b/rw-system.sh
+@@ -855,7 +855,7 @@ if [ "$has_hostapd" = false ];then
+     setprop persist.sys.phh.system_hostapd true
+ fi
+ 
+-#Weird /odm/phone.prop Huawei stuff
++# In Huawei phones, the modem configuration is made depending on the model (/odm/phone.prop or /vendor/phone.prop)
+ HW_PRODID="$(sed -nE 's/.*productid=([0-9xa-f]*).*/\1/p' /proc/cmdline)"
+ [ -z "$HW_PRODID" ] && HW_PRODID="0x$(od -A none -t x1 /sys/firmware/devicetree/base/hisi,modem_id | sed s/' '//g)"
+ for part in odm vendor;do
+@@ -866,6 +866,21 @@ for part in odm vendor;do
+     fi
+ done
+ 
++# In android 13 the support of the two sim cards is not correct. So we disable one
++if getprop ro.vendor.build.fingerprint | grep -iq -E -e 'huawei|honor' || getprop persist.sys.overlay.huawei | grep -iq -E -e 'true'; then
++
++    # Set to mono sim
++    resetprop_phh ro.multi.rild false
++    resetprop_phh persist.radio.multisim.config single
++    resetprop_phh persist.dsds.enabled false
++
++    # ‭1001100110010100‬ = 09994 - Monosim
++    ‭# 1001101010011100‬ = 09A9C - Multisim
++    resetprop_phh persist.radio.modem.cap 09995
++    resetprop_phh ro.config.modem_number 1
++    resetprop_phh ro.config.client_number 1
++fi
++
+ # Fix sprd adf for surfaceflinger to start
+ # Somehow the names of the device nodes are incorrect on Android 10; fix them by mknod
+ if [ -e /dev/sprd-adf-dev ];then
+-- 
+2.25.1
+

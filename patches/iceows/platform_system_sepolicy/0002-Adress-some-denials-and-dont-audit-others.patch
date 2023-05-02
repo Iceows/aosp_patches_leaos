@@ -1,12 +1,13 @@
-From a99032a61f3517be343628a5d3087444b536a1f2 Mon Sep 17 00:00:00 2001
-From: ChonDoit <thphantomblog@gmail.com>
-Date: Sun, 5 Jun 2022 01:53:56 +0000
-Subject: [PATCH 2/3] Adress some denials and dont audit others
+From bdd01887f0e2f2ace9171137139e8d2f830959b5 Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Sat, 29 Apr 2023 15:13:31 +0200
+Subject: [PATCH]  Adress some denials and dont audit others
 
+Change-Id: I6102936ab7edb91172abfdfab5a3a3f45bcf9cde
 ---
  private/denials.te   |  5 +++++
- private/dontaudit.te | 24 ++++++++++++++++++++++++
- 2 files changed, 29 insertions(+)
+ private/dontaudit.te | 37 +++++++++++++++++++++++++++++++++++++
+ 2 files changed, 42 insertions(+)
  create mode 100644 private/denials.te
  create mode 100644 private/dontaudit.te
 
@@ -23,10 +24,10 @@ index 000000000..b38a04a1c
 +allow system_server default_android_service:service_manager { add };
 diff --git a/private/dontaudit.te b/private/dontaudit.te
 new file mode 100644
-index 000000000..dd0422824
+index 000000000..89a935102
 --- /dev/null
 +++ b/private/dontaudit.te
-@@ -0,0 +1,24 @@
+@@ -0,0 +1,37 @@
 +dontaudit surfaceflinger untrusted_app:process getattr;
 +dontaudit surfaceflinger platform_app:process getattr;
 +dontaudit system_server platform_app:process getattr;
@@ -50,7 +51,20 @@ index 000000000..dd0422824
 +dontaudit system_server untrusted_app:process getattr;
 +dontaudit surfaceflinger priv_app:process getattr;
 +dontaudit system_server mediaprovider_app:process getattr;
-+ 
++dontaudit surfaceflinger bootanim:process getattr;
++dontaudit installd system_server:process getattr;
++dontaudit vold system_server:process getattr;
++dontaudit system_server surfaceflinger:process getattr;
++dontaudit system_server netd:process getattr;
++dontaudit system_server mediaserver:process getattr;
++dontaudit system_server secure_element:process getattr;
++dontaudit system_server untrusted_app_30:process getattr;
++dontaudit system_server vold:process getattr;
++dontaudit system_server mediaprovider:process getattr;
++dontaudit system_server nfc:process getattr;
++dontaudit system_server untrusted_app_29:process getattr;
++dontaudit system_server bluetooth:process getattr;
++dontaudit system_server keystore:process getattr;
 -- 
 2.25.1
 
