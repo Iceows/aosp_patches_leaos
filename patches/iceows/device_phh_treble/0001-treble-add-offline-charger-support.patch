@@ -1,0 +1,106 @@
+From 30eb046698172a267e56388365421e7f448ce544 Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Mon, 15 May 2023 22:12:23 +0200
+Subject: [PATCH 01/12] treble: add offline charger support
+
+Properly Thanks to Victor Bo/Ponces for base patches.
+
+Additions
+| Use default charger service instead gsicharger
+| Capabilities SYS_BOOT to be able to directly boot system
+| Seclabel before run service
+| chown-chmod for Smart Charging
+| import vendor charger properties
+| add selinux rules
+---
+ base.mk             | 11 +++++------
+ charger.rc          | 21 +++++++++++++++++++++
+ sepolicy/charger.te | 19 +++++++++++++++++++
+ 3 files changed, 45 insertions(+), 6 deletions(-)
+ create mode 100644 charger.rc
+ create mode 100644 sepolicy/charger.te
+
+diff --git a/base.mk b/base.mk
+index 348799e..2bf8089 100644
+--- a/base.mk
++++ b/base.mk
+@@ -49,7 +49,11 @@ PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
+ #VNDK config files
+ PRODUCT_COPY_FILES += \
+ 	device/phh/treble/vndk-detect:system/bin/vndk-detect \
+-	device/phh/treble/vndk.rc:system/etc/init/vndk.rc \
++	device/phh/treble/vndk.rc:system/etc/init/vndk.rc
++
++#Charger config files
++PRODUCT_COPY_FILES += \
++	device/phh/treble/charger.rc:system/etc/init/charger.rc
+ 
+ #USB Audio
+ PRODUCT_COPY_FILES += \
+@@ -84,11 +88,6 @@ PRODUCT_PACKAGES += \
+ 	bootctl \
+ 	vintf \
+ 
+-# Fix Offline Charging on Huawmeme
+-PRODUCT_PACKAGES += \
+-	huawei-charger
+-PRODUCT_COPY_FILES += \
+-	$(call find-copy-subdir-files,*,device/phh/treble/huawei_charger/files,system/etc/charger)
+ 
+ PRODUCT_COPY_FILES += \
+ 	device/phh/treble/twrp/twrp.rc:system/etc/init/twrp.rc \
+diff --git a/charger.rc b/charger.rc
+new file mode 100644
+index 0000000..2c3c726
+--- /dev/null
++++ b/charger.rc
+@@ -0,0 +1,21 @@
++# Copyright (C) 2023 The TrebleDroid Project
++#
++#
++
++# Add vendor charger init
++import /vendor/etc/init/${ro.bootmode}/init.${ro.bootmode}.rc
++
++service charger /system/bin/charger
++    class charger
++    user system
++    group system shell graphics input wakelock
++    capabilities SYS_BOOT
++    seclabel u:r:charger:s0
++
++on boot
++    chown system system /sys/class/power_supply/batery/input_suspend
++    chmod 0777 /sys/class/power_supply/batery/input_suspend
++
++on charger && property:ro.hardware=mt*
++    write /sys/class/leds/lcd-backlight/trigger "backlight"
++    write /sys/class/android_usb/android0/enable 1
+diff --git a/sepolicy/charger.te b/sepolicy/charger.te
+new file mode 100644
+index 0000000..5c93952
+--- /dev/null
++++ b/sepolicy/charger.te
+@@ -0,0 +1,19 @@
++# Allow charger to write to sysfs_backlight_attr (only for huawei charger)
++# attribute sysfs_backlight_attr;
++# allow charger sysfs_backlight_attr:file w_file_perms;
++
++# Allow charger to write to sysfs_led_attr (only for huawei charger)
++# attribute sysfs_led_attr;
++# allow charger sysfs_led_attr:file w_file_perms;
++
++# Allow charger to read and write to sysfs_power
++allow charger sysfs_power:file rw_file_perms;
++allow charger sysfs_power:dir r_dir_perms;
++allow charger sysfs_power:lnk_file read;
++
++type sys_dev_block, file_type;
++allow charger system_file:file { entrypoint };
++allow init sys_dev_block:lnk_file { read };
++
++# The system charger can write  powerctl properties
++set_prop(charger, powerctl_prop)
+-- 
+2.33.0.windows.2
+

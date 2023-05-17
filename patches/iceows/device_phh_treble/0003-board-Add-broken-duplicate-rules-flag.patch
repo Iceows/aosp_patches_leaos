@@ -1,4 +1,4 @@
-From 4099ad1303bdebc998c1f1d9d16191a7474f8fea Mon Sep 17 00:00:00 2001
+From d2de60a7b29f9630b6325a4e60b191bca32fb6f0 Mon Sep 17 00:00:00 2001
 From: Alberto Ponces <ponces26@gmail.com>
 Date: Sat, 3 Oct 2020 14:28:35 -0700
 Subject: [PATCH 03/12] board: Add broken duplicate rules flag
@@ -22,5 +22,5 @@ index 2cb5dbc..c38e385 100644
  
  BOARD_ROOT_EXTRA_SYMLINKS := $(filter-out $(BOARD_ROOT_EXTRA_SYMLINKS),/mnt/vendor/persist:/persist)
 -- 
-2.25.1
+2.33.0.windows.2
 

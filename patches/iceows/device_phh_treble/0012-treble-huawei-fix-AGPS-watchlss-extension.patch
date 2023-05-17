@@ -1,0 +1,54 @@
+From c72b0775f91695cd82d9693ec1a0c081032cef22 Mon Sep 17 00:00:00 2001
+From: Iceows <mounierr07@gmail.com>
+Date: Wed, 17 May 2023 19:24:15 +0200
+Subject: [PATCH 12/12] treble : huawei - fix AGPS watchlss extension
+
+Fix bad AGPS logspams, process vendor watchlss
+Fix sdcard permission
+---
+ rw-system.sh | 19 ++++++++-----------
+ 1 file changed, 8 insertions(+), 11 deletions(-)
+
+diff --git a/rw-system.sh b/rw-system.sh
+index 5db76be..b90f6eb 100644
+--- a/rw-system.sh
++++ b/rw-system.sh
+@@ -571,10 +571,6 @@ if getprop ro.hardware | grep -qF exynos; then
+     setprop debug.sf.latch_unsignaled 1
+ fi
+ 
+-if getprop ro.product.model | grep -qF ANE; then
+-    setprop debug.sf.latch_unsignaled 1
+-fi
+-
+ if getprop ro.vendor.product.device | grep -q -e nora -e rhannah; then
+     setprop debug.sf.latch_unsignaled 1
+ fi
+@@ -598,16 +594,17 @@ if getprop ro.vendor.build.fingerprint | grep -iq -e Redmi/rosemary \
+     mount -o bind /system/phh/rosemary-excluded-input-devices.xml /system/etc/excluded-input-devices.xml
+ fi
+ 
++# Iceows patch - NFC NXP conf remove, you must set by specify model patch
+ if getprop ro.vendor.build.fingerprint | grep -iq -E -e 'huawei|honor' || getprop persist.sys.overlay.huawei | grep -iq -E -e 'true'; then
+-    p=/product/etc/nfc/libnfc_nxp_*_*.conf
+-    mount -o bind "$p" /system/etc/libnfc-nxp.conf ||
+-        mount -o bind /product/etc/libnfc-nxp.conf /system/etc/libnfc-nxp.conf || true
+ 
+-    p=/product/etc/nfc/libnfc_brcm_*_*.conf
+-    mount -o bind "$p" /system/etc/libnfc-brcm.conf ||
+-        mount -o bind /product/etc/libnfc-nxp.conf /system/etc/libnfc-nxp.conf || true
++   setprop debug.sf.latch_unsignaled 1
++
++    # Set proper /sdcard permissions to avoid dead storage
++   chown media_rw:media_rw /data/media/0
++   chmod 0770 /data/media/0
+ 
+-    mount -o bind /system/phh/libnfc-nci-huawei.conf /system/etc/libnfc-nci.conf
++    # Disable this watchlss extension to fix logspams and dead gps
++    mount -o bind /system/phh/empty /vendor/bin/gnss_watchlssd_thirdparty
+ fi
+ 
+ if getprop ro.vendor.build.fingerprint | grep -qE -e ".*(crown|star)[q2]*lte.*" -e ".*(SC-0[23]K|SCV3[89]).*" && [ "$vndk" -lt 28 ]; then
+-- 
+2.33.0.windows.2
+

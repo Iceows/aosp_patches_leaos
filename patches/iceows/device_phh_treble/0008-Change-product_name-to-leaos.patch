@@ -1,4 +1,4 @@
-From c047ab98f5926e95315b4113403c101fbb2c96d9 Mon Sep 17 00:00:00 2001
+From e68b47f5efbfc1e94137c83ce3c199acbd484e73 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
 Date: Tue, 2 May 2023 09:31:43 +0200
 Subject: [PATCH 08/12] Change product_name to leaos
@@ -21,5 +21,5 @@ index d016d07..1814fe3 100644
  PRODUCT_BRAND := google
  PRODUCT_SYSTEM_BRAND := google
 -- 
-2.25.1
+2.33.0.windows.2
 

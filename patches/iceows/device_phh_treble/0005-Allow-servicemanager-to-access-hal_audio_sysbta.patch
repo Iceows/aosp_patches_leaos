@@ -1,4 +1,4 @@
-From 98610c48bd6dd016e83463c684e1816ecf1913db Mon Sep 17 00:00:00 2001
+From f54b92319b6fed7ea29f6716cc14c1c21bdf49ea Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
 Date: Sat, 29 Apr 2023 15:41:10 +0200
 Subject: [PATCH 05/12] Allow servicemanager to access hal_audio_sysbta
@@ -25,5 +25,5 @@ index d871ed3..d227c24 100644
 +
 +get_prop(hal_audio_sysbta, vendor_default_prop);
 -- 
-2.25.1
+2.33.0.windows.2
 
