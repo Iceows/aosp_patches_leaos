@@ -1,6 +1,6 @@
-From 139a385a6c3df001281eb1c7e63eef961e7340b3 Mon Sep 17 00:00:00 2001
+From 64b55b742a7580109494e3c9431c1d61800352ca Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
-Date: Wed, 17 May 2023 18:23:52 +0200
+Date: Wed, 17 May 2023 19:53:52 +0200
 Subject: [PATCH] core : fix blanking off in huawei device
 
 For some unknown reason, the call to the gr_fb_blank(blank) function does not work on Huawei with kirin processors. The cause is at the level of the minui library in the call to the function which turns off the screen but cannot turn it back on
@@ -11,13 +11,13 @@ ret = ioctl(fb_fd, FBIOBLANK, blank? FB_BLANK_POWERDOWN: FB_BLANK_UNBLANK)
 
 The call to this function is therefore replaced by a simple filling of the empty screen.
 
-Change-Id: I1e8ff6252d5c90aef8097e9968cb2cabc00503a4
+Change-Id: Id7d4b476495cb063ded3779480741015afcff3ea
 ---
  healthd/healthd_draw.cpp | 43 +++++++++++++++++++++++++++++++++++++++-
  1 file changed, 42 insertions(+), 1 deletion(-)
 
 diff --git a/healthd/healthd_draw.cpp b/healthd/healthd_draw.cpp
-index 7c7931944..24b3131d8 100644
+index 7c7931944..aa6558b10 100644
 --- a/healthd/healthd_draw.cpp
 +++ b/healthd/healthd_draw.cpp
 @@ -17,6 +17,7 @@
@@ -56,7 +56,7 @@ index 7c7931944..24b3131d8 100644
 +    bool bmulti=gr_has_multiple_connectors();
 +
 +    if (bmulti && (drm==1)) {
-+    	KLOG_WARNING("charger", "minui graphic backend don't support multi-connector for blank screen\n");
++        KLOG_WARNING("charger", "minui graphic backend don't support multi-connector for blank screen\n");
 +    }
 +
 +	// blank don't work on huawei device, use clear_screen()
