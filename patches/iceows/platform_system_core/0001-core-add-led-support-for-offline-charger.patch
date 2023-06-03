@@ -1,11 +1,9 @@
-From 536f80376d28f79c8ebb8c373ead89bff98bc7ce Mon Sep 17 00:00:00 2001
+From d05e900267275745ccef2286e594304b18555f18 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
-Date: Thu, 1 Jun 2023 15:54:24 +0200
+Date: Sat, 3 Jun 2023 19:19:21 +0200
 Subject: [PATCH] core :  add led support for offline charger
 
 Just allows you to change the color of the LEDs depending on the state of charge of the battery
-
-Change-Id: Ieac086cf1cb5521a28af7a42a09ff41ef89d3cf4
 ---
  healthd/healthd_draw.cpp                      |  8 ++--
  healthd/healthd_mode_charger.cpp              | 37 ++++++++++++++++---
@@ -104,19 +102,19 @@ index f01ffd486..1ca573cbd 100644
  
  
 diff --git a/healthd/include_charger/charger/healthd_mode_charger.h b/healthd/include_charger/charger/healthd_mode_charger.h
-index 291fc7eb3..9d8bb5498 100644
+index 291fc7eb3..af2456e8c 100644
 --- a/healthd/include_charger/charger/healthd_mode_charger.h
 +++ b/healthd/include_charger/charger/healthd_mode_charger.h
-@@ -117,6 +117,9 @@ class Charger {
-     int64_t next_key_check_ = 0;
+@@ -118,6 +118,9 @@ class Charger {
      int64_t next_pwr_check_ = 0;
      int64_t wait_batt_level_timestamp_ = 0;
-+    
+ 
 +    uint8_t old_red = 0;
 +    uint8_t old_green = 0;
- 
++
      DirectRenderManager drm_;
      SrceenSwitch screen_switch_;
+ 
 -- 
 2.25.1
 
