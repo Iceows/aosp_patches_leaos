@@ -1,0 +1,167 @@
+From 3323e697d0301bfd6b151b967a1a2a0d7668aa6a Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Thu, 1 Jun 2023 19:15:40 +0200
+Subject: [PATCH 2/2] selinux : huawei - add selinux denied rules on EMUI 10
+
+Allows you to pass almost all the selinux rules on a Huawei phone under EMUI 10
+---
+ sepolicy/huawei.te | 79 +++++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 71 insertions(+), 8 deletions(-)
+
+diff --git a/sepolicy/huawei.te b/sepolicy/huawei.te
+index 08bf5c0..475d2ea 100644
+--- a/sepolicy/huawei.te
++++ b/sepolicy/huawei.te
+@@ -22,11 +22,21 @@ allow kernel tmpfs:{ dir file } relabelfrom;
+ allow kernel device:{ dir file } relabelto;
+ 
+ # system/core/init/mount_handler.cpp likes to browse all /sys/block/xxx, so let it do so...
++type sys_block_sda, file_type;
++type sys_block_sdb, file_type;
++type sys_block_sdc, file_type;
+ type sys_block_sdd, file_type;
+ allow init { sysfs sys_block_sdd }:dir r_dir_perms;
+-allow init { sysfs sys_block_sdd }:file r_file_perms;
+ allow init { sysfs sys_block_sdd }:lnk_file read;
+ 
++allow init { sysfs sys_block_sda }:file rw_file_perms;
++allow init { sysfs sys_block_sdb }:file rw_file_perms;
++allow init { sysfs sys_block_sdc }:file rw_file_perms;
++allow init { sysfs sys_block_sdd }:file rw_file_perms;
++
++allow vold { sys_block_sdd }:file rw_file_perms;
++
++
+ allowxperm vendor_init { teecd_data_file }:dir ioctl {
+   FS_IOC_GET_ENCRYPTION_POLICY
+   FS_IOC_SET_ENCRYPTION_POLICY
+@@ -54,6 +64,8 @@ allow rild splash2_data_file:dir rw_dir_perms;
+ allow rild splash2_data_file:file rw_file_perms;
+ allow kernel splash2_data_file:dir { rw_dir_perms create setattr rmdir };
+ allow kernel splash2_data_file:file { rw_file_perms create unlink setattr };
++allow hal_fingerprint_default splash2_data_file:dir rw_dir_perms;
++allow phhsu_daemon splash2_data_file:filesystem { getattr };
+ 
+ # Add support off modem Huawei firmware and nv file
+ type mnt_modem_file, file_type;
+@@ -68,6 +80,13 @@ allow fsck modem_secure_file:dir r_dir_perms;
+ allow fsck modem_fw_file:dir r_dir_perms;
+ allow fsck modem_nv_file:dir r_dir_perms;
+ 
++allow phhsu_daemon modem_secure_file:filesystem { getattr };
++allow phhsu_daemon modem_log_file:filesystem { getattr };
++allow phhsu_daemon modem_fw_file:filesystem { getattr };
++allow phhsu_daemon modem_nv_file:filesystem { getattr };
++
++
++# Google apps
+ allow gmscore_app mnt_modem_file:dir r_dir_perms;
+ 
+ # Fix CPU gouvernor (rules are in xml file)
+@@ -75,6 +94,12 @@ type hwemerffu_service, domain;
+ allow hwemerffu_service proc:file r_file_perms;
+ 
+ 
++type uniperf, domain;
++type hwsched, domain;
++allow uniperf system_data_file:lnk_file { read };
++allow hwsched system_data_file:lnk_file { read };
++
++
+ # Fix all SEdenied
+ 
+ type hinetmanager, fs_type, sysfs_type;
+@@ -88,10 +113,6 @@ allow mediaprovider_app cache_file:dir r_dir_perms;
+ type hal_usb_default, domain;
+ allow hal_usb_default self:capability { dac_override };
+ 
+-type sysfs_led, domain;
+-allow init sysfs_led:file { setattr };
+-
+-
+ #allow crash_dump bluetooth_data_file:file rw_file_perms;
+ #allow crash_dump resourcecache_data_file:file { read open };
+ 
+@@ -112,19 +133,44 @@ allow init teecd_data_file:dir { mounton };
+ allow init teecd_data_file:filesystem { mount relabelto relabelfrom };
+ allow init sys_block_mmcblk0:file { open write };
+ 
++type sys_dev_block, sysfs_type;
++allow init sys_dev_block:lnk_file { read };
++
++
++type cust_data_file, data_file_type;
++allow init cust_data_file:file { rw_file_perms create setattr };
++allow init app_data_file:dir { rw_dir_perms create setattr };
++allow init privapp_data_file:dir { rw_dir_perms create setattr };
++allow init system_app_data_file:dir { rw_dir_perms create setattr };
++
++type hisee_data_file, data_file_type;
++allow init hisee_data_file:filesystem { relabelto };
++allow init self:capability2 { mac_admin };
++allow init proc:file { write };
++
++
++type hisee_blkdev, file_type;
+ allow fsck block_device:blk_file { read open write ioctl };
++allow fsck tmpfs:lnk_file { read open write };
++allow fsck hisee_blkdev:blk_file { read open write };
++allow fsck splash2_data_file:dir { getattr };
++allow fsck cache_file:dir { getattr };
++allow fsck teecd_data_file:dir { getattr };
++
++
+ allow teecd_data_file self:filesystem { associate };
+ allow rootfs labeledfs:filesystem { associate };
+ allow tee self:capability { sys_ptrace };
+ 
+-allow kernel device:chr_file { open write };
++
+ allow oeminfo_nvm block_device:blk_file { ioctl getattr open read write };
+ allow gpsdaemon system_data_file:lnk_file { read };
+ allow oeminfo_nvm device:chr_file { ioctl open read write };
+ allow rild system_data_file:lnk_file { read };
+-allow kernel system_data_root_file:dir r_dir_perms;
+-allow kernel system_data_root_file:file rw_file_perms;
++allow kernel system_data_root_file:dir { r_dir_perms setattr };
++allow kernel system_data_root_file:file { rw_file_perms setattr };
+ allow kernel unlabeled:file r_file_perms;
++allow kernel device:chr_file { open write };
+ 
+ allow hi110x_daemon rootfs:dir { open read };
+ allow hi110x_daemon self:fifo_file { ioctl };
+@@ -203,6 +249,10 @@ type hal_camera_default, domain;
+ type hal_audio_default, domain;
+ type hal_keymaster_default, domain;
+ type hal_nfc_default, domain;
++type hal_wifi_default, domain;
++type hal_wifi_supplicant_default, domain;
++type hal_power_default, domain;
++
+ type hi110x_daemon, domain;
+ type wpa_hisi, domain;
+ type aptouch_daemon, domain;
+@@ -210,7 +260,20 @@ type gpsdaemon, domain;
+ type atcmdserver, domain;
+ type hisecd, domain;
+ type storage_info, domain;
++type mediacodec, domain;
++type fusd, domain;
++
++set_prop(vendor_init, default_prop)
++set_prop(hal_wifi_default, vendor_default_prop)
++get_prop(fusd, default_prop)
++get_prop(vendor_init, default_prop)
++get_prop(hal_wifi_supplicant_default, config_prop)
++get_prop(hal_wifi_supplicant_default, default_prop)
++# declare in samsumg.te
++get_prop(hal_graphics_composer_default, default_prop)
++
+ 
++get_prop(hal_power_default, default_prop)
+ get_prop(system_app, cameradaemon_prop)
+ get_prop(rild, config_prop)
+ get_prop(rild, system_prop)
+-- 
+2.25.1
+
