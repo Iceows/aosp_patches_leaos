@@ -1,18 +1,18 @@
-From bf7b93109728502a5dac6c5f1884e38b7b79a10a Mon Sep 17 00:00:00 2001
-From: Raphael Mounier <mounierr07@gmail.com>
-Date: Tue, 2 May 2023 09:03:40 +0200
-Subject: [PATCH 07/12] selinux : huawei - add selinux denied rules on EMUI 9.1
+From 3f544f5d7b60d4ba630fcd1d78945e9401ab5c91 Mon Sep 17 00:00:00 2001
+From: Iceows <mounierr07@gmail.com>
+Date: Tue, 6 Jun 2023 07:22:28 +0200
+Subject: [PATCH]  selinux : huawei - add selinux denied rules on EMUI 9.1
 
 Allows you to pass almost all the selinux rules on a Huawei phone under EMUI 9selinux :  huawei - add selinux denied rules on EMUI 9.1
 ---
- sepolicy/huawei.te         | 210 ++++++++++++++++++++++++++++++++++++-
+ sepolicy/huawei.te         | 206 ++++++++++++++++++++++++++++++++++++-
  sepolicy/phh.te            |   4 +
  sepolicy/property_contexts |  10 +-
  sepolicy/vold.te           |   4 +
- 4 files changed, 223 insertions(+), 5 deletions(-)
+ 4 files changed, 219 insertions(+), 5 deletions(-)
 
 diff --git a/sepolicy/huawei.te b/sepolicy/huawei.te
-index 2988ed6..08bf5c0 100644
+index 2988ed6..104f639 100644
 --- a/sepolicy/huawei.te
 +++ b/sepolicy/huawei.te
 @@ -6,14 +6,15 @@ type dmd_device, file_type;
@@ -43,7 +43,7 @@ index 2988ed6..08bf5c0 100644
    FS_IOC_GET_ENCRYPTION_POLICY
    FS_IOC_SET_ENCRYPTION_POLICY
  };
-@@ -35,3 +36,204 @@ allowxperm vendor_init { teecd_data_file }:dir ioctl {
+@@ -35,3 +36,200 @@ allowxperm vendor_init { teecd_data_file }:dir ioctl {
  type sys_block_mmcblk0, file_type;
  allow init sys_block_mmcblk0:lnk_file read;
  allow init sysfs_zram:lnk_file read;
@@ -98,10 +98,6 @@ index 2988ed6..08bf5c0 100644
 +
 +type hal_usb_default, domain;
 +allow hal_usb_default self:capability { dac_override };
-+
-+type sysfs_led, domain;
-+allow init sysfs_led:file { setattr };
-+
 +
 +#allow crash_dump bluetooth_data_file:file rw_file_perms;
 +#allow crash_dump resourcecache_data_file:file { read open };

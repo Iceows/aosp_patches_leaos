@@ -1,8 +1,7 @@
-From c5f1fa7f96974f2733f1c002bf965109cdf2277e Mon Sep 17 00:00:00 2001
+From 2f0417388e4b64381f5f6a0e63d361e5ce80387f Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
-Date: Sat, 3 Jun 2023 21:51:11 +0200
-Subject: [PATCH 4/4]  treble : add dynamic securize , and some extra 
- functions
+Date: Mon, 5 Jun 2023 08:38:46 +0200
+Subject: [PATCH]  treble : add dynamic securize , and some extra  functions
 
 - Add Dynamic securize
 - Add Autorun
@@ -13,31 +12,20 @@ Subject: [PATCH 4/4]  treble : add dynamic securize , and some extra
 - Add Double Tape 2W (qin)
 - Remove gnss_watchlssd_thirdparty (agps)
 ---
- base.mk             |  5 +--
+ base.mk             |  1 +
  phh-on-data.sh      | 15 +++++---
  phh-prop-handler.sh | 87 ++++++++++++++++++++++++++++++++++++++++++++-
  rw-system.sh        | 22 ++++++------
  secure.sh           | 16 +++++++++
  vndk.rc             | 31 ++++++++++++++--
- 6 files changed, 153 insertions(+), 23 deletions(-)
+ 6 files changed, 153 insertions(+), 19 deletions(-)
  create mode 100644 secure.sh
 
 diff --git a/base.mk b/base.mk
-index 59d7e84..96e058d 100644
+index 59d7e84..92715b5 100644
 --- a/base.mk
 +++ b/base.mk
-@@ -62,10 +62,6 @@ PRODUCT_COPY_FILES += \
- PRODUCT_COPY_FILES += \
- 	device/phh/treble/charger.rc:system/etc/init/charger.rc
- 
--#Charger image
--PRODUCT_PACKAGES += \
--    product_charger_res_images
--
- #USB Audio
- PRODUCT_COPY_FILES += \
- 	frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:system/etc/usb_audio_policy_configuration.xml \
-@@ -87,6 +83,7 @@ PRODUCT_PACKAGES += \
+@@ -87,6 +87,7 @@ PRODUCT_PACKAGES += \
  	android.hardware.nfc@1.2-service \
  
  PRODUCT_COPY_FILES += \
