@@ -1,7 +1,7 @@
-From c582931acbc809f157426b3a1207c5263816c366 Mon Sep 17 00:00:00 2001
+From 0f624a1e449e1590287a103cc5a77cb651b75dd8 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
-Date: Thu, 8 Jun 2023 15:33:16 +0200
-Subject: [PATCH] huawei - fix open failed when open rpc_motion_req
+Date: Thu, 15 Jun 2023 19:21:54 +0200
+Subject: [PATCH] huawei - fix open failed when open rpc_motion_req 
  (audio_custom)
 
 Fix this error :
@@ -11,14 +11,14 @@ audio_custom: notify_sensor_call_state, open /sys/class/sensors/rpc_sensor/rpc_m
  1 file changed, 3 insertions(+)
 
 diff --git a/rw-system.sh b/rw-system.sh
-index 782a157..7021f3c 100644
+index 782a157..ecda1d4 100644
 --- a/rw-system.sh
 +++ b/rw-system.sh
 @@ -610,6 +610,9 @@ if getprop ro.vendor.build.fingerprint | grep -iq -E -e 'huawei|honor' || getpro
  
      # Disable this watchlss extension to fix logspams and dead gps
      mount -o bind /system/phh/empty /vendor/bin/gnss_watchlssd_thirdparty
-+	
++
 +	# For audio_custom
 +	chown system:system /sys/class/sensors/rpc_sensor/rpc_motion_req
  fi

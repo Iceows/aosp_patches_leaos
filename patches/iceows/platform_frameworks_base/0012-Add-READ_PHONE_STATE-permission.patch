@@ -1,25 +1,27 @@
-From 40409188ede4e1df4ecf9b21ea70cfdaa03688e1 Mon Sep 17 00:00:00 2001
-From: Janson Kang <temasek71@gmail.com>
-Date: Mon, 14 Dec 2015 11:13:24 +0800
-Subject: [PATCH 7/8] Add "android.permission.READ_PHONE_STATE" to manifest
+From 5d99820d2db4fb9d50deba15a3a83a33b3b5f522 Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Thu, 15 Jun 2023 18:58:55 +0200
+Subject: [PATCH] Add READ_PHONE_STATE permission
 
-Change-Id: I78d90166635bbdf6b74e2a02efc1029387b4ad8d
+ Add "android.permission.READ_PHONE_STATE" to manif
+
+Change-Id: I99da3eb84f4c038c7e570253459ad48b2311781b
 ---
  packages/SystemUI/AndroidManifest.xml | 1 +
  1 file changed, 1 insertion(+)
 
 diff --git a/packages/SystemUI/AndroidManifest.xml b/packages/SystemUI/AndroidManifest.xml
-index 0709b3d1167e..52f984bd1088 100644
+index 5c369afc1fcd..532f8e1a590c 100644
 --- a/packages/SystemUI/AndroidManifest.xml
 +++ b/packages/SystemUI/AndroidManifest.xml
-@@ -72,6 +72,7 @@
+@@ -67,6 +67,7 @@
      <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" />
      <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
      <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 +    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
      <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
+     <uses-permission android:name="android.permission.READ_PRECISE_PHONE_STATE" />
      <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 -- 
-2.34.1
+2.25.1
 

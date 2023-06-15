@@ -1,8 +1,8 @@
-From 55b73ef686fe01bea3fc364bae741b0bf5411687 Mon Sep 17 00:00:00 2001
+From d6f62259ffe1d660f72ab595e58f0f0fe5f2cc8c Mon Sep 17 00:00:00 2001
 From: Nico <nicorg2529@gmail.com>
 Date: Fri, 1 Nov 2019 15:41:51 +0000
-Subject: [PATCH 37/47] Partial revert "Move unused classes out of stagefright
- foundataion"
+Subject: [PATCH 279/320] Partial revert "Move unused classes out of
+ stagefright foundataion"
 
 This imports the old foundation code in the standard platform stagefright.
 The foundation variant is used in VNDK, we can't change the ABI there.
@@ -1449,7 +1449,7 @@ index 0000000000..e3b77ec99a
 +
 +}  // namespace android
 diff --git a/media/libstagefright/Android.bp b/media/libstagefright/Android.bp
-index 9af38fcb04..e71f3b5d29 100644
+index 158a285a8e..825b46b6cc 100644
 --- a/media/libstagefright/Android.bp
 +++ b/media/libstagefright/Android.bp
 @@ -296,6 +296,7 @@ cc_library {

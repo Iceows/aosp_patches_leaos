@@ -1,7 +1,7 @@
-From ed821f76d3212cbc22fb06940cfe01a829ac6eb0 Mon Sep 17 00:00:00 2001
+From 35ede1809d634840194c8c6ed0d11d4c29c21106 Mon Sep 17 00:00:00 2001
 From: Vladimir Oltean <olteanv@gmail.com>
 Date: Wed, 9 Jan 2019 01:13:10 +0200
-Subject: [PATCH 29/47] Revert "stagefright: remove Miracast sender code"
+Subject: [PATCH 01/11] Revert "stagefright: remove Miracast sender code"
 
 This reverts commit d0a98fa05f0f6719b93d000c4638230af06e0b99.
 
@@ -13,38 +13,38 @@ Signed-off-by: Kujou Yuko <i@779.moe>
  media/libmedia/Android.bp                     |    1 +
  media/libmedia/IHDCP.cpp                      |  359 ++++
  media/libmedia/IMediaPlayerService.cpp        |   17 +
- media/libmedia/include/media/IHDCP.h          |  120 ++
+ media/libmedia/include/media/IHDCP.h          |  118 ++
  .../include/media/IMediaPlayerService.h       |    2 +
  media/libmediaplayerservice/Android.bp        |    7 +
- media/libmediaplayerservice/HDCP.cpp          |  175 ++
- media/libmediaplayerservice/HDCP.h            |   66 +
+ media/libmediaplayerservice/HDCP.cpp          |  174 ++
+ media/libmediaplayerservice/HDCP.h            |   65 +
  .../MediaPlayerService.cpp                    |   17 +-
  .../MediaPlayerService.h                      |    1 +
  media/libmediaplayerservice/RemoteDisplay.cpp |   66 +
- media/libmediaplayerservice/RemoteDisplay.h   |   59 +
+ media/libmediaplayerservice/RemoteDisplay.h   |   58 +
  media/libstagefright/wifi-display/Android.bp  |   51 +
- .../wifi-display/MediaSender.cpp              |  519 +++++
- .../libstagefright/wifi-display/MediaSender.h |  132 ++
+ .../wifi-display/MediaSender.cpp              |  518 +++++
+ .../libstagefright/wifi-display/MediaSender.h |  131 ++
  .../wifi-display/Parameters.cpp               |   92 +
  .../libstagefright/wifi-display/Parameters.h  |   41 +
- .../wifi-display/VideoFormats.cpp             |  550 ++++++
- .../wifi-display/VideoFormats.h               |  125 ++
- .../libstagefright/wifi-display/rtp/RTPBase.h |   49 +
- .../wifi-display/rtp/RTPSender.cpp            |  808 ++++++++
+ .../wifi-display/VideoFormats.cpp             |  549 ++++++
+ .../wifi-display/VideoFormats.h               |  124 ++
+ .../libstagefright/wifi-display/rtp/RTPBase.h |   47 +
+ .../wifi-display/rtp/RTPSender.cpp            |  807 ++++++++
  .../wifi-display/rtp/RTPSender.h              |  119 ++
  .../wifi-display/source/Converter.cpp         |  821 ++++++++
  .../wifi-display/source/Converter.h           |  157 ++
- .../wifi-display/source/MediaPuller.cpp       |  224 +++
+ .../wifi-display/source/MediaPuller.cpp       |  223 +++
  .../wifi-display/source/MediaPuller.h         |   68 +
- .../wifi-display/source/PlaybackSession.cpp   | 1112 +++++++++++
- .../wifi-display/source/PlaybackSession.h     |  176 ++
+ .../wifi-display/source/PlaybackSession.cpp   | 1111 +++++++++++
+ .../wifi-display/source/PlaybackSession.h     |  175 ++
  .../wifi-display/source/RepeaterSource.cpp    |  219 +++
  .../wifi-display/source/RepeaterSource.h      |   67 +
- .../wifi-display/source/TSPacketizer.cpp      | 1055 ++++++++++
- .../wifi-display/source/TSPacketizer.h        |   94 +
- .../wifi-display/source/WifiDisplaySource.cpp | 1737 +++++++++++++++++
+ .../wifi-display/source/TSPacketizer.cpp      | 1054 ++++++++++
+ .../wifi-display/source/TSPacketizer.h        |   93 +
+ .../wifi-display/source/WifiDisplaySource.cpp | 1736 +++++++++++++++++
  .../wifi-display/source/WifiDisplaySource.h   |  278 +++
- 35 files changed, 9380 insertions(+), 5 deletions(-)
+ 35 files changed, 9362 insertions(+), 5 deletions(-)
  create mode 120000 include/media/IHDCP.h
  create mode 100644 media/libmedia/IHDCP.cpp
  create mode 100644 media/libmedia/include/media/IHDCP.h
@@ -511,10 +511,10 @@ index 07c0ac5979..f8326b607a 100644
              uint32_t params = data.readInt32();
 diff --git a/media/libmedia/include/media/IHDCP.h b/media/libmedia/include/media/IHDCP.h
 new file mode 100644
-index 0000000000..352561ecbb
+index 0000000000..4ef263c11f
 --- /dev/null
 +++ b/media/libmedia/include/media/IHDCP.h
-@@ -0,0 +1,120 @@
+@@ -0,0 +1,118 @@
 +/*
 + * Copyright (C) 2012 The Android Open Source Project
 + *
@@ -633,8 +633,6 @@ index 0000000000..352561ecbb
 +};
 +
 +}  // namespace android
-+
-+
 diff --git a/media/libmedia/include/media/IMediaPlayerService.h b/media/libmedia/include/media/IMediaPlayerService.h
 index 6070673cfa..d35472bc28 100644
 --- a/media/libmedia/include/media/IMediaPlayerService.h
@@ -694,10 +692,10 @@ index 266cb17356..77f1552829 100644
      export_include_dirs: [
 diff --git a/media/libmediaplayerservice/HDCP.cpp b/media/libmediaplayerservice/HDCP.cpp
 new file mode 100644
-index 0000000000..afe39367fb
+index 0000000000..ae823d95df
 --- /dev/null
 +++ b/media/libmediaplayerservice/HDCP.cpp
-@@ -0,0 +1,175 @@
+@@ -0,0 +1,174 @@
 +/*
 + * Copyright (C) 2012 The Android Open Source Project
 + *
@@ -872,13 +870,12 @@ index 0000000000..afe39367fb
 +}
 +
 +}  // namespace android
-+
 diff --git a/media/libmediaplayerservice/HDCP.h b/media/libmediaplayerservice/HDCP.h
 new file mode 100644
-index 0000000000..83c61b56c0
+index 0000000000..0768e52504
 --- /dev/null
 +++ b/media/libmediaplayerservice/HDCP.h
-@@ -0,0 +1,66 @@
+@@ -0,0 +1,65 @@
 +/*
 + * Copyright (C) 2012 The Android Open Source Project
 + *
@@ -944,7 +941,6 @@ index 0000000000..83c61b56c0
 +}  // namespace android
 +
 +#endif  // HDCP_H_
-+
 diff --git a/media/libmediaplayerservice/MediaPlayerService.cpp b/media/libmediaplayerservice/MediaPlayerService.cpp
 index 8e19d02d2f..95d358d069 100644
 --- a/media/libmediaplayerservice/MediaPlayerService.cpp
@@ -1068,10 +1064,10 @@ index 0000000000..0eb4b5dad0
 +}  // namespace android
 diff --git a/media/libmediaplayerservice/RemoteDisplay.h b/media/libmediaplayerservice/RemoteDisplay.h
 new file mode 100644
-index 0000000000..d4573e9a39
+index 0000000000..775d971332
 --- /dev/null
 +++ b/media/libmediaplayerservice/RemoteDisplay.h
-@@ -0,0 +1,59 @@
+@@ -0,0 +1,58 @@
 +/*
 + * Copyright 2012, The Android Open Source Project
 + *
@@ -1130,7 +1126,6 @@ index 0000000000..d4573e9a39
 +}  // namespace android
 +
 +#endif  // REMOTE_DISPLAY_H_
-+
 diff --git a/media/libstagefright/wifi-display/Android.bp b/media/libstagefright/wifi-display/Android.bp
 new file mode 100644
 index 0000000000..fb08c5b072
@@ -1190,10 +1185,10 @@ index 0000000000..fb08c5b072
 +}
 diff --git a/media/libstagefright/wifi-display/MediaSender.cpp b/media/libstagefright/wifi-display/MediaSender.cpp
 new file mode 100644
-index 0000000000..cc412f5f46
+index 0000000000..6c7731779e
 --- /dev/null
 +++ b/media/libstagefright/wifi-display/MediaSender.cpp
-@@ -0,0 +1,519 @@
+@@ -0,0 +1,518 @@
 +/*
 + * Copyright 2013, The Android Open Source Project
 + *
@@ -1712,13 +1707,12 @@ index 0000000000..cc412f5f46
 +}
 +
 +}  // namespace android
-+
 diff --git a/media/libstagefright/wifi-display/MediaSender.h b/media/libstagefright/wifi-display/MediaSender.h
 new file mode 100644
-index 0000000000..04538ea1f6
+index 0000000000..2715f38bcf
 --- /dev/null
 +++ b/media/libstagefright/wifi-display/MediaSender.h
-@@ -0,0 +1,132 @@
+@@ -0,0 +1,131 @@
 +/*
 + * Copyright 2013, The Android Open Source Project
 + *
@@ -1850,7 +1844,6 @@ index 0000000000..04538ea1f6
 +}  // namespace android
 +
 +#endif  // MEDIA_SENDER_H_
-+
 diff --git a/media/libstagefright/wifi-display/Parameters.cpp b/media/libstagefright/wifi-display/Parameters.cpp
 new file mode 100644
 index 0000000000..d2a61ea464
@@ -1998,10 +1991,10 @@ index 0000000000..a5e787e234
 +}  // namespace android
 diff --git a/media/libstagefright/wifi-display/VideoFormats.cpp b/media/libstagefright/wifi-display/VideoFormats.cpp
 new file mode 100644
-index 0000000000..dbc511caa7
+index 0000000000..66fd446cf1
 --- /dev/null
 +++ b/media/libstagefright/wifi-display/VideoFormats.cpp
-@@ -0,0 +1,550 @@
+@@ -0,0 +1,549 @@
 +/*
 + * Copyright 2013, The Android Open Source Project
 + *
@@ -2551,13 +2544,12 @@ index 0000000000..dbc511caa7
 +}
 +
 +}  // namespace android
-+
 diff --git a/media/libstagefright/wifi-display/VideoFormats.h b/media/libstagefright/wifi-display/VideoFormats.h
 new file mode 100644
-index 0000000000..fd38fd192e
+index 0000000000..104587dda0
 --- /dev/null
 +++ b/media/libstagefright/wifi-display/VideoFormats.h
-@@ -0,0 +1,125 @@
+@@ -0,0 +1,124 @@
 +/*
 + * Copyright 2013, The Android Open Source Project
 + *
@@ -2682,13 +2674,12 @@ index 0000000000..fd38fd192e
 +}  // namespace android
 +
 +#endif  // VIDEO_FORMATS_H_
-+
 diff --git a/media/libstagefright/wifi-display/rtp/RTPBase.h b/media/libstagefright/wifi-display/rtp/RTPBase.h
 new file mode 100644
-index 0000000000..194f1ee13b
+index 0000000000..a03d16519e
 --- /dev/null
 +++ b/media/libstagefright/wifi-display/rtp/RTPBase.h
-@@ -0,0 +1,49 @@
+@@ -0,0 +1,47 @@
 +/*
 + * Copyright 2013, The Android Open Source Project
 + *
@@ -2736,14 +2727,12 @@ index 0000000000..194f1ee13b
 +}  // namespace android
 +
 +#endif  // RTP_BASE_H_
-+
-+
 diff --git a/media/libstagefright/wifi-display/rtp/RTPSender.cpp b/media/libstagefright/wifi-display/rtp/RTPSender.cpp
 new file mode 100644
-index 0000000000..ca9fdd2bd7
+index 0000000000..e5aeb03cf1
 --- /dev/null
 +++ b/media/libstagefright/wifi-display/rtp/RTPSender.cpp
-@@ -0,0 +1,808 @@
+@@ -0,0 +1,807 @@
 +/*
 + * Copyright 2013, The Android Open Source Project
 + *
@@ -3551,7 +3540,6 @@ index 0000000000..ca9fdd2bd7
 +}
 +
 +}  // namespace android
-+
 diff --git a/media/libstagefright/wifi-display/rtp/RTPSender.h b/media/libstagefright/wifi-display/rtp/RTPSender.h
 new file mode 100644
 index 0000000000..bedfd01a8a
@@ -4669,10 +4657,10 @@ index 0000000000..ad95ab5ce9
 +#endif  // CONVERTER_H_
 diff --git a/media/libstagefright/wifi-display/source/MediaPuller.cpp b/media/libstagefright/wifi-display/source/MediaPuller.cpp
 new file mode 100644
-index 0000000000..ce07a4ec4c
+index 0000000000..15d5ddbb26
 --- /dev/null
 +++ b/media/libstagefright/wifi-display/source/MediaPuller.cpp
-@@ -0,0 +1,224 @@
+@@ -0,0 +1,223 @@
 +/*
 + * Copyright 2012, The Android Open Source Project
 + *
@@ -4896,7 +4884,6 @@ index 0000000000..ce07a4ec4c
 +}
 +
 +}  // namespace android
-+
 diff --git a/media/libstagefright/wifi-display/source/MediaPuller.h b/media/libstagefright/wifi-display/source/MediaPuller.h
 new file mode 100644
 index 0000000000..1291bb3f9e
@@ -4973,10 +4960,10 @@ index 0000000000..1291bb3f9e
 +#endif  // MEDIA_PULLER_H_
 diff --git a/media/libstagefright/wifi-display/source/PlaybackSession.cpp b/media/libstagefright/wifi-display/source/PlaybackSession.cpp
 new file mode 100644
-index 0000000000..f1ecca0515
+index 0000000000..3355f0e3fa
 --- /dev/null
 +++ b/media/libstagefright/wifi-display/source/PlaybackSession.cpp
-@@ -0,0 +1,1112 @@
+@@ -0,0 +1,1111 @@
 +/*
 + * Copyright 2012, The Android Open Source Project
 + *
@@ -6088,13 +6075,12 @@ index 0000000000..f1ecca0515
 +}
 +
 +}  // namespace android
-+
 diff --git a/media/libstagefright/wifi-display/source/PlaybackSession.h b/media/libstagefright/wifi-display/source/PlaybackSession.h
 new file mode 100644
-index 0000000000..f6673df541
+index 0000000000..88b7e3d180
 --- /dev/null
 +++ b/media/libstagefright/wifi-display/source/PlaybackSession.h
-@@ -0,0 +1,176 @@
+@@ -0,0 +1,175 @@
 +/*
 + * Copyright 2012, The Android Open Source Project
 + *
@@ -6270,7 +6256,6 @@ index 0000000000..f6673df541
 +}  // namespace android
 +
 +#endif  // PLAYBACK_SESSION_H_
-+
 diff --git a/media/libstagefright/wifi-display/source/RepeaterSource.cpp b/media/libstagefright/wifi-display/source/RepeaterSource.cpp
 new file mode 100644
 index 0000000000..af6b66337d
@@ -6571,10 +6556,10 @@ index 0000000000..8d414fd538
 +#endif // REPEATER_SOURCE_H_
 diff --git a/media/libstagefright/wifi-display/source/TSPacketizer.cpp b/media/libstagefright/wifi-display/source/TSPacketizer.cpp
 new file mode 100644
-index 0000000000..865ba94e14
+index 0000000000..fbe5bba816
 --- /dev/null
 +++ b/media/libstagefright/wifi-display/source/TSPacketizer.cpp
-@@ -0,0 +1,1055 @@
+@@ -0,0 +1,1054 @@
 +/*
 + * Copyright 2012, The Android Open Source Project
 + *
@@ -7629,13 +7614,12 @@ index 0000000000..865ba94e14
 +}
 +
 +}  // namespace android
-+
 diff --git a/media/libstagefright/wifi-display/source/TSPacketizer.h b/media/libstagefright/wifi-display/source/TSPacketizer.h
 new file mode 100644
-index 0000000000..0dcb179551
+index 0000000000..def95669ff
 --- /dev/null
 +++ b/media/libstagefright/wifi-display/source/TSPacketizer.h
-@@ -0,0 +1,94 @@
+@@ -0,0 +1,93 @@
 +/*
 + * Copyright 2012, The Android Open Source Project
 + *
@@ -7729,13 +7713,12 @@ index 0000000000..0dcb179551
 +}  // namespace android
 +
 +#endif  // TS_PACKETIZER_H_
-+
 diff --git a/media/libstagefright/wifi-display/source/WifiDisplaySource.cpp b/media/libstagefright/wifi-display/source/WifiDisplaySource.cpp
 new file mode 100644
-index 0000000000..4695e5d289
+index 0000000000..4c02e14e20
 --- /dev/null
 +++ b/media/libstagefright/wifi-display/source/WifiDisplaySource.cpp
-@@ -0,0 +1,1737 @@
+@@ -0,0 +1,1736 @@
 +/*
 + * Copyright 2012, The Android Open Source Project
 + *
@@ -9472,7 +9455,6 @@ index 0000000000..4695e5d289
 +}
 +
 +}  // namespace android
-+
 diff --git a/media/libstagefright/wifi-display/source/WifiDisplaySource.h b/media/libstagefright/wifi-display/source/WifiDisplaySource.h
 new file mode 100644
 index 0000000000..c25a675ee2
@@ -9758,5 +9740,5 @@ index 0000000000..c25a675ee2
 +
 +#endif  // WIFI_DISPLAY_SOURCE_H_
 -- 
-2.25.1
+2.34.1
 
