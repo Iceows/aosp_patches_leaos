@@ -1,0 +1,28 @@
+From c461b826f72bb4e3c9fc9723feb2efca8ffb1e33 Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Fri, 6 Oct 2023 15:45:42 +0200
+Subject: [PATCH] audioflinger: change callingUid by getCallingUid
+
+Fix build compilation
+
+Change-Id: Ia2d6dfd566e09524c0620d0c2e10b344e35e23a0
+---
+ services/audiopolicy/service/AudioPolicyInterfaceImpl.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/services/audiopolicy/service/AudioPolicyInterfaceImpl.cpp b/services/audiopolicy/service/AudioPolicyInterfaceImpl.cpp
+index 8c60ec5843..3cbb7250c5 100644
+--- a/services/audiopolicy/service/AudioPolicyInterfaceImpl.cpp
++++ b/services/audiopolicy/service/AudioPolicyInterfaceImpl.cpp
+@@ -718,7 +718,7 @@ Status AudioPolicyService::getInputForAttr(const media::AudioAttributesInternal&
+                 // FIXME: use the same permission as for remote submix for now.
+                 FALLTHROUGH_INTENDED;
+             case AudioPolicyInterface::API_INPUT_MIX_CAPTURE:
+-                if (!isAudioServerOrMediaServerUid(callingUid) && !canCaptureOutput) {
++                if (!isAudioServerOrMediaServerUid(IPCThreadState::self()->getCallingUid()) && !canCaptureOutput) {
+                     ALOGE("%s permission denied: capture not allowed", __func__);
+                     status = PERMISSION_DENIED;
+                 }
+-- 
+2.25.1
+

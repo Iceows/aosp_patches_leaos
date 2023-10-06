@@ -1,0 +1,34 @@
+From 1ccfc30f317a936303046acac32a2f410b463378 Mon Sep 17 00:00:00 2001
+From: Mingming Yin <mingming@codeaurora.org>
+Date: Thu, 17 Jul 2014 18:21:21 -0700
+Subject: [PATCH 03/13] audiopolicy: Disable sonification on WFD sink
+
+ * Aligned with CAF as of QSSI12, and removed unnecessary
+   devices.isEmpty() check.
+
+Original patch:
+https://source.codeaurora.org/quic/la/platform/frameworks/av/commit/services/audiopolicy?h=LA.BR64.1.1.1-01010-8x16.0&id=9cc970fc512bedfa6a2cf03457d93609adc6eb85
+
+Change-Id: I9bad6a294ddd7aee72f6f6a314666b892b730c8e
+---
+ services/audiopolicy/enginedefault/src/Engine.cpp | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/services/audiopolicy/enginedefault/src/Engine.cpp b/services/audiopolicy/enginedefault/src/Engine.cpp
+index 88cbb7d1f0..92522ec79c 100644
+--- a/services/audiopolicy/enginedefault/src/Engine.cpp
++++ b/services/audiopolicy/enginedefault/src/Engine.cpp
+@@ -410,6 +410,10 @@ DeviceVector Engine::getDevicesForStrategyInt(legacy_strategy strategy,
+             devices2 = availableOutputDevices.getDevicesFromType(
+                     AUDIO_DEVICE_OUT_ANLG_DOCK_HEADSET);
+         }
++        if ((devices2.isEmpty()) && (strategy != STRATEGY_SONIFICATION)) {
++            // no sonification on WFD sink
++            devices2 = availableOutputDevices.getDevicesFromType(AUDIO_DEVICE_OUT_PROXY);
++        }
+         if (devices2.isEmpty()) {
+             devices2 = availableOutputDevices.getFirstDevicesFromTypes({
+                         AUDIO_DEVICE_OUT_DGTL_DOCK_HEADSET, AUDIO_DEVICE_OUT_SPEAKER});
+-- 
+2.25.1
+

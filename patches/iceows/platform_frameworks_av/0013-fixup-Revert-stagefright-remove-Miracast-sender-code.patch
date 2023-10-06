@@ -1,0 +1,31 @@
+From e7ecc4301a9ffd2f5b73ba8cbc2f7a5208d5b448 Mon Sep 17 00:00:00 2001
+From: AmeChanRain <downloadbot007@gmail.com>
+Date: Thu, 5 Oct 2023 11:18:40 +0000
+Subject: [PATCH 13/13] fixup! Revert "stagefright: remove Miracast sender
+ code"
+
+* media/libstagefright/mpeg2ts has been moved to media/module/mpeg2ts
+
+* Ref: https://github.com/Miku-UI/platform_frameworks_av/commit/d2843da2f52a8b9dfb74120d66fe3e1bdb56a89b
+
+Change-Id: Id003b86bf1d75b2b98934816eaf9e329162b7b20
+---
+ media/libstagefright/wifi-display/Android.bp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/media/libstagefright/wifi-display/Android.bp b/media/libstagefright/wifi-display/Android.bp
+index 2f1e74943f..bfb3013d1d 100644
+--- a/media/libstagefright/wifi-display/Android.bp
++++ b/media/libstagefright/wifi-display/Android.bp
+@@ -18,7 +18,7 @@ cc_library_shared {
+         "frameworks/av/media/libstagefright",
+         "frameworks/native/include/media/openmax",
+         "frameworks/native/include/media/hardware",
+-        "frameworks/av/media/libstagefright/mpeg2ts",
++        "frameworks/av/media/module/mpeg2ts",
+     ],
+ 
+     shared_libs: [
+-- 
+2.25.1
+

@@ -1,0 +1,26 @@
+From 03f4d1bf79e6e632b96a2ec16318e73c43a63714 Mon Sep 17 00:00:00 2001
+From: Adithya R <gh0strider.2k18.reborn@gmail.com>
+Date: Sat, 14 Dec 2019 02:22:56 +0530
+Subject: [PATCH 06/13] libstagefright: Remove libmediaextractor dependency
+
+Change-Id: Ifb564aafcf6f9bd45010500a589050b6577c0f7a
+Signed-off-by: DennySPb <dennyspb@gmail.com>
+---
+ media/libstagefright/tests/Android.bp | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/media/libstagefright/tests/Android.bp b/media/libstagefright/tests/Android.bp
+index 806cb6fc8c..f10f2b4aaa 100644
+--- a/media/libstagefright/tests/Android.bp
++++ b/media/libstagefright/tests/Android.bp
+@@ -34,7 +34,6 @@ cc_test {
+         "libcutils",
+         "libgui",
+         "libmedia",
+-        "libmediaextractor",
+         "libstagefright",
+         "libstagefright_foundation",
+         "libstagefright_omx",
+-- 
+2.25.1
+
