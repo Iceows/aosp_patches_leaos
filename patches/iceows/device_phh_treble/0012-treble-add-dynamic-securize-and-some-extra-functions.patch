@@ -1,0 +1,234 @@
+From f5d6c21b6f03b3311a3f18af9fc9e231a8a9e9ef Mon Sep 17 00:00:00 2001
+From: Iceows <mounierr07@gmail.com>
+Date: Sat, 7 Oct 2023 23:12:01 +0200
+Subject: [PATCH 3/3] treble: add dynamic securize , and some extra  functions
+
+- Add Dynamic securize
+- Add Autorun
+- Add NoLog
+- Add Restart sysui
+- Add Dump Logs to sdcard
+- Add no stock apps (vendor)
+- Remove gnss_watchlssd_thirdparty (hi6250 agps)
+---
+ base.mk             |  1 +
+ phh-on-data.sh      |  6 ++++
+ phh-prop-handler.sh | 71 +++++++++++++++++++++++++++++++++++++++++++++
+ rw-system.sh        | 25 ++++++++--------
+ secure.sh           | 16 ++++++++++
+ vndk.rc             | 15 ++++++++++
+ 6 files changed, 121 insertions(+), 13 deletions(-)
+ create mode 100644 secure.sh
+
+diff --git a/base.mk b/base.mk
+index a096d0b..18c97d2 100644
+--- a/base.mk
++++ b/base.mk
+@@ -76,6 +76,7 @@ PRODUCT_PACKAGES += \
+         NfcNci \
+ 
+ PRODUCT_COPY_FILES += \
++	device/phh/treble/secure.sh:system/phh/secure.sh \
+ 	device/phh/treble/rw-system.sh:system/bin/rw-system.sh \
+ 	device/phh/treble/phh-on-data.sh:system/bin/phh-on-data.sh \
+ 	device/phh/treble/phh-prop-handler.sh:system/bin/phh-prop-handler.sh \
+diff --git a/phh-on-data.sh b/phh-on-data.sh
+index 472d16e..1c8b887 100644
+--- a/phh-on-data.sh
++++ b/phh-on-data.sh
+@@ -13,6 +13,12 @@ if getprop persist.sys.phh.caf.media_profile |grep -q true;then
+     setprop media.settings.xml "/vendor/etc/media_profiles_vendor.xml"
+ fi
+ 
++if getprop persist.sys.phh.no_stock_apps |grep -q true; then
++	for part in odm vendor; do
++		mount /mnt/phh/empty_dir/ /$part/overlay
++		mount /mnt/phh/empty_dir/ /$part/app
++	done
++fi
+ 
+ minijailSrc=/system/system_ext/apex/com.android.vndk.v28/lib/libminijail.so
+ minijailSrc64=/system/system_ext/apex/com.android.vndk.v28/lib64/libminijail.so
+diff --git a/phh-prop-handler.sh b/phh-prop-handler.sh
+index 7637cc9..3719902 100644
+--- a/phh-prop-handler.sh
++++ b/phh-prop-handler.sh
+@@ -288,3 +288,74 @@ if [ "$1" == "persist.sys.phh.monosim" ]; then
+     fi
+     exit
+ fi
++
++
++#securize
++if [ "$1" == "persist.sys.phh.securize" ]; then
++    if [[ "$prop_value" != "true" ]]; then
++        exit 1
++    fi
++
++    if [ ! -f /data/adb/phh/secure ]; then
++        mkdir -p /data/adb/phh
++        cp /system/phh/secure.sh /data/adb/phh/secure
++    fi
++    /system/bin/sh /data/adb/phh/secure
++    exit
++fi
++
++#autorun
++if [ "$1" == "persist.sys.phh.autorun" ]; then
++    if [[ "$prop_value" != "true" && "$prop_value" != "false" ]]; then
++        exit 1
++    fi
++
++    if [ ! -f /data/adb/phh/run ]; then
++        mkdir -p /data/adb/phh
++        touch /data/adb/phh/run
++    fi
++    /system/bin/sh /data/adb/phh/run
++    exit
++fi
++
++#nolog
++if [ "$1" == "persist.sys.phh.nolog" ]; then
++    if [[ "$prop_value" != "false" && "$prop_value" != "true" ]]; then
++        exit 1
++    fi
++
++    if [[ "$prop_value" == "true" ]]; then
++        setprop ctl.stop logd
++        setprop ctl.stop traced
++        setprop ctl.stop traced_probes
++    else
++        setprop ctl.start traced_probes
++        setprop ctl.start traced
++        setprop ctl.start logd
++    fi
++    exit
++fi
++
++#restart_sysui
++if [ "$1" == "sys.phh.restart_sysui" ]; then
++    if [[ "$prop_value" = "false" && "$prop_value" != "true" ]]; then
++        exit
++    fi
++
++    if [[ "$prop_value" == "true" ]]; then
++        pkill systemui
++    fi
++    exit
++fi
++
++#dump_logs
++if [ "$1" == "sys.phh.dump_logs" ]; then
++    if [[ "$prop_value" = "false" && "$prop_value" != "true" ]]; then
++        exit
++    fi
++
++    if [[ "$prop_value" == "true" ]]; then
++        logcat -b all -d > /sdcard/logs.txt
++    fi
++    exit
++fi
+diff --git a/rw-system.sh b/rw-system.sh
+index 910725b..006534e 100644
+--- a/rw-system.sh
++++ b/rw-system.sh
+@@ -578,10 +578,6 @@ if getprop ro.hardware | grep -qF exynos; then
+     setprop debug.sf.latch_unsignaled 1
+ fi
+ 
+-if getprop ro.product.model | grep -qF ANE; then
+-    setprop debug.sf.latch_unsignaled 1
+-fi
+-
+ if getprop ro.vendor.product.device | grep -q -e nora -e rhannah; then
+     setprop debug.sf.latch_unsignaled 1
+ fi
+@@ -605,16 +601,19 @@ if getprop ro.vendor.build.fingerprint | grep -iq -e Redmi/rosemary \
+     mount -o bind /system/phh/rosemary-excluded-input-devices.xml /system/etc/excluded-input-devices.xml
+ fi
+ 
++ 
++# Iceows patch - NFC NXP conf remove, you must set by specify model patch
++# remove gnss_watchlssd_thirdparty to avoid log spam
+ if getprop ro.vendor.build.fingerprint | grep -iq -E -e 'huawei|honor' || getprop persist.sys.overlay.huawei | grep -iq -E -e 'true'; then
+-    p=/product/etc/nfc/libnfc_nxp_*_*.conf
+-    mount -o bind "$p" /system/etc/libnfc-nxp.conf ||
+-        mount -o bind /product/etc/libnfc-nxp.conf /system/etc/libnfc-nxp.conf || true
+-
+-    p=/product/etc/nfc/libnfc_brcm_*_*.conf
+-    mount -o bind "$p" /system/etc/libnfc-brcm.conf ||
+-        mount -o bind /product/etc/libnfc-nxp.conf /system/etc/libnfc-nxp.conf || true
++    
++	setprop debug.sf.latch_unsignaled 1
+ 
+-    mount -o bind /system/phh/libnfc-nci-huawei.conf /system/etc/libnfc-nci.conf
++    # Set proper /sdcard permissions to avoid dead storage
++    chown media_rw:media_rw /data/media/0
++    chmod 0770 /data/media/0
++ 
++    # Disable this watchlss extension to fix logspams and dead gps
++    mount -o bind /system/phh/empty /vendor/bin/gnss_watchlssd_thirdparty
+ 
+ 	# For audio_custom
+ 	chown system:system /sys/class/sensors/rpc_sensor/rpc_motion_req
+@@ -745,7 +744,7 @@ copyprop() {
+         resetprop_phh "$1" "$(getprop "$2")"
+     fi
+ }
+-if [ -f /system/phh/secure ] || [ -f /metadata/phh/secure ];then
++if [ -f /system/phh/secure ] || [ -f /metadata/phh/secure ] || [ -f /data/adb/phh/secure ];then
+     copyprop ro.build.device ro.vendor.build.device
+     copyprop ro.system.build.fingerprint ro.vendor.build.fingerprint
+     copyprop ro.bootimage.build.fingerprint ro.vendor.build.fingerprint
+diff --git a/secure.sh b/secure.sh
+new file mode 100644
+index 0000000..d776832
+--- /dev/null
++++ b/secure.sh
+@@ -0,0 +1,16 @@
++(getprop ro.vendor.build.security_patch; getprop ro.keymaster.xxx.security_patch) |sort |tail -n 1 |while read v;do
++    [ -n "$v" ] && resetprop_phh ro.build.version.security_patch "$v"
++done
++resetprop_phh ro.build.tags release-keys
++resetprop_phh ro.boot.vbmeta.device_state locked
++resetprop_phh ro.boot.verifiedbootstate green
++resetprop_phh ro.boot.flash.locked 1
++resetprop_phh ro.boot.veritymode enforcing
++resetprop_phh ro.boot.warranty_bit 0
++resetprop_phh ro.warranty_bit 0
++resetprop_phh ro.debuggable 0
++resetprop_phh ro.secure 1
++resetprop_phh ro.build.type user
++resetprop_phh ro.build.selinux 0
++resetprop_phh ro.adb.secure 1
++setprop ctl.restart adbd
+\ No newline at end of file
+diff --git a/vndk.rc b/vndk.rc
+index 470b9ac..5d00b88 100644
+--- a/vndk.rc
++++ b/vndk.rc
+@@ -67,6 +67,21 @@ on property:ro.sf.lcd_density=*
+ on property:persist.bluetooth.system_audio_hal.enabled=*
+     exec u:r:phhsu_daemon:s0 root -- /system/bin/phh-prop-handler.sh "persist.bluetooth.system_audio_hal.enabled"
+ 
++on property:persist.sys.phh.securize=*
++    exec u:r:phhsu_daemon:s0 root -- /system/bin/phh-prop-handler.sh "persist.sys.phh.securize"
++
++on property:persist.sys.phh.autorun=*
++    exec u:r:phhsu_daemon:s0 root -- /system/bin/phh-prop-handler.sh "persist.sys.phh.autorun"
++
++on property:persist.sys.phh.nolog=*
++    exec u:r:phhsu_daemon:s0 root -- /system/bin/phh-prop-handler.sh "persist.sys.phh.nolog"
++
++on property:sys.phh.restart_sysui=*
++    exec u:r:phhsu_daemon:s0 root -- /system/bin/phh-prop-handler.sh "sys.phh.restart_sysui"
++
++on property:sys.phh.dump_logs=*
++    exec u:r:phhsu_daemon:s0 root -- /system/bin/phh-prop-handler.sh "sys.phh.dump_logs"
++
+ on property:init.svc.ril-proxy=stopped && property:persist.sys.phh.restart_ril=true
+     start ril-proxy
+ 
+-- 
+2.33.0.windows.2
+
