@@ -1,0 +1,60 @@
+From 58c4705b29b6bf0f2903f78bef0be66083cde28d Mon Sep 17 00:00:00 2001
+From: Iceows <mounierr07@gmail.com>
+Date: Sun, 8 Oct 2023 23:00:06 +0200
+Subject: [PATCH 12/13] audio: replace param string by corresponding const
+
+---
+ bluetooth/audio/hw/stream_apis.cc | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
+
+diff --git a/bluetooth/audio/hw/stream_apis.cc b/bluetooth/audio/hw/stream_apis.cc
+index 1f449fc..71fca57 100644
+--- a/bluetooth/audio/hw/stream_apis.cc
++++ b/bluetooth/audio/hw/stream_apis.cc
+@@ -335,8 +335,8 @@ static int out_set_parameters(struct audio_stream* stream,
+     }
+   }
+ 
+-  if (params.find("routing") != params.end()) {
+-    auto routing_param = params.find("routing");
++  if (params.find("AUDIO_PARAMETER_STREAM_ROUTING") != params.end()) {
++    auto routing_param = params.find("AUDIO_PARAMETER_STREAM_ROUTING");
+     LOG(INFO) << __func__ << ": state=" << out->bluetooth_output_->GetState()
+               << ", stream param '" << routing_param->first.c_str() << "="
+               << routing_param->second.c_str() << "'";
+@@ -365,8 +365,8 @@ static int out_set_parameters(struct audio_stream* stream,
+     }
+   }
+ 
+-  if (params.find("closing") != params.end()) {
+-    if (params["closing"] == "true") {
++  if (params.find("AUDIO_PARAMETER_KEY_CLOSING") != params.end()) {
++    if (params["AUDIO_PARAMETER_KEY_CLOSING"] == "true") {
+       LOG(INFO) << __func__ << ": state=" << out->bluetooth_output_->GetState()
+                 << " stream param closing, disallow any writes?";
+       if (out->bluetooth_output_->GetState() !=
+@@ -378,8 +378,8 @@ static int out_set_parameters(struct audio_stream* stream,
+     }
+   }
+ 
+-  if (params.find("exiting") != params.end()) {
+-    if (params["exiting"] == "1") {
++  if (params.find("AUDIO_PARAMETER_KEY_EXITING") != params.end()) {
++    if (params["AUDIO_PARAMETER_KEY_EXITING"] == "1") {
+       LOG(INFO) << __func__ << ": state=" << out->bluetooth_output_->GetState()
+                 << " stream param exiting";
+       if (out->bluetooth_output_->GetState() !=
+@@ -761,6 +761,10 @@ int adev_open_output_stream(struct audio_hw_device* dev,
+   // frame is number of samples per channel
+ 
+   size_t preferred_data_interval_us = kBluetoothDefaultOutputBufferMs * 1000;
++
++  // Mixer need 16 multiples
++  preferred_data_interval_us=preferred_data_interval_us*16;
++
+   if (out->bluetooth_output_->GetPreferredDataIntervalUs(
+           &preferred_data_interval_us) &&
+       preferred_data_interval_us != 0) {
+-- 
+2.33.0.windows.2
+

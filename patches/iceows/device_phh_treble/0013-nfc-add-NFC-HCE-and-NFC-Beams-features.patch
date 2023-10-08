@@ -1,16 +1,14 @@
-From e964f08c2289b1f3a7731bf7f36579f4e7cd61b0 Mon Sep 17 00:00:00 2001
+From 2a9e2d257986cd997f644218c1dd0d65c60f6780 Mon Sep 17 00:00:00 2001
 From: Iceows <mounierr07@gmail.com>
-Date: Wed, 17 May 2023 18:54:10 +0200
-Subject: [PATCH 10/12] treble : add nfc beam and hce extension
+Date: Sun, 8 Oct 2023 23:06:00 +0200
+Subject: [PATCH 13/13] nfc: add NFC HCE and NFC Beams features
 
-reference :
-https://github.com/NXPNFCLinux/nxpnfc_android13/blob/main/device-nfc.mk
 ---
- base.mk | 21 ++++++++++++++++-----
- 1 file changed, 16 insertions(+), 5 deletions(-)
+ base.mk | 23 +++++++++++++++++------
+ 1 file changed, 17 insertions(+), 6 deletions(-)
 
 diff --git a/base.mk b/base.mk
-index b9298a2..59d7e84 100644
+index 18c97d2..446a3fd 100644
 --- a/base.mk
 +++ b/base.mk
 @@ -6,7 +6,14 @@ PRODUCT_COPY_FILES := \
@@ -29,11 +27,13 @@ index b9298a2..59d7e84 100644
  
  # Bluetooth Audio (System-side HAL, sysbta)
  PRODUCT_PACKAGES += \
-@@ -19,7 +26,7 @@ PRODUCT_COPY_FILES += \
+@@ -18,8 +25,8 @@ PRODUCT_COPY_FILES += \
+     device/phh/treble/bluetooth/audio/config/sysbta_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/sysbta_audio_policy_configuration_7_0.xml
  
  #Use a more decent APN config
- PRODUCT_COPY_FILES += \
+-PRODUCT_COPY_FILES += \
 -	device/sample/etc/apns-full-conf.xml:system/etc/apns-conf.xml
++#PRODUCT_COPY_FILES += \
 +#	device/sample/etc/apns-full-conf.xml:system/etc/apns-conf.xml
  
  SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += device/phh/treble/sepolicy
@@ -59,10 +59,10 @@ index b9298a2..59d7e84 100644
 +    NfcNci \
 +    Tag \
 +    android.hardware.nfc@1.0-impl \
-+	android.hardware.nfc@1.2-service \
++	android.hardware.nfc@1.2-service
  
  PRODUCT_COPY_FILES += \
- 	device/phh/treble/rw-system.sh:system/bin/rw-system.sh \
+ 	device/phh/treble/secure.sh:system/phh/secure.sh \
 -- 
 2.33.0.windows.2
 

@@ -1,14 +1,14 @@
-From e68b47f5efbfc1e94137c83ce3c199acbd484e73 Mon Sep 17 00:00:00 2001
+From 56306d6b9f31ac15b7e06749ad54652c0ae2faa6 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
 Date: Tue, 2 May 2023 09:31:43 +0200
-Subject: [PATCH 08/12] Change product_name to leaos
+Subject: [PATCH 09/13] Change product_name to leaos
 
 ---
  generate.sh | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/generate.sh b/generate.sh
-index d016d07..1814fe3 100644
+index 8fbb16b..90eeb2e 100644
 --- a/generate.sh
 +++ b/generate.sh
 @@ -85,7 +85,7 @@ $optional_base

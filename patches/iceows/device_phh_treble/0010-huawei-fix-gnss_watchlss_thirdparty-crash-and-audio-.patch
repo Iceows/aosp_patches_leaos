@@ -1,0 +1,67 @@
+From 21b7858554b6c07ade7b8da62f4feca6cdb5ef59 Mon Sep 17 00:00:00 2001
+From: Iceows <mounierr07@gmail.com>
+Date: Sun, 8 Oct 2023 22:54:43 +0200
+Subject: [PATCH 10/13] huawei: fix gnss_watchlss_thirdparty crash and audio
+ rpc motion
+
+---
+ rw-system.sh | 26 ++++++++++++++------------
+ 1 file changed, 14 insertions(+), 12 deletions(-)
+
+diff --git a/rw-system.sh b/rw-system.sh
+index 67ac152..006534e 100644
+--- a/rw-system.sh
++++ b/rw-system.sh
+@@ -578,10 +578,6 @@ if getprop ro.hardware | grep -qF exynos; then
+     setprop debug.sf.latch_unsignaled 1
+ fi
+ 
+-if getprop ro.product.model | grep -qF ANE; then
+-    setprop debug.sf.latch_unsignaled 1
+-fi
+-
+ if getprop ro.vendor.product.device | grep -q -e nora -e rhannah; then
+     setprop debug.sf.latch_unsignaled 1
+ fi
+@@ -605,16 +601,22 @@ if getprop ro.vendor.build.fingerprint | grep -iq -e Redmi/rosemary \
+     mount -o bind /system/phh/rosemary-excluded-input-devices.xml /system/etc/excluded-input-devices.xml
+ fi
+ 
++ 
++# Iceows patch - NFC NXP conf remove, you must set by specify model patch
++# remove gnss_watchlssd_thirdparty to avoid log spam
+ if getprop ro.vendor.build.fingerprint | grep -iq -E -e 'huawei|honor' || getprop persist.sys.overlay.huawei | grep -iq -E -e 'true'; then
+-    p=/product/etc/nfc/libnfc_nxp_*_*.conf
+-    mount -o bind "$p" /system/etc/libnfc-nxp.conf ||
+-        mount -o bind /product/etc/libnfc-nxp.conf /system/etc/libnfc-nxp.conf || true
++    
++	setprop debug.sf.latch_unsignaled 1
+ 
+-    p=/product/etc/nfc/libnfc_brcm_*_*.conf
+-    mount -o bind "$p" /system/etc/libnfc-brcm.conf ||
+-        mount -o bind /product/etc/libnfc-nxp.conf /system/etc/libnfc-nxp.conf || true
++    # Set proper /sdcard permissions to avoid dead storage
++    chown media_rw:media_rw /data/media/0
++    chmod 0770 /data/media/0
++ 
++    # Disable this watchlss extension to fix logspams and dead gps
++    mount -o bind /system/phh/empty /vendor/bin/gnss_watchlssd_thirdparty
+ 
+-    mount -o bind /system/phh/libnfc-nci-huawei.conf /system/etc/libnfc-nci.conf
++	# For audio_custom
++	chown system:system /sys/class/sensors/rpc_sensor/rpc_motion_req
+ fi
+ 
+ if getprop ro.vendor.build.fingerprint | grep -qE -e ".*(crown|star)[q2]*lte.*" -e ".*(SC-0[23]K|SCV3[89]).*" && [ "$vndk" -lt 28 ]; then
+@@ -742,7 +744,7 @@ copyprop() {
+         resetprop_phh "$1" "$(getprop "$2")"
+     fi
+ }
+-if [ -f /system/phh/secure ] || [ -f /metadata/phh/secure ];then
++if [ -f /system/phh/secure ] || [ -f /metadata/phh/secure ] || [ -f /data/adb/phh/secure ];then
+     copyprop ro.build.device ro.vendor.build.device
+     copyprop ro.system.build.fingerprint ro.vendor.build.fingerprint
+     copyprop ro.bootimage.build.fingerprint ro.vendor.build.fingerprint
+-- 
+2.33.0.windows.2
+

@@ -1,7 +1,7 @@
-From 3f544f5d7b60d4ba630fcd1d78945e9401ab5c91 Mon Sep 17 00:00:00 2001
+From bfe7bc0e283f67761699d5b9131495f7bfc19001 Mon Sep 17 00:00:00 2001
 From: Iceows <mounierr07@gmail.com>
 Date: Tue, 6 Jun 2023 07:22:28 +0200
-Subject: [PATCH]  selinux : huawei - add selinux denied rules on EMUI 9.1
+Subject: [PATCH 08/13] selinux : huawei - add selinux denied rules on EMUI 9.1
 
 Allows you to pass almost all the selinux rules on a Huawei phone under EMUI 9selinux :  huawei - add selinux denied rules on EMUI 9.1
 ---
@@ -245,7 +245,7 @@ index 2988ed6..104f639 100644
 +get_prop(storage_info, default_prop)
 +get_prop(audioserver, vendor_default_prop)
 diff --git a/sepolicy/phh.te b/sepolicy/phh.te
-index 9e233c3..c4ae324 100644
+index a068156..3e8b399 100644
 --- a/sepolicy/phh.te
 +++ b/sepolicy/phh.te
 @@ -15,3 +15,7 @@ allow phhsu_daemon userdata_block_device:blk_file ioctl;
