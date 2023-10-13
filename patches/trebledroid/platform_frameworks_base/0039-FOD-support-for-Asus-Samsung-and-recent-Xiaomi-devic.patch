@@ -1,4 +1,4 @@
-From d14c5d9ce3b71a38500b3a07a68aa93017717d13 Mon Sep 17 00:00:00 2001
+From 38999b41d5c2a54387748cc1bdc058761df07a0d Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Sun, 18 Dec 2022 18:20:40 -0500
 Subject: [PATCH 39/39] FOD support for Asus, Samsung and recent Xiaomi devices
@@ -14,9 +14,9 @@ Change-Id: Ibd0f9ea8fba584a38c060fd9271549a5e106b4eb
  .../biometrics/UdfpsControllerOverlay.kt      |   7 +-
  .../android/systemui/biometrics/UdfpsView.kt  | 191 ++++++++++++
  services/core/Android.bp                      |   5 +
- .../server/biometrics/AuthService.java        | 288 +++++++++++++++++-
+ .../server/biometrics/AuthService.java        | 290 +++++++++++++++++-
  .../fingerprint/FingerprintService.java       |   3 +-
- 6 files changed, 491 insertions(+), 6 deletions(-)
+ 6 files changed, 493 insertions(+), 6 deletions(-)
 
 diff --git a/packages/SystemUI/Android.bp b/packages/SystemUI/Android.bp
 index 7df3dfb89d96..7f77e39041d1 100644
@@ -316,16 +316,17 @@ index 05782235ea1c..18a9fe12ecb7 100644
      javac_shard_size: 50,
      javacflags: [
 diff --git a/services/core/java/com/android/server/biometrics/AuthService.java b/services/core/java/com/android/server/biometrics/AuthService.java
-index bc741a5e2396..b92d089b81f1 100644
+index bc741a5e2396..add882656713 100644
 --- a/services/core/java/com/android/server/biometrics/AuthService.java
 +++ b/services/core/java/com/android/server/biometrics/AuthService.java
-@@ -76,6 +76,24 @@ import java.util.ArrayList;
+@@ -76,6 +76,25 @@ import java.util.ArrayList;
  import java.util.Arrays;
  import java.util.List;
  
 +import android.hardware.display.DisplayManager;
 +
 +import android.graphics.Point;
++import android.text.TextUtils;
 +import android.util.DisplayMetrics;
 +import java.io.BufferedReader;
 +import java.io.File;
@@ -344,7 +345,7 @@ index bc741a5e2396..b92d089b81f1 100644
  /**
   * System service that provides an interface for authenticating with biometrics and
   * PIN/pattern/password to BiometricPrompt and lock screen.
-@@ -94,6 +112,11 @@ public class AuthService extends SystemService {
+@@ -94,6 +113,11 @@ public class AuthService extends SystemService {
      @VisibleForTesting
      final IAuthService.Stub mImpl;
  
@@ -356,7 +357,7 @@ index bc741a5e2396..b92d089b81f1 100644
      /**
       * Class for injecting dependencies into AuthService.
       * TODO(b/141025588): Replace with a dependency injection framework (e.g. Guice, Dagger).
-@@ -653,11 +676,11 @@ public class AuthService extends SystemService {
+@@ -653,11 +677,11 @@ public class AuthService extends SystemService {
              final int firstApiLevel = SystemProperties.getInt(SYSPROP_FIRST_API_LEVEL, 0);
              final int apiLevel = SystemProperties.getInt(SYSPROP_API_LEVEL, firstApiLevel);
              String[] configStrings = mInjector.getConfiguration(getContext());
@@ -370,7 +371,7 @@ index bc741a5e2396..b92d089b81f1 100644
                  configStrings = generateRSdkCompatibleConfiguration();
              }
              hidlConfigs = new SensorConfig[configStrings.length];
-@@ -672,6 +695,102 @@ public class AuthService extends SystemService {
+@@ -672,6 +696,102 @@ public class AuthService extends SystemService {
          registerAuthenticators(hidlConfigs);
  
          mInjector.publishBinderService(this, mImpl);
@@ -473,7 +474,7 @@ index bc741a5e2396..b92d089b81f1 100644
      }
  
      /**
-@@ -795,14 +914,112 @@ public class AuthService extends SystemService {
+@@ -795,14 +915,113 @@ public class AuthService extends SystemService {
                  ? modality : (modality & ~BiometricAuthenticator.TYPE_CREDENTIAL);
      }
  
@@ -555,9 +556,10 @@ index bc741a5e2396..b92d089b81f1 100644
 +            return udfpsProps;
 +        }
 +
-+       if(android.os.SystemProperties.get("persist.vendor.sys.fp.fod.location.X_Y").contains(",")) {
++       String fpLocation = android.os.SystemProperties.get("persist.vendor.sys.fp.fod.location.X_Y");
++       if(!TextUtils.isEmpty(fpLocation) && fpLocation.contains(",")) {
 +            int[] udfpsProps = new int[3];
-+            String[] coordinates = android.os.SystemProperties.get("persist.vendor.sys.fp.fod.location.X_Y").split(",");
++            String[] coordinates = fpLocation.split(",");
 +            udfpsProps[0] = displayRealSize.x/2;
 +            udfpsProps[1] = Integer.parseInt(coordinates[1]) + 100;
 +
@@ -588,7 +590,7 @@ index bc741a5e2396..b92d089b81f1 100644
  
          // config_is_powerbutton_fps indicates whether device has a power button fingerprint sensor.
          final boolean isPowerbuttonFps = getContext().getResources().getBoolean(
-@@ -864,4 +1081,67 @@ public class AuthService extends SystemService {
+@@ -864,4 +1083,67 @@ public class AuthService extends SystemService {
                  componentInfo, resetLockoutRequiresHardwareAuthToken,
                  resetLockoutRequiresChallenge);
      }
@@ -657,7 +659,7 @@ index bc741a5e2396..b92d089b81f1 100644
 +    }
  }
 diff --git a/services/core/java/com/android/server/biometrics/sensors/fingerprint/FingerprintService.java b/services/core/java/com/android/server/biometrics/sensors/fingerprint/FingerprintService.java
-index 3d6a156d6022..aae7a46b4e15 100644
+index ece35c522ec7..8c20b9e1bf40 100644
 --- a/services/core/java/com/android/server/biometrics/sensors/fingerprint/FingerprintService.java
 +++ b/services/core/java/com/android/server/biometrics/sensors/fingerprint/FingerprintService.java
 @@ -873,7 +873,6 @@ public class FingerprintService extends SystemService {
