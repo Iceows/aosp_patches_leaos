@@ -1,0 +1,41 @@
+From d09c46a6ffe5b6621107c62d7e8429d3825c62f8 Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Wed, 18 Oct 2023 15:09:07 +0200
+Subject: [PATCH] uicc: try catch null exception in getPrintableIccIds function
+
+Allows you to avoid a crash when you don't have information on the Icc ids. This happens on some phones like Huawei where the slot IDs are sometimes equal to -1
+
+Change-Id: Ie4ac0213d967a9fc95e804843f8b39ca22eaf467
+---
+ .../android/internal/telephony/uicc/UiccSlot.java    | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/src/java/com/android/internal/telephony/uicc/UiccSlot.java b/src/java/com/android/internal/telephony/uicc/UiccSlot.java
+index db10271a2f..fa154e68ea 100644
+--- a/src/java/com/android/internal/telephony/uicc/UiccSlot.java
++++ b/src/java/com/android/internal/telephony/uicc/UiccSlot.java
+@@ -653,10 +653,20 @@ public class UiccSlot extends Handler {
+     }
+ 
+     private Map<Integer, String> getPrintableIccIds() {
+-        Map<Integer, String> printableIccIds = mIccIds.entrySet().stream()
++
++        try {
++              Map<Integer, String> printableIccIds = mIccIds.entrySet().stream()
+                 .collect(Collectors.toMap(Map.Entry::getKey,
+                         e -> SubscriptionInfo.getPrintableId(e.getValue())));
++        	return printableIccIds;
++	}
++        catch(NullPointerException e)
++        {
++	    HashMap<Integer, String> printableIccIds= new HashMap<>();
++
++	    printableIccIds.put(-1,"Invalid Icc Ids");
+         return printableIccIds;
++        }
+     }
+ 
+     /**
+-- 
+2.25.1
+
