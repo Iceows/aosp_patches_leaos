@@ -1,7 +1,7 @@
-From 48a72e00b21af330793d9c9f3ac2c4f4c3820e71 Mon Sep 17 00:00:00 2001
+From 2f5cd2d55321e64ca1f53c66794cf351907653b5 Mon Sep 17 00:00:00 2001
 From: Andreas Schneider <asn@cryptomilk.org>
 Date: Sat, 12 Nov 2022 00:35:46 +0000
-Subject: [PATCH 5/7] On Samsung devices, we need to tell Audio HAL if we're
+Subject: [PATCH 5/8] On Samsung devices, we need to tell Audio HAL if we're
  running narrow band or wide band
 
 Ported to Android 13.
@@ -12,36 +12,36 @@ Change-Id: I7802b7a29c017a2cd7018e82772183df1dfa0b89
  1 file changed, 8 insertions(+)
 
 diff --git a/android/app/src/com/android/bluetooth/hfp/HeadsetStateMachine.java b/android/app/src/com/android/bluetooth/hfp/HeadsetStateMachine.java
-index 57eb9aff4c..fbe29415b8 100644
+index b56afd3ee2..b1483b10d6 100644
 --- a/android/app/src/com/android/bluetooth/hfp/HeadsetStateMachine.java
 +++ b/android/app/src/com/android/bluetooth/hfp/HeadsetStateMachine.java
-@@ -151,6 +151,7 @@ public class HeadsetStateMachine extends StateMachine {
-     private boolean mHasNrecEnabled = false;
+@@ -141,6 +141,7 @@ class HeadsetStateMachine extends StateMachine {
      private boolean mHasWbsEnabled = false;
-     private boolean mHasSwbEnabled = false;
+     private boolean mHasSwbLc3Enabled = false;
+     private boolean mHasSwbAptXEnabled = false;
 +    private int mReportScoSampleRate = 0;
      // AT Phone book keeps a group of states used by AT+CPBR commands
-     @VisibleForTesting
-     final AtPhonebook mPhonebook;
-@@ -250,6 +251,7 @@ public class HeadsetStateMachine extends StateMachine {
-         mHasWbsEnabled = false;
+     @VisibleForTesting final AtPhonebook mPhonebook;
+     // HSP specific
+@@ -265,6 +266,7 @@ class HeadsetStateMachine extends StateMachine {
          mHasNrecEnabled = false;
-         mHasSwbEnabled = false;
+         mHasSwbLc3Enabled = false;
+         mHasSwbAptXEnabled = false;
 +        mReportScoSampleRate = 0;
      }
  
      public void dump(StringBuilder sb) {
-@@ -483,6 +485,7 @@ public class HeadsetStateMachine extends StateMachine {
-             mHasWbsEnabled = false;
-             mHasSwbEnabled = false;
+@@ -565,6 +567,7 @@ class HeadsetStateMachine extends StateMachine {
+             mHasSwbLc3Enabled = false;
              mHasNrecEnabled = false;
+             mHasSwbAptXEnabled = false;
 +            mReportScoSampleRate = 0;
  
              broadcastStateTransitions();
              logFailureIfNeeded();
-@@ -1618,6 +1621,9 @@ public class HeadsetStateMachine extends StateMachine {
-                 + " hasWbsEnabled=" + mHasWbsEnabled);
-         am.setParameters("bt_lc3_swb=" + (mHasSwbEnabled ? "on" : "off"));
+@@ -1874,6 +1877,9 @@ class HeadsetStateMachine extends StateMachine {
+             am.setParameters("bt_swb=" + (mHasSwbAptXEnabled ? "0" : "65535"));
+         }
          am.setBluetoothHeadsetProperties(getCurrentDeviceName(), mHasNrecEnabled, mHasWbsEnabled);
 +        if (mReportScoSampleRate > 0) {
 +            am.setParameters("g_sco_samplerate=" + mReportScoSampleRate);
@@ -49,12 +49,15 @@ index 57eb9aff4c..fbe29415b8 100644
      }
  
      @VisibleForTesting
-@@ -1761,10 +1767,12 @@ public class HeadsetStateMachine extends StateMachine {
+@@ -2020,6 +2026,7 @@ class HeadsetStateMachine extends StateMachine {
          switch (wbsConfig) {
              case HeadsetHalConstants.BTHF_WBS_YES:
                  mHasWbsEnabled = true;
 +                mReportScoSampleRate = 16000;
-                 break;
+                 if (Flags.hfpCodecAptxVoice() && mHeadsetService.isAptXSwbEnabled()) {
+                     mHasSwbAptXEnabled = false;
+                 }
+@@ -2027,6 +2034,7 @@ class HeadsetStateMachine extends StateMachine {
              case HeadsetHalConstants.BTHF_WBS_NO:
              case HeadsetHalConstants.BTHF_WBS_NONE:
                  mHasWbsEnabled = false;
@@ -63,5 +66,5 @@ index 57eb9aff4c..fbe29415b8 100644
              default:
                  Log.e(TAG, "processWBSEvent: unknown wbsConfig " + wbsConfig);
 -- 
-2.34.1
+2.25.1
 

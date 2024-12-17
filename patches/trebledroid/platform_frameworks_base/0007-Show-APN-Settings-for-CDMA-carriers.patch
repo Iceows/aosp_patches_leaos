@@ -1,19 +1,19 @@
-From 2348038ffbe8071c7db1e37d3aaa7d78852994af Mon Sep 17 00:00:00 2001
+From 9b8a9fd673869367b7335d170a2d3bdd40075c98 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Mon, 6 Aug 2018 12:49:00 +0200
-Subject: [PATCH 07/39] Show APN Settings for CDMA carriers
+Subject: [PATCH 07/52] Show APN Settings for CDMA carriers
 
 ---
  telephony/java/android/telephony/CarrierConfigManager.java | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/telephony/java/android/telephony/CarrierConfigManager.java b/telephony/java/android/telephony/CarrierConfigManager.java
-index 5b1c6b1c88b8..f38d900d3b58 100644
+index 09cb464198b5..126568c60e07 100644
 --- a/telephony/java/android/telephony/CarrierConfigManager.java
 +++ b/telephony/java/android/telephony/CarrierConfigManager.java
-@@ -9823,7 +9823,7 @@ public class CarrierConfigManager {
-         sDefaults.putBoolean(KEY_OPERATOR_SELECTION_EXPAND_BOOL, true);
+@@ -10525,7 +10525,7 @@ public class CarrierConfigManager {
          sDefaults.putBoolean(KEY_PREFER_2G_BOOL, false);
+         sDefaults.putBoolean(KEY_PREFER_3G_VISIBILITY_BOOL, true);
          sDefaults.putBoolean(KEY_4G_ONLY_BOOL, false);
 -        sDefaults.putBoolean(KEY_SHOW_APN_SETTING_CDMA_BOOL, false);
 +        sDefaults.putBoolean(KEY_SHOW_APN_SETTING_CDMA_BOOL, true);
@@ -21,5 +21,5 @@ index 5b1c6b1c88b8..f38d900d3b58 100644
          sDefaults.putBoolean(KEY_SMS_REQUIRES_DESTINATION_NUMBER_CONVERSION_BOOL, false);
          sDefaults.putBoolean(KEY_SUPPORT_EMERGENCY_SMS_OVER_IMS_BOOL, false);
 -- 
-2.34.1
+2.25.1
 

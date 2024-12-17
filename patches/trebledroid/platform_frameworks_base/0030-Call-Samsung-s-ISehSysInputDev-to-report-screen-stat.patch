@@ -1,40 +1,42 @@
-From cf30ee029a579c89c7e2bd3a2f5217619225433e Mon Sep 17 00:00:00 2001
+From e37bc62fb6eca3fdfe0434ad724e333db08b0627 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Wed, 14 Dec 2022 17:21:00 -0500
-Subject: [PATCH 30/39] Call Samsung's ISehSysInputDev to report screen state
+Subject: [PATCH 30/52] Call Samsung's ISehSysInputDev to report screen state
  to touchscreen driver
 
 This fixes touchscreen not waking up on Galaxy F23
+
+Change-Id: If2d74b97a51b19c730a6f9a1b1f4293d1469a9f8
 ---
  services/core/Android.bp                      |  1 +
- .../server/display/LocalDisplayAdapter.java   | 32 +++++++++++++++++++
- 2 files changed, 33 insertions(+)
+ .../server/display/LocalDisplayAdapter.java   | 31 +++++++++++++++++++
+ 2 files changed, 32 insertions(+)
 
 diff --git a/services/core/Android.bp b/services/core/Android.bp
-index f8d19ec9903d..735959270c11 100644
+index 53730e317ac6..413667cce657 100644
 --- a/services/core/Android.bp
 +++ b/services/core/Android.bp
-@@ -186,6 +186,7 @@ java_library_static {
-         "com.android.sysprop.watchdog",
-         "ImmutabilityAnnotation",
-         "securebox",
+@@ -228,6 +228,7 @@ java_library_static {
+         "dreams_flags_lib",
+         "aconfig_new_storage_flags_lib",
+         "powerstats_flags_lib",
 +        "vendor.samsung.hardware.sysinput-V1.2-java", // HIDL
      ],
      javac_shard_size: 50,
      javacflags: [
 diff --git a/services/core/java/com/android/server/display/LocalDisplayAdapter.java b/services/core/java/com/android/server/display/LocalDisplayAdapter.java
-index c7c0fab6140d..537027f2d77f 100644
+index 44846f310348..1b638c8ea82e 100644
 --- a/services/core/java/com/android/server/display/LocalDisplayAdapter.java
 +++ b/services/core/java/com/android/server/display/LocalDisplayAdapter.java
-@@ -33,6 +33,7 @@ import android.os.Trace;
- import android.util.DisplayUtils;
+@@ -39,6 +39,7 @@ import android.util.DisplayUtils;
  import android.util.LongSparseArray;
+ import android.util.MathUtils;
  import android.util.Slog;
 +import android.util.Log;
  import android.util.SparseArray;
  import android.view.Display;
  import android.view.DisplayAddress;
-@@ -51,6 +52,8 @@ import com.android.server.display.mode.DisplayModeDirector;
+@@ -60,6 +61,8 @@ import com.android.server.display.notifications.DisplayNotificationManager;
  import com.android.server.lights.LightsManager;
  import com.android.server.lights.LogicalLight;
  
@@ -43,7 +45,7 @@ index c7c0fab6140d..537027f2d77f 100644
  import java.io.PrintWriter;
  import java.util.ArrayList;
  import java.util.Arrays;
-@@ -234,6 +237,8 @@ final class LocalDisplayAdapter extends DisplayAdapter {
+@@ -266,6 +269,8 @@ final class LocalDisplayAdapter extends DisplayAdapter {
  
          private DisplayEventReceiver.FrameRateOverride[] mFrameRateOverrides =
                  new DisplayEventReceiver.FrameRateOverride[0];
@@ -52,10 +54,10 @@ index c7c0fab6140d..537027f2d77f 100644
  
          LocalDisplayDevice(IBinder displayToken, long physicalDisplayId,
                  SurfaceControl.StaticDisplayInfo staticDisplayInfo,
-@@ -821,17 +826,44 @@ final class LocalDisplayAdapter extends DisplayAdapter {
+@@ -875,16 +880,42 @@ final class LocalDisplayAdapter extends DisplayAdapter {
                              }
-                             mSidekickActive = false;
                          }
+ 
 +                        if (!triedSamsungHal) {
 +                            triedSamsungHal = true;
 +                            try {
@@ -93,10 +95,8 @@ index c7c0fab6140d..537027f2d77f 100644
 +                        }
 +
                          setCommittedState(state);
-+
+ 
                          // If we're entering a suspended (but not OFF) power state and we
-                         // have a sidekick available, tell it now that it can take control.
-                         if (Display.isSuspendedState(state) && state != Display.STATE_OFF
 -- 
-2.34.1
+2.25.1
 
