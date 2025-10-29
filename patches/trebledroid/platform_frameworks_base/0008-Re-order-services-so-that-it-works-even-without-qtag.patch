@@ -1,7 +1,7 @@
-From d63126c223ec6404fb6c016be2c4ccc02322786a Mon Sep 17 00:00:00 2001
+From 04975170eab3ac716657c98def0004d501ed33e9 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Thu, 8 Nov 2018 23:04:03 +0100
-Subject: [PATCH 08/52] Re-order services so that it works even without qtaguid
+Subject: [PATCH 08/56] Re-order services so that it works even without qtaguid
 
 Change-Id: I0c0f527b3ae151d45c68f7ac6c205da3f34e74df
 ---
@@ -9,10 +9,10 @@ Change-Id: I0c0f527b3ae151d45c68f7ac6c205da3f34e74df
  1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/services/core/java/com/android/server/net/NetworkPolicyManagerService.java b/services/core/java/com/android/server/net/NetworkPolicyManagerService.java
-index d9e22c5a270f..378be8fa132c 100644
+index 7de2815eba6b..80816687537c 100644
 --- a/services/core/java/com/android/server/net/NetworkPolicyManagerService.java
 +++ b/services/core/java/com/android/server/net/NetworkPolicyManagerService.java
-@@ -1035,6 +1035,10 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
+@@ -1026,6 +1026,10 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
          Trace.traceBegin(Trace.TRACE_TAG_NETWORK, "systemReady");
          final int oldPriority = Process.getThreadPriority(Process.myTid());
          try {
@@ -23,7 +23,7 @@ index d9e22c5a270f..378be8fa132c 100644
              // Boost thread's priority during system server init
              Process.setThreadPriority(Process.THREAD_PRIORITY_FOREGROUND);
              if (!isBandwidthControlEnabled()) {
-@@ -1042,10 +1046,6 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
+@@ -1033,10 +1037,6 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
                  return;
              }
  
@@ -33,7 +33,7 @@ index d9e22c5a270f..378be8fa132c 100644
 -
              mUseMeteredFirewallChains = Flags.useMeteredFirewallChains();
              mUseDifferentDelaysForBackgroundChain = Flags.useDifferentDelaysForBackgroundChain();
- 
+             mNeverApplyRulesToCoreUids = Flags.neverApplyRulesToCoreUids();
 -- 
 2.25.1
 

@@ -1,7 +1,7 @@
-From 6d1e72da63864eb8cfdf377a5b78145018d267d9 Mon Sep 17 00:00:00 2001
+From b8bca4c28847ef1fd84baf496b3447045825f441 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Wed, 20 Dec 2023 09:48:04 -0500
-Subject: [PATCH 10/14] Fix loading unnamed GLES
+Subject: [PATCH 10/19] Fix loading unnamed GLES
 
 Normally Android loads libGLES_${ro.hardware.egl}.so
 But up to Android 14, it was allowed not to set ro.hardware.egl
@@ -22,7 +22,7 @@ Test:
  1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/opengl/libs/EGL/Loader.cpp b/opengl/libs/EGL/Loader.cpp
-index ec7b190c74..c5ee5547d4 100644
+index 7012df21ae..18398bb01c 100644
 --- a/opengl/libs/EGL/Loader.cpp
 +++ b/opengl/libs/EGL/Loader.cpp
 @@ -321,8 +321,7 @@ void* Loader::open(egl_connection_t* cnx) {

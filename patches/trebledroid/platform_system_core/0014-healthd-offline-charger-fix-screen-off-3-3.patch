@@ -1,7 +1,7 @@
-From 4840ea349bb1e28a17c9946a7936aba02b9124fe Mon Sep 17 00:00:00 2001
+From 3d9e7355c25f3c0e38d733c20414efbc526e55de Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
 Date: Sun, 21 May 2023 16:15:42 +0200
-Subject: [PATCH 14/27] healthd : offline charger fix screen off 3/3
+Subject: [PATCH 14/28] healthd : offline charger fix screen off 3/3
 
 When the phone is charging, the animation never turns off on huawei phones (kernel 4.9). This patch allows you to turn it off by setting the brightness to 0. This problem may also exist on other phone models.
 
@@ -162,7 +162,7 @@ index 016db8e07..e8e51748d 100644
  
  #endif  // HEALTHD_DRAW_H
 diff --git a/healthd/healthd_mode_charger.cpp b/healthd/healthd_mode_charger.cpp
-index 26af13b31..0d4ba32ff 100644
+index 54b469be3..46f5e2725 100644
 --- a/healthd/healthd_mode_charger.cpp
 +++ b/healthd/healthd_mode_charger.cpp
 @@ -93,9 +93,9 @@ char* locale;

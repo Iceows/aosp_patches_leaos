@@ -1,7 +1,7 @@
-From 94ee2a807995e98b1f96441928e27db91a6d4843 Mon Sep 17 00:00:00 2001
+From d2d0b7bd784225a1cd4374d75efadbdd711b4c2c Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Sun, 31 Mar 2024 17:18:05 -0400
-Subject: [PATCH 25/27] If AVB fails, ignore/disable AVB
+Subject: [PATCH 25/28] If AVB fails, ignore/disable AVB
 
 DO NOT INCLUDE THIS PATCH If you want to run GSIs on a locked bootloader
 
@@ -13,10 +13,10 @@ being AVB1.0
  2 files changed, 14 insertions(+), 2 deletions(-)
 
 diff --git a/init/first_stage_init.cpp b/init/first_stage_init.cpp
-index bfe636bbf..2bf84cf7a 100644
+index e06a64593..960b3389c 100644
 --- a/init/first_stage_init.cpp
 +++ b/init/first_stage_init.cpp
-@@ -514,7 +514,11 @@ int FirstStageMain(int argc, char** argv) {
+@@ -533,7 +533,11 @@ int FirstStageMain(int argc, char** argv) {
          }
  
          if (!created_devices && !fsm->DoCreateDevices()) {
@@ -30,10 +30,10 @@ index bfe636bbf..2bf84cf7a 100644
  
          if (!fsm->DoFirstStageMount()) {
 diff --git a/init/first_stage_mount.cpp b/init/first_stage_mount.cpp
-index dde58aa9e..99bba9a3a 100644
+index 5e8e458f9..a51dece11 100644
 --- a/init/first_stage_mount.cpp
 +++ b/init/first_stage_mount.cpp
-@@ -233,6 +233,12 @@ Result<std::unique_ptr<FirstStageMount>> FirstStageMount::Create(const std::stri
+@@ -239,6 +239,12 @@ Result<std::unique_ptr<FirstStageMount>> FirstStageMount::Create(const std::stri
      } else {
          fstab = ReadFirstStageFstabAndroid();
      }
@@ -46,7 +46,7 @@ index dde58aa9e..99bba9a3a 100644
      if (!fstab.ok()) {
          return fstab.error();
      }
-@@ -269,7 +275,9 @@ bool FirstStageMountVBootV2::DoFirstStageMount() {
+@@ -277,7 +283,9 @@ bool FirstStageMountVBootV2::DoFirstStageMount() {
          return true;
      }
  
