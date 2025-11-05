@@ -1,0 +1,27 @@
+From c022719815760a8b621ec7067ad9598ee2cec752 Mon Sep 17 00:00:00 2001
+From: Iceows <mounierr07@gmail.com>
+Date: Wed, 5 Nov 2025 07:28:31 +0100
+Subject: [PATCH 2/2] device: add trebleapp in product packages
+
+---
+ base.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/base.mk b/base.mk
+index a29e402..e2b3c73 100644
+--- a/base.mk
++++ b/base.mk
+@@ -184,6 +184,10 @@ PRODUCT_COPY_FILES += \
+ PRODUCT_PACKAGES += \
+     asus-motor
+ 
++# TrebleApp
++PRODUCT_PACKAGES += \
++    TrebleApp
++
+ # Privapp-permissions whitelist for PhhTrebleApp
+ PRODUCT_COPY_FILES += \
+     device/phh/treble/privapp-permissions-me.phh.treble.app.xml:system/etc/permissions/privapp-permissions-me.phh.treble.app.xml \
+-- 
+2.34.1
+
