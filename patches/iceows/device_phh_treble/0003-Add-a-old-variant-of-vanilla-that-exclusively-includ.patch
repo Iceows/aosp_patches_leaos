@@ -1,0 +1,57 @@
+From 0d5c7f28c62bb5f21625f2e963ce854fb51aa074 Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Fri, 7 Nov 2025 18:44:36 +0100
+Subject: [PATCH 3/3] =?UTF-8?q?Add=20a=20"old"=20variant=20of=20vanilla,?=
+ =?UTF-8?q?=20that=20exclusively=20includes=20vndk=2028/29,=E2=80=A6?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+… not newer vndk, to reduce size
+
+Target is Pixel 1, with 2GB system partition
+
+Co-Authored-By: Pierre-Hugues HUSSON <phh@phh.me>
+---
+ generate.sh | 8 +++++++-
+ old-vndk.mk | 2 ++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+ create mode 100644 old-vndk.mk
+
+diff --git a/generate.sh b/generate.sh
+index 461eff1..8f24152 100644
+--- a/generate.sh
++++ b/generate.sh
+@@ -15,7 +15,7 @@ fi
+ echo 'PRODUCT_MAKEFILES := \' > AndroidProducts.mk
+ 
+ for part in a ab;do
+-	for apps in vanilla gapps foss gapps-go;do
++	for apps in vanilla gapps foss gapps-go old;do
+ 		for arch in arm64 arm a64;do
+ 			for su in yes no;do
+ 				apps_suffix=""
+@@ -44,6 +44,12 @@ for part in a ab;do
+ 					apps_script=''
+ 					apps_name="vanilla"
+ 				fi
++				if [ "$apps" == "old" ];then
++					apps_suffix="y"
++					apps_script=''
++					apps_name="vanilla old"
++					optional_base='include device/phh/treble/old-vndk.mk'
++				fi
+ 				if [ "$arch" == "arm" ];then
+ 					vndk="vndk-binder32.mk"
+ 				fi
+diff --git a/old-vndk.mk b/old-vndk.mk
+new file mode 100644
+index 0000000..8db9b4c
+--- /dev/null
++++ b/old-vndk.mk
+@@ -0,0 +1,2 @@
++PRODUCT_EXTRA_VNDK_VERSIONS := 28 29
++
+-- 
+2.25.1
+
