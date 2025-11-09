@@ -1,0 +1,53 @@
+From 4d4636cae7dfb7d6fae8dbc272da4e3b48f01e06 Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Sat, 8 Nov 2025 08:48:55 +0100
+Subject: [PATCH] Fix configstore crash for huawei vndk28 device
+
+ Fix configstore crash on A15 - vendor configstore don't have getpid and gettid
+
+Co-Authored-By: Pierre-Hugues HUSSON <phh@phh.me>
+---
+ rw-system.sh | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/rw-system.sh b/rw-system.sh
+index 5bc8905..5268015 100644
+--- a/rw-system.sh
++++ b/rw-system.sh
+@@ -380,8 +380,10 @@ mkdir -p /mnt/phh/
+ mount -t tmpfs -o rw,nodev,relatime,mode=755,gid=0 none /mnt/phh || true
+ mkdir /mnt/phh/empty_dir
+ touch /mnt/phh/empty
+-fixSPL
++touch /mnt/phh/unreadable
++chmod 0 /mnt/phh/unreadable
+ 
++fixSPL
+ changeKeylayout
+ 
+ mount /mnt/phh/empty /vendor/bin/vendor.samsung.security.proca@1.0-service || true
+@@ -641,6 +643,11 @@ if getprop ro.vendor.build.fingerprint | grep -iq -e Redmi/rosemary \
+     mount -o bind /system/phh/rosemary-excluded-input-devices.xml /system/etc/excluded-input-devices.xml
+ fi
+ 
++# Fix configstore crash on A15 - vendor configstore don't have getpid and gettid
++if [ "$vndk" -le 29 ]; then
++    mount /mnt/phh/unreadable /vendor/etc/seccomp_policy/configstore@1.1.policy
++fi
++
+ if getprop ro.vendor.build.fingerprint | grep -iq -E -e 'huawei|honor' || getprop persist.sys.overlay.huawei | grep -iq -E -e 'true'; then
+     p=/product/etc/nfc/libnfc_nxp_*_*.conf
+     mount -o bind "$p" /system/etc/libnfc-nxp.conf ||
+@@ -664,7 +671,8 @@ if getprop ro.vendor.build.fingerprint | grep -iq -E -e 'huawei|honor' || getpro
+ 
+     # For activity reco
+     chmod 0644  /dev/ar
+-    chown system:system /dev/ar    
++    chown system:system /dev/ar
++    
+ fi
+ 
+ if getprop ro.vendor.build.fingerprint | grep -qE -e ".*(crown|star)[q2]*lte.*" -e ".*(SC-0[23]K|SCV3[89]).*" && [ "$vndk" -lt 28 ]; then
+-- 
+2.25.1
+
