@@ -1,0 +1,82 @@
+From a01b703de9b811977a31a677fe518810c1a6ae72 Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Sun, 9 Nov 2025 21:05:19 +0100
+Subject: [PATCH] remove isHidlSupported on android os
+
+ fix : linker  : CANNOT LINK EXECUTABLE "/system/bin/app_process64": cannot locate symbol "_ZN7android8hardware15isHidlSupportedEv" referenced by "/system/lib64/libandroid_runtime.so"...
+
+Change-Id: I982e4936707cb3b52ba4a9c726c838c0fdb16e3b
+---
+ core/java/android/os/HidlSupport.java | 7 -------
+ core/java/android/os/HwBinder.java    | 2 ++
+ core/jni/android_os_HidlSupport.cpp   | 8 +-------
+ 3 files changed, 3 insertions(+), 14 deletions(-)
+
+diff --git a/core/java/android/os/HidlSupport.java b/core/java/android/os/HidlSupport.java
+index 77160557f5c2..91b796aba655 100644
+--- a/core/java/android/os/HidlSupport.java
++++ b/core/java/android/os/HidlSupport.java
+@@ -218,13 +218,6 @@ public class HidlSupport {
+     @SystemApi
+     public static native int getPidIfSharable();
+ 
+-    /**
+-     * Return true if HIDL is supported on this device and false if not.
+-     *
+-     * @hide
+-     */
+-    public static native boolean isHidlSupported();
+-
+     /** @hide */
+     public HidlSupport() {}
+ }
+diff --git a/core/java/android/os/HwBinder.java b/core/java/android/os/HwBinder.java
+index bc19655d1618..0b24865d8996 100644
+--- a/core/java/android/os/HwBinder.java
++++ b/core/java/android/os/HwBinder.java
+@@ -79,6 +79,7 @@ public abstract class HwBinder implements IHwBinder {
+             String iface,
+             String serviceName)
+         throws RemoteException, NoSuchElementException {
++        /*
+         if (!HidlSupport.isHidlSupported()
+                 && (iface.equals("android.hidl.manager@1.0::IServiceManager")
+                         || iface.equals("android.hidl.manager@1.1::IServiceManager")
+@@ -89,6 +90,7 @@ public abstract class HwBinder implements IHwBinder {
+                             + " because HIDL is not supported on this device.");
+             return new HwNoService();
+         }
++        */
+ 
+         return getService(iface, serviceName, false /* retry */);
+     }
+diff --git a/core/jni/android_os_HidlSupport.cpp b/core/jni/android_os_HidlSupport.cpp
+index 3e51e9315d89..e3602d8f5c72 100644
+--- a/core/jni/android_os_HidlSupport.cpp
++++ b/core/jni/android_os_HidlSupport.cpp
+@@ -15,7 +15,6 @@
+  */
+ 
+ #include <hidl/HidlTransportSupport.h>
+-#include <hidl/ServiceManagement.h>
+ #include <nativehelper/JNIHelp.h>
+ 
+ #include "core_jni_helpers.h"
+@@ -25,13 +24,8 @@ static jint android_os_HidlSupport_getPidIfSharable(JNIEnv*, jclass) {
+     return android::hardware::details::getPidIfSharable();
+ }
+ 
+-static jboolean android_os_HidlSupport_isHidlSupported(JNIEnv*, jclass) {
+-    return android::hardware::isHidlSupported();
+-}
+-
+ static const JNINativeMethod gHidlSupportMethods[] = {
+-        {"getPidIfSharable", "()I", (void*)android_os_HidlSupport_getPidIfSharable},
+-        {"isHidlSupported", "()Z", (void*)android_os_HidlSupport_isHidlSupported},
++    {"getPidIfSharable", "()I", (void*)android_os_HidlSupport_getPidIfSharable},
+ };
+ 
+ const char* const kHidlSupportPathName = "android/os/HidlSupport";
+-- 
+2.25.1
+
