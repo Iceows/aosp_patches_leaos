@@ -1,0 +1,67 @@
+From acd6d6737c65f815915dcad85ca72078c5af5ed1 Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Tue, 11 Nov 2025 16:15:22 +0100
+Subject: [PATCH] Add an erofs vndk28-29 variant for huawei phone
+
+---
+ erofs-vndk.mk            | 12 ++++++++++++
+ erofs_compress_hints.txt |  1 +
+ generate.sh              |  8 +++++++-
+ 3 files changed, 20 insertions(+), 1 deletion(-)
+ create mode 100644 erofs-vndk.mk
+ create mode 100644 erofs_compress_hints.txt
+
+diff --git a/erofs-vndk.mk b/erofs-vndk.mk
+new file mode 100644
+index 0000000..4496fbf
+--- /dev/null
++++ b/erofs-vndk.mk
+@@ -0,0 +1,12 @@
++PRODUCT_EXTRA_VNDK_VERSIONS := 28 29
++
++# Use EROFS APEX as default
++#ifeq (true,$(RELEASE_APEX_USE_EROFS_PREINSTALLED))
++#PRODUCT_DEFAULT_APEX_PAYLOAD_TYPE := erofs
++#endif
++
++#PRODUCT_FS_COMPRESSION := 1
++#TARGET_RO_FILE_SYSTEM_TYPE := erofs
++#BOARD_EROFS_COMPRESS_HINTS := device/phh/treble/erofs_compress_hints.txt
++
++
+diff --git a/erofs_compress_hints.txt b/erofs_compress_hints.txt
+new file mode 100644
+index 0000000..1753c81
+--- /dev/null
++++ b/erofs_compress_hints.txt
+@@ -0,0 +1 @@
++.*\.apex$
+diff --git a/generate.sh b/generate.sh
+index 8f24152..165ec74 100644
+--- a/generate.sh
++++ b/generate.sh
+@@ -15,7 +15,7 @@ fi
+ echo 'PRODUCT_MAKEFILES := \' > AndroidProducts.mk
+ 
+ for part in a ab;do
+-	for apps in vanilla gapps foss gapps-go old;do
++	for apps in vanilla gapps foss gapps-go erofs old;do
+ 		for arch in arm64 arm a64;do
+ 			for su in yes no;do
+ 				apps_suffix=""
+@@ -50,6 +50,12 @@ for part in a ab;do
+ 					apps_name="vanilla old"
+ 					optional_base='include device/phh/treble/old-vndk.mk'
+ 				fi
++				if [ "$apps" == "erofs" ];then
++					apps_suffix="e"
++					apps_script=''
++					apps_name="erofs"
++					optional_base='include device/phh/treble/erofs-vndk.mk'
++				fi
+ 				if [ "$arch" == "arm" ];then
+ 					vndk="vndk-binder32.mk"
+ 				fi
+-- 
+2.25.1
+
