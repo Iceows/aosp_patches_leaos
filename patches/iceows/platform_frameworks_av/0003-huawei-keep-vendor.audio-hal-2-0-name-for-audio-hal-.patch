@@ -1,0 +1,64 @@
+From c105a678e3c0ece81a07df9b6aa1212e4e084b19 Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Mon, 10 Nov 2025 10:07:46 +0100
+Subject: [PATCH] huawei keep vendor.audio-hal-2-0 name for audio hal 40
+
+original declaration on stock
+service vendor.audio-hal-2-0 /vendor/bin/hw/vendor.huawei.hardware.audio@4.0-service
+
+Change-Id: I733a8b18ab6bb0243705acc50acf0d83ed9a231c
+---
+ media/audioserver/audioserver.rc | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/media/audioserver/audioserver.rc b/media/audioserver/audioserver.rc
+index 8bdb86e47d..b8f6dda710 100644
+--- a/media/audioserver/audioserver.rc
++++ b/media/audioserver/audioserver.rc
+@@ -13,6 +13,8 @@ service audioserver /system/bin/audioserver
+     onrestart restart vendor.audio-effect-hal-aidl
+     onrestart restart vendor.audio-hal-4-0-msd
+     onrestart restart audio_proxy_service
++    # Keep the original service names for backward compatibility
++    onrestart restart vendor.audio-hal-2-0
+ 
+ on property:vts.native_server.on=1
+     stop audioserver
+@@ -25,6 +27,8 @@ on property:init.svc.audioserver=stopped
+     stop vendor.audio-effect-hal-aidl
+     stop vendor.audio-hal-4-0-msd
+     stop audio_proxy_service
++    # Keep the original service names for backward compatibility
++    stop vendor.audio-hal-2-0
+     # See b/155364397. Need to have HAL service running for VTS.
+     # Can't use 'restart' because then HAL service would restart
+     # audioserver bringing it back into running state.
+@@ -33,6 +37,8 @@ on property:init.svc.audioserver=stopped
+     start vendor.audio-effect-hal-aidl
+     start vendor.audio-hal-4-0-msd
+     start audio_proxy_service
++    # Keep the original service names for backward compatibility
++    start vendor.audio-hal-2-0
+ 
+ on property:init.svc.audioserver=running
+     start vendor.audio-hal
+@@ -40,6 +46,8 @@ on property:init.svc.audioserver=running
+     start vendor.audio-effect-hal-aidl
+     start vendor.audio-hal-4-0-msd
+     start audio_proxy_service
++    # Keep the original service names for backward compatibility
++    start vendor.audio-hal-2-0
+ 
+ on property:sys.audio.restart.hal=1
+     # See b/159966243. Avoid restart loop between audioserver and HAL.
+@@ -49,6 +57,7 @@ on property:sys.audio.restart.hal=1
+     stop vendor.audio-effect-hal-aidl
+     stop vendor.audio-hal-4-0-msd
+     stop audio_proxy_service
++    stop vendor.audio-hal-2-0
+     start vendor.audio-hal
+     start vendor.audio-hal-aidl
+     start vendor.audio-effect-hal-aidl
+-- 
+2.25.1
+
