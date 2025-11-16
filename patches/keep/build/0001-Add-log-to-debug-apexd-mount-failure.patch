@@ -1,0 +1,45 @@
+From 6fd99a9b3f0862960141457b882bf46f67e0287b Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Thu, 6 Nov 2025 19:18:05 +0100
+Subject: [PATCH] Add log to debug apexd mount failure
+
+Change-Id: Idead1b15ad3ab5734719e7e293e35fc96b64ddea
+---
+ apexd/apexd.cpp | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/apexd/apexd.cpp b/apexd/apexd.cpp
+index 73cf5c59..3c74e54f 100644
+--- a/apexd/apexd.cpp
++++ b/apexd/apexd.cpp
+@@ -503,6 +503,7 @@ Result<MountedApexData> MountPackageImpl(const ApexFile& apex,
+     return ErrnoError() << mount_point << " is not empty";
+   }
+ 
++  LOG(INFO) << "Try mount point: " << mount_point << " device " << device_name;
+   const std::string& full_path = apex.GetPath();
+ 
+   if (!apex.GetImageOffset() || !apex.GetImageSize()) {
+@@ -620,6 +621,10 @@ Result<MountedApexData> MountPackageImpl(const ApexFile& apex,
+   if (!apex.GetFsType()) {
+     return Error() << "Cannot mount package without FsType";
+   }
++  
++  LOG(INFO) << "Try mount point step 6: " << mount_point << " device : " << device_name;  
++  LOG(INFO) << "  blockdevice: " << block_device.c_str() << " mount point : " << mount_point.c_str() << "FS : "   << apex.GetFsType().value().c_str();
++
+   if (mount(block_device.c_str(), mount_point.c_str(),
+             apex.GetFsType().value().c_str(), mount_flags, nullptr) == 0) {
+     auto time_elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+@@ -1144,6 +1149,8 @@ void SetConfig(const ApexdConfig& config) { gConfig = config; }
+ Result<void> MountPackage(const ApexFile& apex, const std::string& mount_point,
+                           const std::string& device_name, bool reuse_device,
+                           bool temp_mount) {
++
++  LOG(ERROR) << "Iceows MountPackage point :" << mount_point << "device " << device_name;
+   auto ret =
+       MountPackageImpl(apex, mount_point, device_name,
+                        GetHashTreeFileName(apex, /* is_new= */ false),
+-- 
+2.25.1
+
