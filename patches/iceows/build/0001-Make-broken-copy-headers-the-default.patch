@@ -1,7 +1,7 @@
-From 6dcb2a73bd229e24560dfa9bedafbd738c605a52 Mon Sep 17 00:00:00 2001
+From 0172c22bf131ebd9fe168c6f5449310e06d614be Mon Sep 17 00:00:00 2001
 From: Alexander Koskovich <zvnexus@outlook.com>
 Date: Sat, 3 Oct 2020 14:28:35 -0700
-Subject: [PATCH 02/10] Make broken copy headers the default
+Subject: [PATCH 1/5] Make broken copy headers the default
 
  * Do not take this for S unless needed, this is a hack
    for this cycle.
@@ -12,10 +12,10 @@ Change-Id: I55c8897d7d4d5c2a9e62b1a931b3856b2e38956e
  1 file changed, 1 insertion(+)
 
 diff --git a/core/board_config.mk b/core/board_config.mk
-index dc50a689ad..a7cb809ff0 100644
+index 859a6b2984..ba51288a63 100644
 --- a/core/board_config.mk
 +++ b/core/board_config.mk
-@@ -207,6 +207,7 @@ endif
+@@ -209,6 +209,7 @@ endif
  # ###############################################################
  $(foreach v,$(_build_broken_var_list),$(eval $(v) :=))
  BUILD_BROKEN_NINJA_USES_ENV_VARS :=

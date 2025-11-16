@@ -1,0 +1,25 @@
+From 8ff2e88f037338dad8db1dd7c7ba25413e928d8a Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Sun, 16 Nov 2025 12:42:25 +0100
+Subject: [PATCH 5/5] huawei add product packages shipping api level 28
+
+Change-Id: I1c884a818483acbabbabeaa3927bc0f956434cc7
+---
+ target/product/generic_system.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/target/product/generic_system.mk b/target/product/generic_system.mk
+index b9a623dcd3..a4329a1b16 100644
+--- a/target/product/generic_system.mk
++++ b/target/product/generic_system.mk
+@@ -110,6 +110,7 @@ PRODUCT_PACKAGES += \
+ # Add all of the packages used to support older/upgrading devices
+ # These can be removed as we drop support for the older API levels
+ PRODUCT_PACKAGES += \
++    $(PRODUCT_PACKAGES_SHIPPING_API_LEVEL_28) \
+     $(PRODUCT_PACKAGES_SHIPPING_API_LEVEL_29) \
+     $(PRODUCT_PACKAGES_SHIPPING_API_LEVEL_33) \
+     $(PRODUCT_PACKAGES_SHIPPING_API_LEVEL_34)
+-- 
+2.25.1
+

@@ -1,0 +1,146 @@
+From 738b6905a170ff8ec60e1e0b9f3899389328ec7d Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Sat, 15 Nov 2025 15:26:43 +0100
+Subject: [PATCH] Huawei Remove Concurrent Copying check with Read Barrier
+
+Change-Id: I145373c9106e51c21322ef5ac46a79b723148a7f
+---
+ runtime/gc/space/image_space.cc | 32 +++++++++++++++++++++++++++++---
+ runtime/read_barrier_config.h   | 28 ++++++++++++++--------------
+ 2 files changed, 43 insertions(+), 17 deletions(-)
+
+diff --git a/runtime/gc/space/image_space.cc b/runtime/gc/space/image_space.cc
+index 18f4c42..a41a654 100644
+--- a/runtime/gc/space/image_space.cc
++++ b/runtime/gc/space/image_space.cc
+@@ -1831,6 +1831,8 @@ bool ImageSpace::BootImageLayout::ReadHeader(const std::string& base_location,
+                                              /*out*/std::string* error_msg) {
+   DCHECK_LE(next_bcp_index_, bcp_index);
+   DCHECK_LT(bcp_index, boot_class_path_.size());
++  
++  LOG(INFO) << "ReadHeader image component header for " << base_location << ", filename: " << base_filename;
+ 
+   std::string actual_filename = ExpandLocation(base_filename, bcp_index);
+   int bcp_image_fd = bcp_index < boot_class_path_image_files_.size() ?
+@@ -1848,10 +1850,14 @@ bool ImageSpace::BootImageLayout::ReadHeader(const std::string& base_location,
+     return false;
+   }
+   if (!ReadSpecificImageHeader(image_file.get(), actual_filename.c_str(), &header, error_msg)) {
++    LOG(ERROR) << "ReadSpecificImageHeader not good : " << base_location << ", filename: " << base_filename;
+     return false;
+   }
++  
++  
+   const char* file_description = actual_filename.c_str();
+   if (!ValidateHeader(header, bcp_index, file_description, error_msg)) {
++    LOG(ERROR) << "Header not valid for " << base_location << ", filename: " << base_filename;
+     return false;
+   }
+ 
+@@ -1860,6 +1866,7 @@ bool ImageSpace::BootImageLayout::ReadHeader(const std::string& base_location,
+   size_t component_count = (header.GetImageSpaceCount() == 1u) ? header.GetComponentCount() : 1u;
+   for (size_t i = 0; i < header.GetImageSpaceCount(); i++) {
+     if (!ValidateOatFile(base_location, base_filename, bcp_index + i, component_count, error_msg)) {
++      LOG(ERROR) << "Not Validate Oat File" << base_location << ", filename: " << base_filename;
+       return false;
+     }
+   }
+@@ -2122,8 +2129,14 @@ bool ImageSpace::BootImageLayout::Load(FilenameFn&& filename_fn,
+     }
+     std::string local_error_msg;
+     std::string base_filename;
+-    if (!filename_fn(base_location, &base_filename, &local_error_msg) ||
+-        !ReadHeader(base_location, base_filename, bcp_index, &local_error_msg)) {
++    if (!filename_fn(base_location, &base_filename, &local_error_msg)) {
++      LOG(ERROR) << "Error reading named image component header for " << base_location << ", error: " << local_error_msg;
++      return false; 
++    }
++    
++    LOG(INFO) << "Info reading named image component header for " << base_location << ", filename: " << base_filename;
++     
++    if (!ReadHeader(base_location, base_filename, bcp_index, &local_error_msg)) {
+       LOG(ERROR) << "Error reading named image component header for " << base_location
+                  << ", error: " << local_error_msg;
+       // If the primary boot image is invalid, we generate a single full image. This is faster than
+@@ -2156,8 +2169,12 @@ bool ImageSpace::BootImageLayout::Load(FilenameFn&& filename_fn,
+           return false;
+         }
+         // No extensions are needed.
++        LOG(INFO) << "No extension are needed " << base_location;
+         return true;
+       }
++      
++      LOG(INFO) << "Reading named image component header for " << base_location;
++                 
+       bool should_compile_extension = allow_in_memory_compilation && !profile_filenames.empty();
+       if (!should_compile_extension ||
+           !CompileBootclasspathElements(base_location,
+@@ -3462,15 +3479,24 @@ bool ImageSpace::ValidateOatFile(const OatFile& oat_file,
+     return false;
+   }
+ 
++  LOG(INFO) << "Iceows A15 - Apex version : " << apex_versions << " - getlocation :" << oat_file.GetLocation();
++  LOG(INFO) << "Iceows A15 - Apex version is ok " << Runtime::Current()->GetApexVersions();
++
+   // For a boot image, the key value store only exists in the first OAT file. Skip other OAT files.
++  // Huawei -  found read barrier state mismatch (oat file: false, runtime: true)
++  /*
+   if (oat_file.GetOatHeader().GetKeyValueStoreSize() != 0 &&
+       oat_file.GetOatHeader().IsConcurrentCopying() != gUseReadBarrier) {
+     *error_msg =
+         ART_FORMAT("ValidateOatFile found read barrier state mismatch (oat file: {}, runtime: {})",
+                    oat_file.GetOatHeader().IsConcurrentCopying(),
+                    gUseReadBarrier);
++                   
++    LOG(ERROR) << "Iceows A15 - bad OAT";
+     return false;
+-  }
++  }*/
++  
++   LOG(INFO) << "Iceows A15 : " << "oat file: " << oat_file.GetOatHeader().IsConcurrentCopying() << " runtime: " << gUseReadBarrier;
+ 
+   size_t dex_file_index = 0;  // Counts only primary dex files.
+   const std::vector<const OatDexFile*>& oat_dex_files = oat_file.GetOatDexFiles();
+diff --git a/runtime/read_barrier_config.h b/runtime/read_barrier_config.h
+index 5a5fc05..4c37bea 100644
+--- a/runtime/read_barrier_config.h
++++ b/runtime/read_barrier_config.h
+@@ -75,21 +75,21 @@ static constexpr bool kUseTableLookupReadBarrier = false;
+ // Only if read-barrier isn't forced (see build/art.go) but is selected, that we need
+ // to see if we support userfaultfd GC. All the other cases can be constexpr here.
+ #ifdef ART_FORCE_USE_READ_BARRIER
+-constexpr bool gUseReadBarrier = kUseBakerReadBarrier || kUseTableLookupReadBarrier;
+-constexpr bool gUseUserfaultfd = !gUseReadBarrier;
+-static_assert(!gUseUserfaultfd);
++	constexpr bool gUseReadBarrier = kUseBakerReadBarrier || kUseTableLookupReadBarrier;
++	constexpr bool gUseUserfaultfd = !gUseReadBarrier;
++	static_assert(!gUseUserfaultfd);
+ #else
+-#ifndef ART_USE_READ_BARRIER
+-constexpr bool gUseReadBarrier = false;
+-#ifdef ART_DEFAULT_GC_TYPE_IS_CMC
+-constexpr bool gUseUserfaultfd = true;
+-#else
+-constexpr bool gUseUserfaultfd = false;
+-#endif
+-#else
+-EXPORT extern const bool gUseReadBarrier;
+-EXPORT extern const bool gUseUserfaultfd;
+-#endif
++	#ifndef ART_USE_READ_BARRIER
++		constexpr bool gUseReadBarrier = false;
++		#ifdef ART_DEFAULT_GC_TYPE_IS_CMC
++			constexpr bool gUseUserfaultfd = true;
++		#else
++			constexpr bool gUseUserfaultfd = false;
++		#endif
++	#else
++		EXPORT extern const bool gUseReadBarrier;
++		EXPORT extern const bool gUseUserfaultfd;
++	#endif
+ #endif
+ 
+ // Disabled for performance reasons.
+-- 
+2.25.1
+

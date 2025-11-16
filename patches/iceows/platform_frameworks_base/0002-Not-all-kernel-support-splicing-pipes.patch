@@ -1,0 +1,30 @@
+From ace57e7ac772cd93c489e28b1ce347aeb96d0e36 Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Sun, 16 Nov 2025 12:30:10 +0100
+Subject: [PATCH 2/3] Not all kernel support splicing pipes
+
+Not all kernel support splicing pipes (or is it
+ sockets?), so gracefully fallback to dumb userspace copy when splice() fails
+
+Change-Id: Id7fb1279eaffb8c00b58d33e7e363fab6d12518d
+---
+ core/java/android/os/FileUtils.java | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/core/java/android/os/FileUtils.java b/core/java/android/os/FileUtils.java
+index 14005b31903a..af06e6b1ee7e 100644
+--- a/core/java/android/os/FileUtils.java
++++ b/core/java/android/os/FileUtils.java
+@@ -479,7 +479,8 @@ public final class FileUtils {
+                     return copyInternalSpliceSocket(in, out, count, signal, executor, listener);
+                 }
+             } catch (ErrnoException e) {
+-                throw e.rethrowAsIOException();
++                Slog.w(TAG, "Not all kernel support splicing pipes - so  fallback to userspace.");
++                //throw e.rethrowAsIOException();
+             }
+         }
+ 
+-- 
+2.25.1
+
