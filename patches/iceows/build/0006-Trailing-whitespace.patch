@@ -1,0 +1,91 @@
+From fa2facb7faf129120c6d49a588c2941f1f1b76af Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Sun, 16 Nov 2025 21:09:38 +0100
+Subject: [PATCH] Trailing whitespace
+
+---
+ erofs-vndk.mk |  1 -
+ leaos.mk      | 31 +++++++++++++++++++++++++++++++
+ old-vndk.mk   |  1 -
+ rw-system.sh  |  4 ++--
+ 4 files changed, 33 insertions(+), 4 deletions(-)
+ create mode 100644 leaos.mk
+
+diff --git a/erofs-vndk.mk b/erofs-vndk.mk
+index 4496fbf..7bc876e 100644
+--- a/erofs-vndk.mk
++++ b/erofs-vndk.mk
+@@ -9,4 +9,3 @@ PRODUCT_EXTRA_VNDK_VERSIONS := 28 29
+ #TARGET_RO_FILE_SYSTEM_TYPE := erofs
+ #BOARD_EROFS_COMPRESS_HINTS := device/phh/treble/erofs_compress_hints.txt
+ 
+-
+diff --git a/leaos.mk b/leaos.mk
+new file mode 100644
+index 0000000..794d558
+--- /dev/null
++++ b/leaos.mk
+@@ -0,0 +1,31 @@
++
++ifneq ($(TARGET_BUILD_VARIANT),eng)
++# Disable extra StrictMode features on all non-engineering builds
++PRODUCT_SYSTEM_PROPERTIES += persist.sys.strictmode.disable=true
++endif
++
++# Do not include art debug targets
++PRODUCT_ART_TARGET_INCLUDE_DEBUG_BUILD := false
++
++# Convert GC type to non-generational
++PRODUCT_PROPERTY_OVERRIDES += \
++	dalvik.vm.gctype=nogenerational_cc
++
++# Convert GC type to non-generational
++PRODUCT_ART_USE_READ_BARRIER := false
++
++# Strip the local variable table and the local variable type table to reduce
++# the size of the system image. This has no bearing on stack traces, but will
++# leave less information available via JDWP.
++PRODUCT_MINIMIZE_JAVA_DEBUG_INFO := true
++
++# The set of packages we want to force 'speed' compilation on.
++PRODUCT_DEXPREOPT_SPEED_APPS += \
++    TrebuchetQuickStep \
++    Settings \
++    SystemUI
++
++PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
++    dalvik.vm.systemuicompilerfilter=speed
++
++
+diff --git a/old-vndk.mk b/old-vndk.mk
+index 8db9b4c..522b81b 100644
+--- a/old-vndk.mk
++++ b/old-vndk.mk
+@@ -1,2 +1 @@
+ PRODUCT_EXTRA_VNDK_VERSIONS := 28 29
+-
+diff --git a/rw-system.sh b/rw-system.sh
+index 5268015..2fa6b3e 100644
+--- a/rw-system.sh
++++ b/rw-system.sh
+@@ -658,7 +658,7 @@ if getprop ro.vendor.build.fingerprint | grep -iq -E -e 'huawei|honor' || getpro
+         mount -o bind /product/etc/libnfc-nxp.conf /system/etc/libnfc-nxp.conf || true
+ 
+     mount -o bind /system/phh/libnfc-nci-huawei.conf /system/etc/libnfc-nci.conf
+-    
++
+     # Set proper /sdcard permissions to avoid dead storage
+     chown media_rw:media_rw /data/media/0
+     chmod 0770 /data/media/0
+@@ -672,7 +672,7 @@ if getprop ro.vendor.build.fingerprint | grep -iq -E -e 'huawei|honor' || getpro
+     # For activity reco
+     chmod 0644  /dev/ar
+     chown system:system /dev/ar
+-    
++
+ fi
+ 
+ if getprop ro.vendor.build.fingerprint | grep -qE -e ".*(crown|star)[q2]*lte.*" -e ".*(SC-0[23]K|SCV3[89]).*" && [ "$vndk" -lt 28 ]; then
+-- 
+2.25.1
+
