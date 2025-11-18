@@ -1,0 +1,22 @@
+From 83599963da0fff085ae528f51e9352b691ec183a Mon Sep 17 00:00:00 2001
+From: Iceows <mounierr07@gmail.com>
+Date: Tue, 18 Nov 2025 08:06:46 +0100
+Subject: [PATCH] Don't set PRODUCT_ENABLE_UFFD_GC by default
+
+Change-Id: Id62d0c301a1bc4732258e411f941544c22e19fe9
+---
+ target/product/default_art_config.mk | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/target/product/default_art_config.mk b/target/product/default_art_config.mk
+index 33891d77f1..1a6a7c6e02 100644
+--- a/target/product/default_art_config.mk
++++ b/target/product/default_art_config.mk
+@@ -220,4 +220,3 @@ PRODUCT_SYSTEM_PROPERTIES += \
+     dalvik.vm.dex2oat-Xms=64m \
+     dalvik.vm.dex2oat-Xmx=512m \
+ 
+-PRODUCT_ENABLE_UFFD_GC := default
+-- 
+2.34.1
+
