@@ -1,0 +1,23 @@
+From 777201e95baaa3fcb6cb66c380f8dd39e46a6723 Mon Sep 17 00:00:00 2001
+From: Iceows <mounierr07@gmail.com>
+Date: Tue, 18 Nov 2025 23:12:10 +0100
+Subject: [PATCH] huawei: disable uffd_gc
+
+Change-Id: Ice5206071e2adcc3fbec06bb6f7b5d074cec9a30
+---
+ target/product/gsi_release.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/target/product/gsi_release.mk b/target/product/gsi_release.mk
+index e022941454..c0d53feb85 100644
+--- a/target/product/gsi_release.mk
++++ b/target/product/gsi_release.mk
+@@ -92,4 +92,4 @@ endif
+ # Assume the device supports UFFD. If it doesn't, the ART runtime will fall back
+ # to CC, and odrefresh will regenerate core dexopt artifacts on the first boot,
+ # so this is okay.
+-PRODUCT_ENABLE_UFFD_GC := true
++PRODUCT_ENABLE_UFFD_GC := false
+-- 
+2.34.1
+
