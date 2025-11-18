@@ -1,8 +1,8 @@
-From 0d5c7f28c62bb5f21625f2e963ce854fb51aa074 Mon Sep 17 00:00:00 2001
-From: Raphael Mounier <mounierr07@gmail.com>
-Date: Fri, 7 Nov 2025 18:44:36 +0100
-Subject: [PATCH 3/3] =?UTF-8?q?Add=20a=20"old"=20variant=20of=20vanilla,?=
- =?UTF-8?q?=20that=20exclusively=20includes=20vndk=2028/29,=E2=80=A6?=
+From aaf89cc422150e28866c3e443fa3a116b0d74792 Mon Sep 17 00:00:00 2001
+From: Iceows <mounierr07@gmail.com>
+Date: Mon, 17 Nov 2025 19:49:27 +0100
+Subject: [PATCH 3/7] device: add an old variant of vanilla that exclusively
+ include
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -14,8 +14,8 @@ Target is Pixel 1, with 2GB system partition
 Co-Authored-By: Pierre-Hugues HUSSON <phh@phh.me>
 ---
  generate.sh | 8 +++++++-
- old-vndk.mk | 2 ++
- 2 files changed, 9 insertions(+), 1 deletion(-)
+ old-vndk.mk | 1 +
+ 2 files changed, 8 insertions(+), 1 deletion(-)
  create mode 100644 old-vndk.mk
 
 diff --git a/generate.sh b/generate.sh
@@ -46,12 +46,11 @@ index 461eff1..8f24152 100644
  				fi
 diff --git a/old-vndk.mk b/old-vndk.mk
 new file mode 100644
-index 0000000..8db9b4c
+index 0000000..522b81b
 --- /dev/null
 +++ b/old-vndk.mk
-@@ -0,0 +1,2 @@
+@@ -0,0 +1 @@
 +PRODUCT_EXTRA_VNDK_VERSIONS := 28 29
-+
 -- 
-2.25.1
+2.34.1
 

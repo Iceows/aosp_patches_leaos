@@ -1,7 +1,7 @@
-From c9b1d17bf09b80f6c905869d6f776eccc72e55da Mon Sep 17 00:00:00 2001
+From a4ebe2975e8d67cb0fa749d8ec711bea76766ad4 Mon Sep 17 00:00:00 2001
 From: Iceows <mounierr07@gmail.com>
 Date: Wed, 5 Nov 2025 07:28:31 +0100
-Subject: [PATCH 2/3] device: add trebleapp in product packages
+Subject: [PATCH 2/7] device: add trebleapp in product packages
 
 ---
  base.mk | 4 ++++
@@ -23,5 +23,5 @@ index a29e402..e2b3c73 100644
  PRODUCT_COPY_FILES += \
      device/phh/treble/privapp-permissions-me.phh.treble.app.xml:system/etc/permissions/privapp-permissions-me.phh.treble.app.xml \
 -- 
-2.25.1
+2.34.1
 

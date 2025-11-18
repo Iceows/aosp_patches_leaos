@@ -1,34 +1,32 @@
-From acd6d6737c65f815915dcad85ca72078c5af5ed1 Mon Sep 17 00:00:00 2001
-From: Raphael Mounier <mounierr07@gmail.com>
-Date: Tue, 11 Nov 2025 16:15:22 +0100
-Subject: [PATCH] Add an erofs vndk28-29 variant for huawei phone
+From 6b1c81e58da2009fbd341f325a28f4692257643b Mon Sep 17 00:00:00 2001
+From: Iceows <mounierr07@gmail.com>
+Date: Mon, 17 Nov 2025 20:13:53 +0100
+Subject: [PATCH 5/7] huawei: add an erofs vndk28-29 variant for huawei phone
 
 ---
- erofs-vndk.mk            | 12 ++++++++++++
+ erofs-vndk.mk            | 10 ++++++++++
  erofs_compress_hints.txt |  1 +
  generate.sh              |  8 +++++++-
- 3 files changed, 20 insertions(+), 1 deletion(-)
+ 3 files changed, 18 insertions(+), 1 deletion(-)
  create mode 100644 erofs-vndk.mk
  create mode 100644 erofs_compress_hints.txt
 
 diff --git a/erofs-vndk.mk b/erofs-vndk.mk
 new file mode 100644
-index 0000000..4496fbf
+index 0000000..515e2b9
 --- /dev/null
 +++ b/erofs-vndk.mk
-@@ -0,0 +1,12 @@
+@@ -0,0 +1,10 @@
 +PRODUCT_EXTRA_VNDK_VERSIONS := 28 29
 +
 +# Use EROFS APEX as default
-+#ifeq (true,$(RELEASE_APEX_USE_EROFS_PREINSTALLED))
-+#PRODUCT_DEFAULT_APEX_PAYLOAD_TYPE := erofs
-+#endif
++ifeq (true,$(RELEASE_APEX_USE_EROFS_PREINSTALLED))
++    PRODUCT_DEFAULT_APEX_PAYLOAD_TYPE := erofs
++endif
 +
-+#PRODUCT_FS_COMPRESSION := 1
-+#TARGET_RO_FILE_SYSTEM_TYPE := erofs
-+#BOARD_EROFS_COMPRESS_HINTS := device/phh/treble/erofs_compress_hints.txt
-+
-+
++PRODUCT_FS_COMPRESSION := 1
++TARGET_RO_FILE_SYSTEM_TYPE := erofs
++BOARD_EROFS_COMPRESS_HINTS := device/phh/treble/erofs_compress_hints.txt
 diff --git a/erofs_compress_hints.txt b/erofs_compress_hints.txt
 new file mode 100644
 index 0000000..1753c81
@@ -63,5 +61,5 @@ index 8f24152..165ec74 100644
  					vndk="vndk-binder32.mk"
  				fi
 -- 
-2.25.1
+2.34.1
 
