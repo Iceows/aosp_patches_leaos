@@ -1,7 +1,7 @@
-From 719508a58648e95c39adacf561b7235a9679d902 Mon Sep 17 00:00:00 2001
+From 58e1333d6df418a909b41c5dea71bf713e86c361 Mon Sep 17 00:00:00 2001
 From: Iceows <mounierr07@gmail.com>
 Date: Tue, 18 Nov 2025 22:58:15 +0100
-Subject: [PATCH] huawei: add compatibility for IRadio 1.4
+Subject: [PATCH 1/2] huawei: add compatibility for IRadio 1.4
 
 Change-Id: I5fc074d2d55251a87231c5e0ca07b519f63b873c
 ---
@@ -18,7 +18,7 @@ Change-Id: I5fc074d2d55251a87231c5e0ca07b519f63b873c
  10 files changed, 196 insertions(+), 152 deletions(-)
 
 diff --git a/compatibility_matrices/compatibility_matrix.6.xml b/compatibility_matrices/compatibility_matrix.6.xml
-index fdd7952..77f042e 100644
+index fdd7952503..77f042e768 100644
 --- a/compatibility_matrices/compatibility_matrix.6.xml
 +++ b/compatibility_matrices/compatibility_matrix.6.xml
 @@ -450,7 +450,7 @@
@@ -31,7 +31,7 @@ index fdd7952..77f042e 100644
              <name>IRadio</name>
              <instance>slot1</instance>
 diff --git a/radio/aidl/compat/libradiocompat/RadioCompatBase.cpp b/radio/aidl/compat/libradiocompat/RadioCompatBase.cpp
-index 2a2d7a3..0e99b40 100644
+index 2a2d7a36e9..0e99b40378 100644
 --- a/radio/aidl/compat/libradiocompat/RadioCompatBase.cpp
 +++ b/radio/aidl/compat/libradiocompat/RadioCompatBase.cpp
 @@ -23,7 +23,8 @@ namespace android::hardware::radio::compat {
@@ -45,7 +45,7 @@ index 2a2d7a3..0e99b40 100644
        mCallbackManager(cbMgr) {}
  
 diff --git a/radio/aidl/compat/libradiocompat/data/RadioData.cpp b/radio/aidl/compat/libradiocompat/data/RadioData.cpp
-index 51f5543..f676fd5 100644
+index 51f5543420..f676fd5134 100644
 --- a/radio/aidl/compat/libradiocompat/data/RadioData.cpp
 +++ b/radio/aidl/compat/libradiocompat/data/RadioData.cpp
 @@ -58,7 +58,7 @@ ScopedAStatus RadioData::cancelHandover(int32_t serial, int32_t callId) {
@@ -140,7 +140,7 @@ index 51f5543..f676fd5 100644
  }
  
 diff --git a/radio/aidl/compat/libradiocompat/include/libradiocompat/RadioCompatBase.h b/radio/aidl/compat/libradiocompat/include/libradiocompat/RadioCompatBase.h
-index eb22fff..a34186c 100644
+index eb22fff25d..a34186ce23 100644
 --- a/radio/aidl/compat/libradiocompat/include/libradiocompat/RadioCompatBase.h
 +++ b/radio/aidl/compat/libradiocompat/include/libradiocompat/RadioCompatBase.h
 @@ -26,13 +26,14 @@ class RadioCompatBase {
@@ -160,7 +160,7 @@ index eb22fff..a34186c 100644
  };
  
 diff --git a/radio/aidl/compat/libradiocompat/messaging/RadioMessaging.cpp b/radio/aidl/compat/libradiocompat/messaging/RadioMessaging.cpp
-index 56d49f1..e244332 100644
+index 56d49f1bb9..e244332fd5 100644
 --- a/radio/aidl/compat/libradiocompat/messaging/RadioMessaging.cpp
 +++ b/radio/aidl/compat/libradiocompat/messaging/RadioMessaging.cpp
 @@ -36,63 +36,63 @@ std::shared_ptr<aidl::IRadioMessagingResponse> RadioMessaging::respond() {
@@ -336,7 +336,7 @@ index 56d49f1..e244332 100644
  }
  
 diff --git a/radio/aidl/compat/libradiocompat/modem/RadioModem.cpp b/radio/aidl/compat/libradiocompat/modem/RadioModem.cpp
-index f088b10..ee78135 100644
+index f088b10b19..ee7813558f 100644
 --- a/radio/aidl/compat/libradiocompat/modem/RadioModem.cpp
 +++ b/radio/aidl/compat/libradiocompat/modem/RadioModem.cpp
 @@ -33,19 +33,19 @@ std::shared_ptr<aidl::IRadioModemResponse> RadioModem::respond() {
@@ -461,7 +461,7 @@ index f088b10..ee78135 100644
      return ok();
  }
 diff --git a/radio/aidl/compat/libradiocompat/network/RadioNetwork.cpp b/radio/aidl/compat/libradiocompat/network/RadioNetwork.cpp
-index b5aee5c..5d42139 100644
+index b5aee5c085..5d42139a51 100644
 --- a/radio/aidl/compat/libradiocompat/network/RadioNetwork.cpp
 +++ b/radio/aidl/compat/libradiocompat/network/RadioNetwork.cpp
 @@ -41,32 +41,32 @@ ScopedAStatus RadioNetwork::getAllowedNetworkTypesBitmap(int32_t serial) {
@@ -731,7 +731,7 @@ index b5aee5c..5d42139 100644
  }
  
 diff --git a/radio/aidl/compat/libradiocompat/sim/RadioSim.cpp b/radio/aidl/compat/libradiocompat/sim/RadioSim.cpp
-index 490b07b..befe0ea 100644
+index 490b07b9f9..befe0ea9d7 100644
 --- a/radio/aidl/compat/libradiocompat/sim/RadioSim.cpp
 +++ b/radio/aidl/compat/libradiocompat/sim/RadioSim.cpp
 @@ -36,45 +36,45 @@ std::shared_ptr<aidl::IRadioSimResponse> RadioSim::respond() {
@@ -991,7 +991,7 @@ index 490b07b..befe0ea 100644
  }
  
 diff --git a/radio/aidl/compat/libradiocompat/voice/RadioVoice.cpp b/radio/aidl/compat/libradiocompat/voice/RadioVoice.cpp
-index 9088f01..705ee7b 100644
+index 9088f01f3d..705ee7b71d 100644
 --- a/radio/aidl/compat/libradiocompat/voice/RadioVoice.cpp
 +++ b/radio/aidl/compat/libradiocompat/voice/RadioVoice.cpp
 @@ -36,25 +36,25 @@ std::shared_ptr<aidl::IRadioVoiceResponse> RadioVoice::respond() {
@@ -1264,7 +1264,7 @@ index 9088f01..705ee7b 100644
  }
  
 diff --git a/radio/aidl/compat/service/service.cpp b/radio/aidl/compat/service/service.cpp
-index 8af05de..9d1a9fd 100644
+index 8af05deb08..9d1a9fd551 100644
 --- a/radio/aidl/compat/service/service.cpp
 +++ b/radio/aidl/compat/service/service.cpp
 @@ -51,7 +51,7 @@ static void publishRadioHal(std::shared_ptr<compat::DriverContext> ctx, sp<V1_5:
@@ -1277,5 +1277,5 @@ index 8af05de..9d1a9fd 100644
  
      hidl_utils::linkDeathToDeath(radioHidl);
 -- 
-2.34.1
+2.25.1
 
