@@ -1,17 +1,19 @@
-From 35ce533fe3745c2185d10e997fd8ebd599af9fd7 Mon Sep 17 00:00:00 2001
-From: Pierre-Hugues Husson <phh@phh.me>
-Date: Sat, 19 Feb 2022 08:20:25 -0500
-Subject: [PATCH 2/2] Add new mechanism to fake vendor props on a per-process
+From 204fb35f5a781338196c88f6c2e6e542569c1faa Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Fri, 19 Dec 2025 18:58:41 +0100
+Subject: [PATCH 2/2]  Add new mechanism to fake vendor props on a per-process 
  basis
 
 This reads debug.phh.props.<process name>. If its value is "vendor",
 then ro.product.device/ro.product.manufacturer is read from vendor
+
+Change-Id: If40fc693a1b151802454358a587d7c69b5c7fb77
 ---
  libc/system_properties/system_properties.cpp | 87 +++++++++++++++++++-
  1 file changed, 85 insertions(+), 2 deletions(-)
 
 diff --git a/libc/system_properties/system_properties.cpp b/libc/system_properties/system_properties.cpp
-index e0d38a822..60974e8ae 100644
+index 6924ff145..8495a9f8f 100644
 --- a/libc/system_properties/system_properties.cpp
 +++ b/libc/system_properties/system_properties.cpp
 @@ -36,6 +36,8 @@

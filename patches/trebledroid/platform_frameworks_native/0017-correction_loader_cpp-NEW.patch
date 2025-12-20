@@ -1,0 +1,35 @@
+From 339c79d4c60438d3be7d030c055b1f6c7e4c5687 Mon Sep 17 00:00:00 2001
+From: harvey186 <harvey186@hotmail.com>
+Date: Thu, 4 Dec 2025 11:29:54 +0100
+Subject: [PATCH] correction_loader_cpp-NEW
+
+Change-Id: Id814587e712c89078fe779c378e5ee82951efe7f
+---
+ opengl/libs/EGL/Loader.cpp                                  | 4 ++--
+ 1 files changed, 17 insertions(+), 0 deletions(-)
+
+diff --git a/opengl/libs/EGL/Loader.cpp b/opengl/libs/EGL/Loader.cpp
+index ad7946c..d7a8d87 100644
+--- a/opengl/libs/EGL/Loader.cpp
++++ b/opengl/libs/EGL/Loader.cpp
+@@ -289,7 +289,7 @@ void* Loader::open(egl_connection_t* cnx) {
+     }
+ 
+     // Finally, try to load default driver.
+-    bool failToLoadFromDriverSuffixProperty = false;
++/*    bool failToLoadFromDriverSuffixProperty = false;
+     if (!hnd) {
+         // Start by searching for the library name appended by the system
+         // properties of the GLES userspace driver in both locations.
+@@ -312,7 +312,7 @@ void* Loader::open(egl_connection_t* cnx) {
+             break;
+         }
+     }
+-
++*/
+     if (!hnd) {
+         // Can't find graphics driver by appending the value from system properties, now search for
+         // the exact name without any suffix of the GLES userspace driver in both locations.
+-- 
+2.34.1
+

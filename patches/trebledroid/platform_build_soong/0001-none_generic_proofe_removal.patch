@@ -1,0 +1,32 @@
+From c69884a69e1d1a373c19c057137feaefabacbd22 Mon Sep 17 00:00:00 2001
+From: harvey186 <harvey186@hotmail.com>
+Date: Wed, 3 Dec 2025 11:48:55 +0100
+Subject: [PATCH] none_generic_proofe_removal
+
+Change-Id: Ia56ba462e1433c023d67809cb63a30e02608445e
+---
+ filesystem/filesystem.go | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/filesystem/filesystem.go b/filesystem/filesystem.go
+index f0c7ee7..5113da2 100644
+--- a/filesystem/filesystem.go
++++ b/filesystem/filesystem.go
+@@ -1117,13 +1117,7 @@ func (f *filesystem) verifyGenericConfig(ctx android.ModuleContext, specs map[st
+ 		return true
+ 	})
+ 
+-	if len(nonGenericModules) > 0 {
+-		errStr := "\n"
+-		for _, m := range android.SortedKeys(nonGenericModules) {
+-			errStr += fmt.Sprintf("\t%q from %q,\n", m, nonGenericModules[m])
+-		}
+-		ctx.ModuleErrorf("includes non-generic modules:%s", errStr)
+-	}
++
+ }
+ 
+ type buildImageParams struct {
+-- 
+2.34.1
+

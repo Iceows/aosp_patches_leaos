@@ -1,24 +1,23 @@
-From bae92a3ade68e6c026ed434769f5a1c427cd9ea6 Mon Sep 17 00:00:00 2001
-From: Alberto Ponces <ponces26@gmail.com>
-Date: Sun, 20 Oct 2024 21:15:08 +0100
-Subject: [PATCH 27/28] Revert "init: remove session keyring workaround for old
- kernels"
+From 32e343813c8acc4d9de505a3443a8c01f13d74c2 Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Sat, 20 Dec 2025 14:03:11 +0100
+Subject: [PATCH 2/3] Revert "init: remove session keyring workaround for old
 
-This reverts commit 5d7c35ce205f1b4afadd6a1725c0b5e03962a97c.
+Change-Id: Ia4f739f091c37efbae7d92a79b64a298ccf77774
 ---
  init/Android.bp                  |  1 +
  init/builtins.cpp                |  3 +++
- init/fscrypt_init_extensions.cpp | 16 ++++++++++++++++
+ init/fscrypt_init_extensions.cpp | 17 ++++++++++++++++-
  init/fscrypt_init_extensions.h   |  1 +
  init/fuzzer/Android.bp           |  1 +
  init/init.cpp                    |  6 ++++++
- 6 files changed, 28 insertions(+)
+ 6 files changed, 28 insertions(+), 1 deletion(-)
 
 diff --git a/init/Android.bp b/init/Android.bp
-index ed19b4b86..dd3c2e120 100644
+index a8e7708c3..56fa318dd 100644
 --- a/init/Android.bp
 +++ b/init/Android.bp
-@@ -185,6 +185,7 @@ libinit_cc_defaults {
+@@ -201,6 +201,7 @@ libinit_cc_defaults {
          "libext4_utils",
          "libfs_mgr",
          "libgsi",
@@ -27,7 +26,7 @@ index ed19b4b86..dd3c2e120 100644
          "liblogwrap",
          "liblp",
 diff --git a/init/builtins.cpp b/init/builtins.cpp
-index a5222bb0d..2d100e733 100644
+index ede2fcd1a..4a89c453b 100644
 --- a/init/builtins.cpp
 +++ b/init/builtins.cpp
 @@ -597,6 +597,9 @@ static Result<void> queue_fs_event(int code) {
@@ -41,17 +40,19 @@ index a5222bb0d..2d100e733 100644
  
          // Although encrypted, vold has already set the device up, so we do not need to
 diff --git a/init/fscrypt_init_extensions.cpp b/init/fscrypt_init_extensions.cpp
-index 6a561e54c..fbd818957 100644
+index 6a561e54c..2c3ab94d6 100644
 --- a/init/fscrypt_init_extensions.cpp
 +++ b/init/fscrypt_init_extensions.cpp
-@@ -34,12 +34,28 @@
- #include <cutils/properties.h>
- #include <cutils/sockets.h>
- #include <fscrypt/fscrypt.h>
+@@ -22,7 +22,7 @@
+ #include <sys/mount.h>
+ #include <sys/stat.h>
+ #include <unistd.h>
+-
 +#include <keyutils.h>
- #include <logwrap/logwrap.h>
+ #include <string>
+ #include <vector>
  
- #define TAG "fscrypt"
+@@ -40,6 +40,21 @@
  
  using namespace android::fscrypt;
  
@@ -97,18 +98,18 @@ index 8cfd597d9..cb3700a7f 100644
          "libprocessgroup",
          "libselinux",
 diff --git a/init/init.cpp b/init/init.cpp
-index 5b0b0ddee..6eceed8e9 100644
+index 08e7c661d..9667e6325 100644
 --- a/init/init.cpp
 +++ b/init/init.cpp
-@@ -52,6 +52,7 @@
- #include <android-base/thread_annotations.h>
- #include <fs_avb/fs_avb.h>
- #include <fs_mgr_vendor_overlay.h>
+@@ -41,6 +41,7 @@
+ #include <optional>
+ #include <thread>
+ #include <vector>
 +#include <keyutils.h>
- #include <libavb/libavb.h>
- #include <libgsi/libgsi.h>
- #include <libsnapshot/snapshot.h>
-@@ -962,6 +963,11 @@ int SecondStageMain(int argc, char** argv) {
+ 
+ #include <android-base/chrono_utils.h>
+ #include <android-base/file.h>
+@@ -1088,6 +1089,11 @@ int SecondStageMain(int argc, char** argv) {
                     << " to /proc/1/oom_score_adj: " << result.error();
      }
  

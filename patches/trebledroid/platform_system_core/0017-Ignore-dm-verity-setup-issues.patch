@@ -1,7 +1,7 @@
-From 43374fc4469dce4581f1da38ea04d98439ce917c Mon Sep 17 00:00:00 2001
-From: Pierre-Hugues Husson <phh@phh.me>
-Date: Fri, 6 Oct 2023 08:20:48 -0400
-Subject: [PATCH 17/28] Ignore dm-verity setup issues
+From 72bd20f402be1a1b147ff7fc6d425455a11a0e22 Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Thu, 18 Dec 2025 09:08:09 +0100
+Subject: [PATCH] Ignore dm-verity setup issues
 
 On Amlogic STB Android 9 vendor, no boot device is setup
 (fstab doesn't use /dev/block/by-name but more direct mappings)
@@ -9,15 +9,17 @@ that means that libavb can't access the partition by-name, thus failing
 to read vbmeta & co, and thus failing setting up dm-verity.
 
 We don't care much about dm-verity so let's just ignore this
+
+Change-Id: I52d0b072737877cc6c2ebebbcd79b1555984febd
 ---
  init/first_stage_mount.cpp | 1 -
  1 file changed, 1 deletion(-)
 
 diff --git a/init/first_stage_mount.cpp b/init/first_stage_mount.cpp
-index aa6b55166..5e8e458f9 100644
+index d8858cd..81101f9 100644
 --- a/init/first_stage_mount.cpp
 +++ b/init/first_stage_mount.cpp
-@@ -458,7 +458,6 @@ bool FirstStageMountVBootV2::MountPartition(const Fstab::iterator& begin, bool e
+@@ -469,7 +469,6 @@ bool FirstStageMountVBootV2::MountPartition(const Fstab::iterator& begin, bool e
      }
      if (!SetUpDmVerity(&(*begin))) {
          PLOG(ERROR) << "Failed to setup verity for '" << begin->mount_point << "'";

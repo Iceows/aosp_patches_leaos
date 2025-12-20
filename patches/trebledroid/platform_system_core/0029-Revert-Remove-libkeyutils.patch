@@ -1,0 +1,297 @@
+From bd9227b5f0e9e33a8c85d2bd34fa47d7a360734e Mon Sep 17 00:00:00 2001
+From: Michael Bestas <mkbestas@lineageos.org>
+Date: Fri, 21 Nov 2025 01:00:17 +0200
+Subject: [PATCH 3/3] Revert "Remove libkeyutils"
+
+This reverts commit 6dce39d61cf7507e8fc4f84a4e46cf1ac5abc67b.
+
+Reason for revert: Required for I695f04514f4334c77636120d94990b0b6eaa11a3
+
+Change-Id: Ia3a683ca1ec04e737c513998024e45ccd88b1c52
+---
+ libkeyutils/.clang-format      |  1 +
+ libkeyutils/Android.bp         | 31 +++++++++++++++
+ libkeyutils/NOTICE             | 25 ++++++++++++
+ libkeyutils/include/keyutils.h | 60 +++++++++++++++++++++++++++++
+ libkeyutils/keyutils.cpp       | 69 ++++++++++++++++++++++++++++++++++
+ libkeyutils/keyutils_test.cpp  | 46 +++++++++++++++++++++++
+ 6 files changed, 232 insertions(+)
+ create mode 120000 libkeyutils/.clang-format
+ create mode 100644 libkeyutils/Android.bp
+ create mode 100644 libkeyutils/NOTICE
+ create mode 100644 libkeyutils/include/keyutils.h
+ create mode 100644 libkeyutils/keyutils.cpp
+ create mode 100644 libkeyutils/keyutils_test.cpp
+
+diff --git a/libkeyutils/.clang-format b/libkeyutils/.clang-format
+new file mode 120000
+index 000000000..fd0645fdf
+--- /dev/null
++++ b/libkeyutils/.clang-format
+@@ -0,0 +1 @@
++../.clang-format-2
+\ No newline at end of file
+diff --git a/libkeyutils/Android.bp b/libkeyutils/Android.bp
+new file mode 100644
+index 000000000..3af07b47c
+--- /dev/null
++++ b/libkeyutils/Android.bp
+@@ -0,0 +1,31 @@
++package {
++    default_applicable_licenses: ["system_core_libkeyutils_license"],
++}
++
++license {
++    name: "system_core_libkeyutils_license",
++    visibility: [":__subpackages__"],
++    license_kinds: ["SPDX-license-identifier-BSD"],
++    license_text: ["NOTICE"],
++}
++
++cc_library {
++    name: "libkeyutils",
++    cflags: ["-Werror"],
++    defaults: ["linux_bionic_supported"],
++    ramdisk_available: true,
++    vendor_ramdisk_available: true,
++    recovery_available: true,
++    export_include_dirs: ["include/"],
++    local_include_dirs: ["include/"],
++    srcs: ["keyutils.cpp"],
++    stl: "none",
++}
++
++cc_test {
++    name: "libkeyutils-tests",
++    cflags: ["-Werror"],
++    shared_libs: ["libkeyutils"],
++    srcs: ["keyutils_test.cpp"],
++    test_suites: ["device-tests"],
++}
+diff --git a/libkeyutils/NOTICE b/libkeyutils/NOTICE
+new file mode 100644
+index 000000000..5828550d5
+--- /dev/null
++++ b/libkeyutils/NOTICE
+@@ -0,0 +1,25 @@
++Copyright (C) 2017 The Android Open Source Project
++All rights reserved.
++
++Redistribution and use in source and binary forms, with or without
++modification, are permitted provided that the following conditions
++are met:
++ * Redistributions of source code must retain the above copyright
++   notice, this list of conditions and the following disclaimer.
++ * Redistributions in binary form must reproduce the above copyright
++   notice, this list of conditions and the following disclaimer in
++   the documentation and/or other materials provided with the
++   distribution.
++
++THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
++FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
++COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
++INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
++BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
++OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
++AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
++OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
++OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++SUCH DAMAGE.
+diff --git a/libkeyutils/include/keyutils.h b/libkeyutils/include/keyutils.h
+new file mode 100644
+index 000000000..c508f2790
+--- /dev/null
++++ b/libkeyutils/include/keyutils.h
+@@ -0,0 +1,60 @@
++/*
++ * Copyright (C) 2017 The Android Open Source Project
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ *  * Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ *  * Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in
++ *    the documentation and/or other materials provided with the
++ *    distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
++ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
++ * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
++ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
++ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
++ * OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
++ * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
++ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
++ * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ */
++
++#ifndef _KEYUTILS_H_
++#define _KEYUTILS_H_
++
++#include <linux/keyctl.h>
++#include <stdint.h>
++#include <sys/cdefs.h>
++
++__BEGIN_DECLS
++
++typedef int32_t key_serial_t;
++
++key_serial_t add_key(const char* type, const char* description, const void* payload,
++                     size_t payload_length, key_serial_t ring_id);
++
++key_serial_t keyctl_get_keyring_ID(key_serial_t id, int create);
++
++long keyctl_revoke(key_serial_t id); /* TODO: remove this */
++
++long keyctl_search(key_serial_t ring_id, const char* type, const char* description,
++                   key_serial_t dest_ring_id);
++
++long keyctl_setperm(key_serial_t id, int permissions);
++
++long keyctl_unlink(key_serial_t key, key_serial_t keyring);
++
++long keyctl_restrict_keyring(key_serial_t keyring, const char* type, const char* restriction);
++
++long keyctl_get_security(key_serial_t key, char* buffer, size_t buflen);
++
++__END_DECLS
++
++#endif
+diff --git a/libkeyutils/keyutils.cpp b/libkeyutils/keyutils.cpp
+new file mode 100644
+index 000000000..1c5acc9ad
+--- /dev/null
++++ b/libkeyutils/keyutils.cpp
+@@ -0,0 +1,69 @@
++/*
++ * Copyright (C) 2017 The Android Open Source Project
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ *  * Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ *  * Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in
++ *    the documentation and/or other materials provided with the
++ *    distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
++ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
++ * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
++ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
++ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
++ * OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
++ * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
++ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
++ * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ */
++
++#include <keyutils.h>
++
++#include <stdarg.h>
++#include <sys/syscall.h>
++#include <unistd.h>
++
++// keyctl(2) is deliberately not exposed. Callers should use the typed APIs instead.
++
++key_serial_t add_key(const char* type, const char* description, const void* payload,
++                     size_t payload_length, key_serial_t ring_id) {
++  return syscall(__NR_add_key, type, description, payload, payload_length, ring_id);
++}
++
++key_serial_t keyctl_get_keyring_ID(key_serial_t id, int create) {
++  return syscall(__NR_keyctl, KEYCTL_GET_KEYRING_ID, id, create);
++}
++
++long keyctl_revoke(key_serial_t id) {
++  return syscall(__NR_keyctl, KEYCTL_REVOKE, id);
++}
++
++long keyctl_search(key_serial_t ring_id, const char* type, const char* description,
++                   key_serial_t dest_ring_id) {
++  return syscall(__NR_keyctl, KEYCTL_SEARCH, ring_id, type, description, dest_ring_id);
++}
++
++long keyctl_setperm(key_serial_t id, int permissions) {
++  return syscall(__NR_keyctl, KEYCTL_SETPERM, id, permissions);
++}
++
++long keyctl_unlink(key_serial_t key, key_serial_t keyring) {
++  return syscall(__NR_keyctl, KEYCTL_UNLINK, key, keyring);
++}
++
++long keyctl_restrict_keyring(key_serial_t keyring, const char* type, const char* restriction) {
++  return syscall(__NR_keyctl, KEYCTL_RESTRICT_KEYRING, keyring, type, restriction);
++}
++
++long keyctl_get_security(key_serial_t id, char* buffer, size_t buflen) {
++  return syscall(__NR_keyctl, KEYCTL_GET_SECURITY, id, buffer, buflen);
++}
+diff --git a/libkeyutils/keyutils_test.cpp b/libkeyutils/keyutils_test.cpp
+new file mode 100644
+index 000000000..d03747b3e
+--- /dev/null
++++ b/libkeyutils/keyutils_test.cpp
+@@ -0,0 +1,46 @@
++/*
++ * Copyright (C) 2017 The Android Open Source Project
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ *  * Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ *  * Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in
++ *    the documentation and/or other materials provided with the
++ *    distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
++ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
++ * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
++ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
++ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
++ * OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
++ * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
++ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
++ * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ */
++
++#include <keyutils.h>
++
++#include <dlfcn.h>
++
++#include <gtest/gtest.h>
++
++TEST(keyutils, smoke) {
++  // Check that the exported type is the right size.
++  ASSERT_EQ(4U, sizeof(key_serial_t));
++
++  // Check that all the functions actually exist.
++  ASSERT_TRUE(dlsym(nullptr, "add_key") != nullptr);
++  ASSERT_TRUE(dlsym(nullptr, "keyctl_get_keyring_ID") != nullptr);
++  ASSERT_TRUE(dlsym(nullptr, "keyctl_revoke") != nullptr);
++  ASSERT_TRUE(dlsym(nullptr, "keyctl_search") != nullptr);
++  ASSERT_TRUE(dlsym(nullptr, "keyctl_setperm") != nullptr);
++  ASSERT_TRUE(dlsym(nullptr, "keyctl_unlink") != nullptr);
++}
+-- 
+2.25.1
+

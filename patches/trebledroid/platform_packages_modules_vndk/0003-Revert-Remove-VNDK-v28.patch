@@ -1,0 +1,27 @@
+From 3e887b92cda05eb544e7f7e12b284cfcadb46207 Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Sun, 14 Dec 2025 09:40:30 +0100
+Subject: [PATCH 3/3] Revert "Remove VNDK v28"
+
+This reverts commit 2c33d53b0d14c9654b361942a916dfe7ed3739db.
+---
+ apex/Android.bp | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/apex/Android.bp b/apex/Android.bp
+index 8290ce0..9151ceb 100644
+--- a/apex/Android.bp
++++ b/apex/Android.bp
+@@ -78,3 +78,9 @@ apex_vndk {
+     system_ext_specific: true,
+ }
+ 
++apex_vndk {
++    name: "com.android.vndk.v28",
++    defaults: ["vndk-apex-defaults"],
++    vndk_version: "28",
++    system_ext_specific: true,
++}
+-- 
+2.25.1
+

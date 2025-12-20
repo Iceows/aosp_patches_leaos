@@ -1,7 +1,7 @@
-From 21f7836f73fc1df783b84e79e55abecad9359d81 Mon Sep 17 00:00:00 2001
-From: Pierre-Hugues Husson <phh@phh.me>
-Date: Fri, 18 Oct 2024 17:26:04 -0400
-Subject: [PATCH 6/6] Revert "vold: remove session keyring workaround for old
+From 8035a40dbbd3c771a7a38d83ad0732b211a79d45 Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Sat, 20 Dec 2025 19:19:43 +0100
+Subject: [PATCH 3/3] Revert "vold: remove session keyring workaround for old
  kernels"
 
 This reverts commit 0e87a83cbacd7ccb47873df1b555598f94e6a287.
@@ -13,10 +13,10 @@ This reverts commit 0e87a83cbacd7ccb47873df1b555598f94e6a287.
  4 files changed, 153 insertions(+)
 
 diff --git a/Android.bp b/Android.bp
-index ba3267ca..ffa63af9 100644
+index 289da229..3c036354 100644
 --- a/Android.bp
 +++ b/Android.bp
-@@ -62,6 +62,7 @@ cc_defaults {
+@@ -61,6 +61,7 @@ cc_defaults {
          "libincfs",
          "libhidlbase",
          "libkeymint_support",
@@ -25,7 +25,7 @@ index ba3267ca..ffa63af9 100644
          "liblogwrap",
          "libselinux",
 diff --git a/FsCrypt.cpp b/FsCrypt.cpp
-index ea455a81..28f511b6 100644
+index a8078ef8..e303b0d4 100644
 --- a/FsCrypt.cpp
 +++ b/FsCrypt.cpp
 @@ -49,6 +49,7 @@
@@ -249,10 +249,10 @@ index bd2ccddd..9e8920d1 100644
      android::base::unique_fd fd(open(mountpoint.c_str(), O_RDONLY | O_DIRECTORY | O_CLOEXEC));
      if (fd == -1) {
 diff --git a/KeyUtil.h b/KeyUtil.h
-index cc1a1f98..17a234e6 100644
+index eb1aa55d..52a78b4f 100644
 --- a/KeyUtil.h
 +++ b/KeyUtil.h
-@@ -43,15 +43,28 @@ bool generateStorageKey(const KeyGeneration& gen, KeyBuffer* key);
+@@ -44,15 +44,28 @@ bool generateStorageKey(const KeyGeneration& gen, KeyBuffer* key);
  // be generated.
  const KeyGeneration neverGen();
  

@@ -1,17 +1,18 @@
-From 19536d5fffc11717b6bc193ee4c457bd8c5de123 Mon Sep 17 00:00:00 2001
-From: Pierre-Hugues Husson <phh@phh.me>
-Date: Wed, 11 Mar 2020 14:02:35 +0100
-Subject: [PATCH 5/6] Every voldmanaged storage is adoptable
+From 7708186b33e59851722961542ea4069c5b402c1f Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Sat, 20 Dec 2025 19:05:35 +0100
+Subject: [PATCH 2/3] Every voldmanaged storage is adoptable
 
+Change-Id: Ic6ffa77cea899427facaaa3be30ae4d265081684
 ---
  main.cpp | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/main.cpp b/main.cpp
-index 078ee14b..475060dc 100644
+index bdce76ed..dc0464c5 100644
 --- a/main.cpp
 +++ b/main.cpp
-@@ -269,7 +269,7 @@ static int process_config(VolumeManager* vm, VoldConfigs* configs) {
+@@ -277,7 +277,7 @@ static int process_config(VolumeManager* vm, VoldConfigs* configs) {
              std::string nickname(entry.label);
              int flags = 0;
  

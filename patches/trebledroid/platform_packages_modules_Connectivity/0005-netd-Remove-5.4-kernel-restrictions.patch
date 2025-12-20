@@ -1,0 +1,39 @@
+From 1169ab4334d85f660be94841cda5beb348d9d949 Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Fri, 19 Dec 2025 19:15:46 +0100
+Subject: [PATCH 5/6] netd: Remove < 5.4 kernel restrictions
+
+Change-Id: Ia0046e527646fa8f97deebc1453ae370c86642a5
+---
+ bpf/netd/BpfHandler.cpp | 15 ---------------
+ 1 file changed, 15 deletions(-)
+
+diff --git a/bpf/netd/BpfHandler.cpp b/bpf/netd/BpfHandler.cpp
+index 7b5e63e206..922a6ea767 100644
+--- a/bpf/netd/BpfHandler.cpp
++++ b/bpf/netd/BpfHandler.cpp
+@@ -81,21 +81,6 @@ static Status initPrograms(const char* cg2_path) {
+     // This code was mainlined in T, so this should be trivially satisfied.
+     if (!isAtLeastT) return Status("S- platform is unsupported");
+ 
+-    // U mandates this mount point (though it should also be the case on T)
+-    if (isAtLeastU && !!strcmp(cg2_path, "/sys/fs/cgroup")) {
+-        return Status("U+ platform with cg2_path != /sys/fs/cgroup is unsupported");
+-    }
+-
+-    // V bumps the kernel requirement up to 4.19
+-    if (isAtLeastV && !isAtLeastKernelVersion(4, 19)) {
+-        return Status("V+ platform with kernel version < 4.19.0 is unsupported");
+-    }
+-
+-    // 25Q2 bumps the kernel requirement up to 5.4
+-    if (isAtLeast25Q2 && !isAtLeastKernelVersion(5, 4)) {
+-        return Status("25Q2+ platform with kernel version < 5.4.0 is unsupported");
+-    }
+-
+     unique_fd cg_fd(open(cg2_path, O_DIRECTORY | O_RDONLY | O_CLOEXEC));
+     if (!cg_fd.ok()) return statusFromErrno(errno, "Opening cgroup dir failed");
+ 
+-- 
+2.25.1
+
