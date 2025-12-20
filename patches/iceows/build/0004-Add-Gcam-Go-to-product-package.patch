@@ -1,20 +1,22 @@
-From 758b4a95c7b64f7cd53a0d6f83c5be09cb96755d Mon Sep 17 00:00:00 2001
+From 6c93b55867f360412e0e503edf9be85f54793178 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
-Date: Wed, 13 Apr 2022 09:40:02 +0200
-Subject: [PATCH 09/10] Add Gcam Go to product package
+Date: Sun, 14 Dec 2025 11:42:03 +0100
+Subject: [PATCH 4/5] Add Gcam Go to product package
 
+Change-Id: I1bd03d4e1d509ba169767c7fd9af93b8a273a28c
 ---
- target/product/handheld_product.mk | 1 +
- 1 file changed, 1 insertion(+)
+ target/product/handheld_product.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/target/product/handheld_product.mk b/target/product/handheld_product.mk
-index 2199c570a0..ce0eb4b258 100644
+index 8755ae6..c9d1cc9 100644
 --- a/target/product/handheld_product.mk
 +++ b/target/product/handheld_product.mk
-@@ -25,6 +25,7 @@ PRODUCT_PACKAGES += \
+@@ -24,7 +24,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/media_product.mk)
+ PRODUCT_PACKAGES += \
      Browser2 \
      Calendar \
-     Camera2 \
+-    Camera2 \
 +    GcamGo \
      Contacts \
      DeskClock \

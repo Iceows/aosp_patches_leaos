@@ -1,0 +1,35 @@
+From 97b8e802cabfb1ab5584217c2e9ba0d2d3459dca Mon Sep 17 00:00:00 2001
+From: Raphael Mounier <mounierr07@gmail.com>
+Date: Sun, 14 Dec 2025 13:57:00 +0100
+Subject: [PATCH 3/6] lge: remove vendor vibrator cmds
+
+---
+ cmds/Android.bp | 12 ------------
+ 1 file changed, 12 deletions(-)
+
+diff --git a/cmds/Android.bp b/cmds/Android.bp
+index df2625f..096401c 100644
+--- a/cmds/Android.bp
++++ b/cmds/Android.bp
+@@ -37,18 +37,6 @@ cc_binary {
+ 	host_supported: true,
+ }
+ 
+-cc_binary {
+-	name: "vibrator-lge",
+-	srcs: [
+-		"vibrator-lge.cpp",
+-	],
+-	shared_libs: [
+-		"vendor.lge.hardware.vibrator@1.0",
+-		"libutils",
+-		"libhidlbase",
+-	],
+-}
+-
+ cc_binary {
+ 	name: "mtk-sms-fwk-ready",
+ 	srcs: [
+-- 
+2.25.1
+

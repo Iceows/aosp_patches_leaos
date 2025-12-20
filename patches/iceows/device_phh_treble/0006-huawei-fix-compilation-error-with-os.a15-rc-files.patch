@@ -1,7 +1,7 @@
-From 0228c2e5b1dcf4d880e55920e8db3f0f8ff598c6 Mon Sep 17 00:00:00 2001
+From e9615ea314ce260c470d9a18aa0bb51555b1e0a6 Mon Sep 17 00:00:00 2001
 From: Iceows <mounierr07@gmail.com>
 Date: Mon, 17 Nov 2025 21:35:46 +0100
-Subject: [PATCH 7/7] huawei: fix compilation error with os.a15 rc files
+Subject: [PATCH 6/6] huawei: fix compilation error with os.a15 rc files
 
 ---
  files/init.emui.huawei.os.a15.rc | 23 +----------------------
@@ -54,5 +54,5 @@ index 195769a..5f78d84 100644
      chmod 0664 /sys/class/sensors/sensorhub_dump
 +
 -- 
-2.34.1
+2.25.1
 

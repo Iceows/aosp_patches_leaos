@@ -1,19 +1,17 @@
-From b524c6b2898266adee6994c67e07ec8d9d726fad Mon Sep 17 00:00:00 2001
+From 2aedd7cf862db9ccd9b731e870545ea505f98373 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
-Date: Sun, 9 Nov 2025 21:05:19 +0100
-Subject: [PATCH 1/3] remove isHidlSupported on android os
+Date: Sun, 14 Dec 2025 15:11:46 +0100
+Subject: [PATCH 1/2] remove isHidlSupported, gsi always support hidl
 
- fix : linker  : CANNOT LINK EXECUTABLE "/system/bin/app_process64": cannot locate symbol "_ZN7android8hardware15isHidlSupportedEv" referenced by "/system/lib64/libandroid_runtime.so"...
-
-Change-Id: I982e4936707cb3b52ba4a9c726c838c0fdb16e3b
+Change-Id: Ie494c9228c2f1293407ef80e6c488083181694a1
 ---
- core/java/android/os/HidlSupport.java | 7 -------
- core/java/android/os/HwBinder.java    | 2 ++
- core/jni/android_os_HidlSupport.cpp   | 8 +-------
- 3 files changed, 3 insertions(+), 14 deletions(-)
+ core/java/android/os/HidlSupport.java |  7 -------
+ core/java/android/os/HwBinder.java    | 10 ----------
+ core/jni/android_os_HidlSupport.cpp   |  6 ------
+ 3 files changed, 23 deletions(-)
 
 diff --git a/core/java/android/os/HidlSupport.java b/core/java/android/os/HidlSupport.java
-index 77160557f5c2..91b796aba655 100644
+index 77160557f..91b796aba 100644
 --- a/core/java/android/os/HidlSupport.java
 +++ b/core/java/android/os/HidlSupport.java
 @@ -218,13 +218,6 @@ public class HidlSupport {
@@ -31,27 +29,28 @@ index 77160557f5c2..91b796aba655 100644
      public HidlSupport() {}
  }
 diff --git a/core/java/android/os/HwBinder.java b/core/java/android/os/HwBinder.java
-index bc19655d1618..0b24865d8996 100644
+index bc19655d1..f85a3fb17 100644
 --- a/core/java/android/os/HwBinder.java
 +++ b/core/java/android/os/HwBinder.java
-@@ -79,6 +79,7 @@ public abstract class HwBinder implements IHwBinder {
+@@ -79,16 +79,6 @@ public abstract class HwBinder implements IHwBinder {
              String iface,
              String serviceName)
          throws RemoteException, NoSuchElementException {
-+        /*
-         if (!HidlSupport.isHidlSupported()
-                 && (iface.equals("android.hidl.manager@1.0::IServiceManager")
-                         || iface.equals("android.hidl.manager@1.1::IServiceManager")
-@@ -89,6 +90,7 @@ public abstract class HwBinder implements IHwBinder {
-                             + " because HIDL is not supported on this device.");
-             return new HwNoService();
-         }
-+        */
+-        if (!HidlSupport.isHidlSupported()
+-                && (iface.equals("android.hidl.manager@1.0::IServiceManager")
+-                        || iface.equals("android.hidl.manager@1.1::IServiceManager")
+-                        || iface.equals("android.hidl.manager@1.2::IServiceManager"))) {
+-            Log.i(
+-                    TAG,
+-                    "Replacing Java hwservicemanager with a fake HwNoService"
+-                            + " because HIDL is not supported on this device.");
+-            return new HwNoService();
+-        }
  
          return getService(iface, serviceName, false /* retry */);
      }
 diff --git a/core/jni/android_os_HidlSupport.cpp b/core/jni/android_os_HidlSupport.cpp
-index 3e51e9315d89..e3602d8f5c72 100644
+index 3e51e9315..13f9c4627 100644
 --- a/core/jni/android_os_HidlSupport.cpp
 +++ b/core/jni/android_os_HidlSupport.cpp
 @@ -15,7 +15,6 @@
@@ -71,9 +70,8 @@ index 3e51e9315d89..e3602d8f5c72 100644
 -}
 -
  static const JNINativeMethod gHidlSupportMethods[] = {
--        {"getPidIfSharable", "()I", (void*)android_os_HidlSupport_getPidIfSharable},
+         {"getPidIfSharable", "()I", (void*)android_os_HidlSupport_getPidIfSharable},
 -        {"isHidlSupported", "()Z", (void*)android_os_HidlSupport_isHidlSupported},
-+    {"getPidIfSharable", "()I", (void*)android_os_HidlSupport_getPidIfSharable},
  };
  
  const char* const kHidlSupportPathName = "android/os/HidlSupport";

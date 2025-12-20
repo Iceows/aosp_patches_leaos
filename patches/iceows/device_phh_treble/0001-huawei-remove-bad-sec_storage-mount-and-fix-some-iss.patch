@@ -1,7 +1,7 @@
-From 0bc5a98e929a4cf4c092ea005a9594f57be479f1 Mon Sep 17 00:00:00 2001
+From 90ad77e2d535caf351ec9438721998f6faad2212 Mon Sep 17 00:00:00 2001
 From: Iceows <mounierr07@gmail.com>
 Date: Mon, 17 Nov 2025 19:44:31 +0100
-Subject: [PATCH 1/7] huawei: remove bad sec_storage mount and fix some issues
+Subject: [PATCH 1/6] huawei: remove bad sec_storage mount and fix some issues
  with ......
 
 huawei: remove bad sec_storage mount and fix some issues with media, rpc motions sensor and ar
@@ -10,10 +10,10 @@ huawei: remove bad sec_storage mount and fix some issues with media, rpc motions
  1 file changed, 17 insertions(+), 19 deletions(-)
 
 diff --git a/rw-system.sh b/rw-system.sh
-index a7b94f6..ac31458 100644
+index 3ac9aa5..68f1cce 100644
 --- a/rw-system.sh
 +++ b/rw-system.sh
-@@ -651,6 +651,20 @@ if getprop ro.vendor.build.fingerprint | grep -iq -E -e 'huawei|honor' || getpro
+@@ -666,6 +666,20 @@ if getprop ro.vendor.build.fingerprint | grep -iq -E -e 'huawei|honor' || getpro
          mount -o bind /product/etc/libnfc-nxp.conf /system/etc/libnfc-nxp.conf || true
  
      mount -o bind /system/phh/libnfc-nci-huawei.conf /system/etc/libnfc-nci.conf
@@ -34,7 +34,7 @@ index a7b94f6..ac31458 100644
  fi
  
  if getprop ro.vendor.build.fingerprint | grep -qE -e ".*(crown|star)[q2]*lte.*" -e ".*(SC-0[23]K|SCV3[89]).*" && [ "$vndk" -lt 28 ]; then
-@@ -870,6 +884,7 @@ if getprop ro.boot.boot_devices |grep -v , |grep -qE .;then
+@@ -885,6 +899,7 @@ if getprop ro.boot.boot_devices |grep -v , |grep -qE .;then
      ln -s /dev/block/platform/$(getprop ro.boot.boot_devices) /dev/block/bootdevice
  fi
  
@@ -42,7 +42,7 @@ index a7b94f6..ac31458 100644
  if [ -c /dev/dsm ];then
      # /dev/dsm is a magic device on Kirin chipsets that teecd needs to access.
      # Make sure that permissions are right.
-@@ -877,25 +892,8 @@ if [ -c /dev/dsm ];then
+@@ -892,25 +907,8 @@ if [ -c /dev/dsm ];then
      chmod 0660 /dev/dsm
  
      # The presence of /dev/dsm indicates that we have a teecd,
@@ -71,5 +71,5 @@ index a7b94f6..ac31458 100644
  
  #Weird /odm/phone.prop Huawei stuff
 -- 
-2.34.1
+2.25.1
 

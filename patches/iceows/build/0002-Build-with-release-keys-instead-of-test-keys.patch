@@ -1,20 +1,20 @@
-From 8e659bdfe58421a1fdbda6a5e8610d1a693fa7c6 Mon Sep 17 00:00:00 2001
+From f38ec09075e68af84559114f76f4ec76048e9c3a Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
-Date: Sun, 16 Nov 2025 14:50:57 +0100
-Subject: [PATCH] Build with release keys instead of test-keys
+Date: Sun, 14 Dec 2025 11:38:16 +0100
+Subject: [PATCH 1/5] Build with release keys instead of test-keys
 
 Help to pass safetynet
 
-Change-Id: I303dc1018639f09c6c172404be04d9dc35a997f6
+Change-Id: Ic209b8f4fcd8eb536fc7754454066f5ec8c13455
 ---
- core/sysprop.mk | 2 +-
+ core/config.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/core/sysprop.mk b/core/sysprop.mk
-index dcde71bd1e..132a9a4da2 100644
---- a/core/sysprop.mk
-+++ b/core/sysprop.mk
-@@ -170,7 +170,7 @@ endif
+diff --git a/core/config.mk b/core/config.mk
+index e4fd4a9..b48a3cd 100644
+--- a/core/config.mk
++++ b/core/config.mk
+@@ -1295,7 +1295,7 @@ endif
  # Both of these tags will be removed and replaced with "release-keys"
  # when the target-files is signed in a post-build step.
  ifeq ($(DEFAULT_SYSTEM_DEV_CERTIFICATE),build/make/target/product/security/testkey)
