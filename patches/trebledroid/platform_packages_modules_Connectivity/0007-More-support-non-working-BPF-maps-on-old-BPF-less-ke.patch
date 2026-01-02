@@ -1,19 +1,32 @@
-From 2332f5bef8af6456d5fdf646ab8df90f699919b1 Mon Sep 17 00:00:00 2001
+From 0e0e19807027bdae056ec71234483456d75d4635 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
-Date: Sun, 21 Dec 2025 14:37:38 +0100
-Subject: [PATCH] More support non-working BPF maps on old BPF-less kernel
+Date: Thu, 1 Jan 2026 18:37:51 +0100
+Subject: [PATCH 7/7] More support non-working BPF maps on old BPF-less kernel
 
-Change-Id: I2e27c3c2a1eef4bbfe2fb21a278afa1d22bbfd38
+Change-Id: I0f0d699ffbd8c791cdbf4d69ab3b032bafbad24e
 ---
+ bpf/headers/include/bpf/BpfMap.h              |  1 +
  .../src/android/net/BpfNetMapsUtils.java      |  7 ++++
  .../android/net/NetworkStackBpfNetMaps.java   |  6 +--
  .../libs/libnetworkstats/BpfNetworkStats.cpp  |  1 +
  .../server/net/NetworkStatsService.java       | 29 ++++++++------
  .../src/com/android/server/BpfNetMaps.java    | 39 ++++++++++++++++++-
- 5 files changed, 66 insertions(+), 16 deletions(-)
+ 6 files changed, 67 insertions(+), 16 deletions(-)
 
+diff --git a/bpf/headers/include/bpf/BpfMap.h b/bpf/headers/include/bpf/BpfMap.h
+index bda9439..b1902e2 100644
+--- a/bpf/headers/include/bpf/BpfMap.h
++++ b/bpf/headers/include/bpf/BpfMap.h
+@@ -120,6 +120,7 @@ class BpfMapRO {
+             if (bpfGetFdKeySize(mMapFd) != sizeof(Key)) return false;
+             if (bpfGetFdValueSize(mMapFd) != sizeof(Value)) return false;
+         }
++        return true;
+     }
+ 
+   public:
 diff --git a/framework/src/android/net/BpfNetMapsUtils.java b/framework/src/android/net/BpfNetMapsUtils.java
-index 1760fa7ec2..408294ce6d 100644
+index 1760fa7..408294c 100644
 --- a/framework/src/android/net/BpfNetMapsUtils.java
 +++ b/framework/src/android/net/BpfNetMapsUtils.java
 @@ -213,6 +213,8 @@ public class BpfNetMapsUtils {
@@ -52,7 +65,7 @@ index 1760fa7ec2..408294ce6d 100644
              return dataSaverEnabledMap.getValue(DATA_SAVER_ENABLED_KEY).val == DATA_SAVER_ENABLED;
          } catch (ErrnoException e) {
 diff --git a/framework/src/android/net/NetworkStackBpfNetMaps.java b/framework/src/android/net/NetworkStackBpfNetMaps.java
-index b7c4e34fad..750490ad24 100644
+index b7c4e34..750490a 100644
 --- a/framework/src/android/net/NetworkStackBpfNetMaps.java
 +++ b/framework/src/android/net/NetworkStackBpfNetMaps.java
 @@ -97,7 +97,7 @@ public class NetworkStackBpfNetMaps {
@@ -83,7 +96,7 @@ index b7c4e34fad..750490ad24 100644
          }
      }
 diff --git a/service-t/native/libs/libnetworkstats/BpfNetworkStats.cpp b/service-t/native/libs/libnetworkstats/BpfNetworkStats.cpp
-index ae8dbbe321..71c3dbdf19 100644
+index ae8dbbe..71c3dbd 100644
 --- a/service-t/native/libs/libnetworkstats/BpfNetworkStats.cpp
 +++ b/service-t/native/libs/libnetworkstats/BpfNetworkStats.cpp
 @@ -255,6 +255,7 @@ int parseBpfNetworkStatsDetail(std::vector<stats_line>* lines) {
@@ -95,7 +108,7 @@ index ae8dbbe321..71c3dbdf19 100644
      if (!configuration.ok()) {
          ALOGE("Cannot read the old configuration from map: %s",
 diff --git a/service-t/src/com/android/server/net/NetworkStatsService.java b/service-t/src/com/android/server/net/NetworkStatsService.java
-index c82955f44f..3f739f87ef 100644
+index c82955f..fc47aa6 100644
 --- a/service-t/src/com/android/server/net/NetworkStatsService.java
 +++ b/service-t/src/com/android/server/net/NetworkStatsService.java
 @@ -453,12 +453,12 @@ public class NetworkStatsService extends INetworkStatsService.Stub {
@@ -109,10 +122,10 @@ index c82955f44f..3f739f87ef 100644
 -    private final IBpfMap<S32, StatsMapValue> mAppUidStatsMap;
 -    private final IBpfMap<S32, StatsMapValue> mIfaceStatsMap;
 +    private IBpfMap<S32, U8> mUidCounterSetMap = null;
-+    private IBpfMap<CookieTagMapKey, CookieTagMapValue> mCookieTagMap = null;
++    private IBpfMap<S64, CookieTagMapValue> mCookieTagMap = null;
 +    private IBpfMap<StatsMapKey, StatsMapValue> mStatsMapA = null;
 +    private IBpfMap<StatsMapKey, StatsMapValue> mStatsMapB = null;
-+    private IBpfMap<UidStatsMapKey, StatsMapValue> mAppUidStatsMap = null;
++    private IBpfMap<S32, StatsMapValue> mAppUidStatsMap = null;
 +    private IBpfMap<S32, StatsMapValue> mIfaceStatsMap = null;
  
      /** Data layer operation counters for splicing into other structures. */
@@ -149,7 +162,7 @@ index c82955f44f..3f739f87ef 100644
              mCookieTagMap.forEach((key, value) -> {
                  // If SkDestroyListener deletes the socket tag while this code is running,
 diff --git a/service/src/com/android/server/BpfNetMaps.java b/service/src/com/android/server/BpfNetMaps.java
-index a96819380c..cf03a52577 100644
+index a968193..cf03a52 100644
 --- a/service/src/com/android/server/BpfNetMaps.java
 +++ b/service/src/com/android/server/BpfNetMaps.java
 @@ -444,7 +444,11 @@ public class BpfNetMaps {

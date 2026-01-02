@@ -1,7 +1,7 @@
-From c964098ac33546d2a76e9bb4b5e188da8552cc11 Mon Sep 17 00:00:00 2001
+From d130c6ff5728629dd5f8941b83d3f04821493da7 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
 Date: Fri, 19 Dec 2025 19:10:22 +0100
-Subject: [PATCH 4/6] Revert "netdupdatable: add back abort() on init() fail"
+Subject: [PATCH 4/7] Revert "netdupdatable: add back abort() on init() fail"
 
 Change-Id: Ie0ff795d29eaf2ff20e408abd2abe34c83b36d4a
 ---
@@ -9,7 +9,7 @@ Change-Id: Ie0ff795d29eaf2ff20e408abd2abe34c83b36d4a
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/bpf/netd/NetdUpdatable.cpp b/bpf/netd/NetdUpdatable.cpp
-index 3b15916398..8b9e5a759c 100644
+index 3b15916..8b9e5a7 100644
 --- a/bpf/netd/NetdUpdatable.cpp
 +++ b/bpf/netd/NetdUpdatable.cpp
 @@ -31,8 +31,8 @@ int libnetd_updatable_init(const char* cg2_path) {

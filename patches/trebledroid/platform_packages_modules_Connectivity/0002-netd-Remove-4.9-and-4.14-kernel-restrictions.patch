@@ -1,7 +1,7 @@
-From aedb28613eca9b9be15f5bb9b555b84f79e0544d Mon Sep 17 00:00:00 2001
+From e524ae52a0a98e4921d5c088db8a1ecbb36e8fe1 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
 Date: Sun, 14 Dec 2025 21:00:46 +0100
-Subject: [PATCH 2/6] netd: Remove 4.9 and 4.14 kernel restrictions
+Subject: [PATCH 2/7] netd: Remove 4.9 and 4.14 kernel restrictions
 
 Change-Id: Iacd81992b09d4eb24a478c016bf05905d3068f01
 ---
@@ -9,7 +9,7 @@ Change-Id: Iacd81992b09d4eb24a478c016bf05905d3068f01
  1 file changed, 10 deletions(-)
 
 diff --git a/bpf/netd/BpfHandler.cpp b/bpf/netd/BpfHandler.cpp
-index f7fd8b99a7..7b5e63e206 100644
+index f7fd8b9..7b5e63e 100644
 --- a/bpf/netd/BpfHandler.cpp
 +++ b/bpf/netd/BpfHandler.cpp
 @@ -81,16 +81,6 @@ static Status initPrograms(const char* cg2_path) {

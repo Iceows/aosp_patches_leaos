@@ -1,7 +1,7 @@
-From d86bfb6e4f3fe2f8f917f85ffe06973da7d5adb1 Mon Sep 17 00:00:00 2001
+From fadbec6e11a438227cd828ed889053e17b632135 Mon Sep 17 00:00:00 2001
 From: Raphael Mounier <mounierr07@gmail.com>
 Date: Thu, 18 Dec 2025 14:19:59 +0100
-Subject: [PATCH 3/6] Support non-working BPF maps on old BPF-less kernel
+Subject: [PATCH 3/7] Support non-working BPF maps on old BPF-less kernel
 
 Change-Id: I7c5d84e83b7b6141978cdaa45a5c1e58930e70ef
 ---
@@ -10,7 +10,7 @@ Change-Id: I7c5d84e83b7b6141978cdaa45a5c1e58930e70ef
  2 files changed, 46 insertions(+), 38 deletions(-)
 
 diff --git a/bpf/headers/include/bpf/BpfMap.h b/bpf/headers/include/bpf/BpfMap.h
-index 8ef564dbf1..bda9439533 100644
+index 8ef564d..bda9439 100644
 --- a/bpf/headers/include/bpf/BpfMap.h
 +++ b/bpf/headers/include/bpf/BpfMap.h
 @@ -106,28 +106,25 @@ class BpfMapRO {
@@ -54,7 +54,7 @@ index 8ef564dbf1..bda9439533 100644
  
      Result<Key> getFirstKey() const {
 diff --git a/bpf/loader/NetBpfLoad.cpp b/bpf/loader/NetBpfLoad.cpp
-index 73869a74f8..3c0246783a 100644
+index 73869a7..3c02467 100644
 --- a/bpf/loader/NetBpfLoad.cpp
 +++ b/bpf/loader/NetBpfLoad.cpp
 @@ -1579,6 +1579,8 @@ static int doLoad(char** argv, char * const envp[]) {
